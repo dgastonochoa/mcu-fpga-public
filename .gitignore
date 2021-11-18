@@ -1,0 +1,24 @@
+#
+# Keil uVision
+#
+*.d
+*.crf
+*.htm*
+*.axf
+*.dep
+*.o
+*.map
+*.lnp
+*.lst
+*.bak
+
+#
+# Vivado
+#
+**/gr.runs/**
+**/gr.cache/**
+
+#
+# vscode
+#
+*.vscode/**
