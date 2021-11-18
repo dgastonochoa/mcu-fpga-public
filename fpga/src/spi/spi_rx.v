@@ -6,14 +6,14 @@ module spi_rx
 
   output reg [DATA_LENGTH - 1 : 0] data,
   output reg data_rdy,
-  input wire prst
+  input wire prst,
+  input wire clk
 );
   localparam IDLE = 0, RECV = 1, DUMMY_BITS = 2;
 
   reg [DATA_LENGTH - 1 : 0] buff = 0;
-  reg [3:0] idx = 0;
+  reg [3:0] idx = DATA_LENGTH - 1;
   reg [3:0] dummy_bits_cnt = 0;
-  reg [4:0] timer = 0;
   reg [1:0] cs = IDLE;
 
   initial begin
@@ -21,13 +21,15 @@ module spi_rx
     data_rdy <= 0;
   end
 
-  always @ (posedge sck or posedge prst) begin
+  always @ (posedge clk or posedge prst) begin
     if (prst) begin
-      cs <= RECV;
-      data_rdy <= 0;
-      data <= 0;
+      buff <= 0;
+      idx <= DATA_LENGTH - 1;
       dummy_bits_cnt <= 0;
-    end else begin
+      cs <= IDLE;
+      data <= 0;
+      data_rdy <= 0;
+    end else if (sck) begin
       case (cs)
 
       IDLE: begin
@@ -37,30 +39,33 @@ module spi_rx
           data <= 0;
 
           buff[idx] <= rx;
-          idx <= idx + 1;
+          idx <= idx - 1;
 
           dummy_bits_cnt <= 0;
         end
       end
 
       RECV: begin
-        idx <= idx + 1;
-        if (idx >= DATA_LENGTH) begin
-          data <= buff;
-          buff <= 0;
-          idx <= 0;
+        buff[idx] <= rx;
+        if (idx == 0) begin
+          idx <= DATA_LENGTH - 1;
           cs <= DUMMY_BITS;
         end else begin
-          buff[idx] <= rx;
+          idx <= idx - 1;
         end
       end
 
       DUMMY_BITS: begin
-        if (!data_rdy)
-          data_rdy <= 1;
+        if (dummy_bits_cnt == 0) begin
+          data <= buff;
+          buff <= 0;
+        end else begin
+          if (!data_rdy)
+            data_rdy <= 1;
+        end
 
         dummy_bits_cnt <= dummy_bits_cnt + 1;
-        if (dummy_bits_cnt == 2) begin
+        if (dummy_bits_cnt == 3) begin
           cs <= IDLE;
         end
       end
