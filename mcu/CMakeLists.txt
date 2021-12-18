@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.13.1)
 
-project(blinky-uart-cmake)
+project(mcu)
 
 include(cmake/environment.cmake)
 
 add_executable(${CMAKE_PROJECT_NAME}.axf
     src/startup_gcc.c
-    src/blinky-uart.c
+    src/main.c
 )
 
 add_dependencies(${CMAKE_PROJECT_NAME}.axf tm4c123_lib)

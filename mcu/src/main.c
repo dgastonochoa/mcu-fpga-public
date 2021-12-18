@@ -36,12 +36,12 @@ static void SPI2_Init(void)
 	// Config. SPI port as slave. 12 bits, PHA = 1, POL = 1, 4 MHz.
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
-	
+
 	GPIOPinConfigure(GPIO_PD0_SSI1CLK);
   GPIOPinConfigure(GPIO_PD1_SSI1FSS);
 	GPIOPinConfigure(GPIO_PD2_SSI1RX);
   GPIOPinConfigure(GPIO_PD3_SSI1TX);
-	
+
 	GPIOPinTypeSSI(GPIO_PORTD_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 
 	SSIConfigSetExpClk(SSI1_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_3,
@@ -55,22 +55,24 @@ static void SPI_Init(void)
 	// Config. SPI port as master. 8 bits, PHA = 1, POL = 1, 4 MHz.
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI0);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-	
+
 	GPIOPinConfigure(GPIO_PA2_SSI0CLK);
   GPIOPinConfigure(GPIO_PA3_SSI0FSS);
 	GPIOPinConfigure(GPIO_PA4_SSI0RX);
   GPIOPinConfigure(GPIO_PA5_SSI0TX);
-	
+
 	GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5);
-	
+
 	SSIConfigSetExpClk(SSI0_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_3,
 										 SSI_MODE_MASTER, 4000000, 12);
 
   SSIEnable(SSI0_BASE);
-	
+
 	// Config. PF1 to be used as reset pin for the slave SPI device.
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
 	GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_1);
+	GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
+	GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_3);
 
 	GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 0);
 	Delay();
@@ -89,7 +91,7 @@ static void UART_Init(void){
 }
 
 int main(void)
-{  
+{
 	SPI_Init();
 	SPI2_Init();
 	UART_Init();
@@ -105,7 +107,10 @@ int main(void)
     UARTprintf("Could not write to the SSI1 fifo\r\n");
   }
 
+	uint8_t last_val = 0;
   while(1) {
+
+
 		if (cnt == 0) {
 			SSIDataPut(SSI0_BASE, spi_data_framed);
 			spi_data++;
@@ -113,11 +118,14 @@ int main(void)
 				spi_data = 0;
 			}
 			spi_data_framed = (spi_data << 4) | 0xb;
-			
+
 			Delay();
-			
+
 			SSIDataGet(SSI0_BASE, &spi_read_data);
 			UARTprintf("SPI: %x %d %d\r\n", spi_read_data & 0xfff, spi_read_data & 0xff, (spi_read_data & 0xb00) >> 8);
+
+			last_val = (last_val == 0 ? 8 : 0);
+	  GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, last_val);
 
 			Delay();
 		}
