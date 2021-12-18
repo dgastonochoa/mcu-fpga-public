@@ -71,6 +71,9 @@ static void SPI_Init(void)
     // Config. PF1 to be used as reset pin for the slave SPI device.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_1);
+
+    // Config. PF2 and 3 as outputs to use the LED.
+    // TODO Move this to a different place.
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_3);
 
@@ -145,6 +148,10 @@ int main(void)
   }
 }
 
+/**
+ * Leave this symbol here for Keil uVision.
+ *
+ */
 int __main(void) {
     return main();
 }
