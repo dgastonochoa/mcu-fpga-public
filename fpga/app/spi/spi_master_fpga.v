@@ -2,7 +2,7 @@
 `define RECV_DATA_LENGTH 8
 
 module spi_master_fpga(clk, vauxp6, vauxp14, vauxp7, vauxp15, LED, btnC, rst);
-  input wire clk; 
+  input wire clk;
   output wire vauxp6;
   input wire vauxp14;
   output wire vauxp7;
