@@ -64,9 +64,14 @@ SECTIONS
         _ebss = .;
     } > SRAM
 
-    _heap_bottom = ALIGN(8);
-    _heap_top = ORIGIN(SRAM) + LENGTH(SRAM) - _stack_size;
-    _stack_bottom = ALIGN(8);
-    _stack_top = ORIGIN(SRAM) + LENGTH(SRAM);
+    . = ALIGN(8);
+    _heap_bottom = .;
+    . = ORIGIN(SRAM) + LENGTH(SRAM) - _stack_size;
+    _heap_top = .;
+    . = . + 8;
+    . = ALIGN(8);
+    _stack_bottom = .;
+    . = ORIGIN(SRAM) + LENGTH(SRAM);
+    _stack_top = .;
 
 }
