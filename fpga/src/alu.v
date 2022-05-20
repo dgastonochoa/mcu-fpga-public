@@ -1,3 +1,21 @@
+`define ALU_OP_ADD  2'b00
+`define ALU_OP_SUB  2'b01
+`define ALU_OP_AND  2'b10
+`define ALU_OP_OR   2'b11
+
+/**
+ * ALU module
+ *
+ * @param a Operand a
+ * @param b Operand b
+ * @param op Operation to perform. See ALU_OP* macros
+ * @param res Operation result
+ * @param flags Bit flags updated after the operation finishes.
+ *      bit 0: overflow
+ *      bit 1: carry out
+ *      bit 2: result is zero
+ *      bit 3: result is negative
+ */
 module alu (
     input logic [31 : 0] a,
     input logic [31 : 0] b,
