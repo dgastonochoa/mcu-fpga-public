@@ -2,6 +2,7 @@ BUILDIR=./build
 SRC=../src
 SRCRV=$(SRC)/riscv
 TSRCRV=./riscv
+INC=../include
 
 RANDOM := $(shell bash -c 'echo $$RANDOM')
 
@@ -30,7 +31,7 @@ $(BUILDIR)/datapath_tb.xv: $(TSRCRV)/datapath/datapath_tb.sv $(SRC)/alu.sv $(SRC
 $(BUILDIR)/%_tb.xv:
 	@if [ ! -d "$(BUILDIR)" ]; then mkdir $(BUILDIR); fi
 	@echo "Building $@"
-	@iverilog -o $@ -g2012 -DSEED=$(RANDOM) -DVCD="\"$@.vcd\"" $^
+	@iverilog -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
 
 $(BUILDIR)/2scomp: ./utils/2scomp.c
 	gcc -o $@ -std=c11 $<

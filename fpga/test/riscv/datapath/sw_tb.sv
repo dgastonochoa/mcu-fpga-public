@@ -1,20 +1,55 @@
 `timescale 10ps/1ps
 
+`include "alu.vh"
+`include "riscv/datapath.vh"
+
 `ifndef VCD
     `define VCD "sw_tb.vcd"
 `endif
 
 module sw_tb;
-    reg reg_we, imm_src, mem_we;
+    reg reg_we, imm_src, mem_we, alu_src, res_src;
+    reg [1:0] alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
 
     reg clk = 0, rst;
 
-    riscv_single_top dut(reg_we, mem_we, imm_src, instr, alu_out, mem_rd_data, mem_wd_data, pc, rst, clk);
+    riscv_single_top dut(
+        reg_we,
+        mem_we,
+        imm_src,
+        alu_ctrl,
+        alu_src,
+        res_src,
+        instr,
+        alu_out,
+        mem_rd_data,
+        mem_wd_data,
+        pc,
+        rst,
+        clk
+    );
 
     always #10 clk = ~clk;
+
+    //
+    // Debug signals
+    //
+    wire [31:0] x6, x9;
+    assign x6 = dut.dp.rf._reg[6];
+    assign x9 = dut.dp.rf._reg[9];
+
+    wire [31:0] addr1, addr3;
+    assign addr1 = dut.dp.rf.addr1;
+    assign addr3 = dut.dp.rf.addr3;
+
+    wire [31:0] mem5, mem10, mem11;
+    assign mem5 = dut.data_mem._mem[5];
+    assign mem10 = dut.data_mem._mem[10];
+    assign mem11 = dut.data_mem._mem[11];
+
 
     initial begin
         $dumpfile(`VCD);
@@ -37,6 +72,9 @@ module sw_tb;
         reg_we = 1'b0;
         imm_src = 1'b1;
         mem_we = 1'b1;
+        alu_ctrl = alu_op_add;
+        alu_src = alu_src_ext_imm;
+        res_src = res_src_read_data;
 
         // Reset and test
         #2  rst = 1;
@@ -49,16 +87,4 @@ module sw_tb;
         $finish;
     end
 
-    wire [31:0] x0, x6, x9;
-    assign x6 = dut.dp.rf._reg[6];
-    assign x9 = dut.dp.rf._reg[9];
-
-    wire [31:0] addr1, addr3;
-    assign addr1 = dut.dp.rf.addr1;
-    assign addr3 = dut.dp.rf.addr3;
-
-    wire [31:0] mem5, mem10, mem11;
-    assign mem5 = dut.data_mem._mem[5];
-    assign mem10 = dut.data_mem._mem[10];
-    assign mem11 = dut.data_mem._mem[11];
 endmodule

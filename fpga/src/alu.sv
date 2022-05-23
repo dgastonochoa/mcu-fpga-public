@@ -1,14 +1,11 @@
-`define ALU_OP_ADD  2'b00
-`define ALU_OP_SUB  2'b01
-`define ALU_OP_AND  2'b10
-`define ALU_OP_OR   2'b11
+`include "alu.vh"
 
 /**
  * ALU module
  *
  * @param a Operand a
  * @param b Operand b
- * @param op Operation to perform. See ALU_OP* macros
+ * @param op Operation to perform. See riscv_params TODO change this
  * @param res Operation result
  * @param flags Bit flags updated after the operation finishes.
  *      bit 0: overflow
@@ -34,20 +31,20 @@ module alu (
 
     always_comb begin
         case (op)
-        2'b00: begin
+        alu_op_add: begin
             b_op = b;
             cin = 1'b0;
             res = s;
         end
 
-        2'b01: begin
+        alu_op_sub: begin
             b_op = nb;
             cin = 1'b1;
             res = s;
         end
 
-        2'b10: res = a & b;
-        2'b11: res = a | b;
+        alu_op_and: res = a & b;
+        alu_op_or: res = a | b;
         endcase
     end
 
@@ -73,8 +70,8 @@ module alu (
 
     always_comb begin
         case (op)
-        2'b00: ov = ov0 | ov1;
-        2'b01: ov = ov2 | ov3;
+        alu_op_add: ov = ov0 | ov1;
+        alu_op_sub: ov = ov2 | ov3;
         default: ov = 0;
         endcase
     end

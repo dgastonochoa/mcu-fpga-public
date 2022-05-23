@@ -7,6 +7,9 @@ module riscv_single_top(
     input   wire        reg_we,
     input   wire        mem_we,
     input   wire        imm_src,
+    input   wire [1:0]  alu_op,
+    input   wire        alu_src,
+    input   wire        res_src,
     ////////
 
     // Signals exposed for debugging purposes
@@ -21,7 +24,20 @@ module riscv_single_top(
     input   wire        rst,
     input   wire        clk
 );
-    datapath dp(instr, mem_rd_data, reg_we, imm_src, pc, alu_out, mem_wd_data, rst, clk);
+    datapath dp(
+        instr,
+        mem_rd_data,
+        reg_we,
+        imm_src,
+        alu_op,
+        alu_src,
+        res_src,
+        pc,
+        alu_out,
+        mem_wd_data,
+        rst,
+        clk
+    );
 
     mem data_mem(alu_out, mem_wd_data, mem_we, mem_rd_data, clk);
 

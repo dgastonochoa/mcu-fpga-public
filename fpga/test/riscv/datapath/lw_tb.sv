@@ -1,11 +1,16 @@
 `timescale 10ps/1ps
 
+`include "alu.vh"
+`include "riscv/datapath.vh"
+
 `ifndef VCD
     `define VCD "lw_tb.vcd"
 `endif
 
 module lw_tb;
-    reg reg_we, imm_src, mem_we;
+
+    reg reg_we, imm_src, mem_we, alu_src, res_src;
+    reg [1:0] alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
@@ -16,6 +21,9 @@ module lw_tb;
         reg_we,
         mem_we,
         imm_src,
+        alu_ctrl,
+        alu_src,
+        res_src,
         instr,
         alu_out,
         mem_rd_data,
@@ -25,12 +33,15 @@ module lw_tb;
         clk
     );
 
+    always #10 clk = ~clk;
+
+    //
     // Debug signals
+    //
     wire [31:0] x6, x9;
     assign x6 = dut.dp.rf._reg[6];
     assign x9 = dut.dp.rf._reg[9];
 
-    always #10 clk = ~clk;
 
     initial begin
         $dumpfile(`VCD);
@@ -54,6 +65,9 @@ module lw_tb;
         reg_we = 1'b1;
         imm_src = 1'b0;
         mem_we = 1'b0;
+        alu_ctrl = alu_op_add;
+        alu_src = alu_src_ext_imm;
+        res_src = res_src_read_data;
 
         // Reset and test
         #2  rst = 1;
