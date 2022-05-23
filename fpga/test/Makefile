@@ -1,16 +1,15 @@
 BUILDIR=./build
 SRC=../src
+SRCRV=$(SRC)/riscv
+TSRCRV=./riscv
 
 RANDOM := $(shell bash -c 'echo $$RANDOM')
 
-test_alu := $(BUILDIR)/alu_logic_tb.xv \
-			 $(BUILDIR)/alu_add_tb.xv \
-			 $(BUILDIR)/alu_subs_tb.xv \
-			 $(BUILDIR)/alu_slt_tb.xv
+tests := $(BUILDIR)/alu_logic_tb.xv 	\
+		 $(BUILDIR)/alu_add_tb.xv 		\
+		 $(BUILDIR)/alu_subs_tb.xv
 
-test/all: test/alu
-
-test/alu: $(test_alu)
+all: $(tests)
 	$(foreach test,$^,vvp $(test);)
 
 $(BUILDIR)/alu_logic_tb.xv: alu_logic_tb.v $(SRC)/alu.v
