@@ -67,6 +67,7 @@ module sw_tb;
         dut.instr_mem._mem[0] = 32'hfe64aa23;           // sw x6, -12(x9)
         dut.instr_mem._mem[1] = 32'h0074a423;           // sw x7, 8(x9)
         dut.instr_mem._mem[2] = 32'h0084a6a3;           // sw x8, 12(x9)
+        dut.instr_mem._mem[3] = 32'h0004a6a3;           // sw x0, 12(x9)
 
         // Set control signals for sw
         reg_we = 1'b0;
@@ -82,6 +83,7 @@ module sw_tb;
         #11 assert(dut.data_mem._mem[5] === 32'hdeadc0de);
         #20 assert(dut.data_mem._mem[10] === 32'hdeadbeef);
         #20 assert(dut.data_mem._mem[11] === 32'hc001c0de);
+        #20 assert(dut.data_mem._mem[11] === 32'h00);
 
         #5;
         $finish;

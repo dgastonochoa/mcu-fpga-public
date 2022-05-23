@@ -70,6 +70,9 @@ module regfile_tb;
         we = 1;
         #40;
 
+        //
+        // Verify reading the zero register produces 0
+        //
         we = 0;
         ad1 = 0;
         ad2 = 0;

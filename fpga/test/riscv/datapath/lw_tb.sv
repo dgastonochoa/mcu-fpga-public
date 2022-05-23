@@ -48,6 +48,7 @@ module lw_tb;
         $dumpvars(1, lw_tb);
 
         // Set register init. vals
+        dut.dp.rf._reg[0] = 32'd0;
         dut.dp.rf._reg[6] = 32'd0;
         dut.dp.rf._reg[9] = 32'd8;
 
@@ -56,10 +57,12 @@ module lw_tb;
         dut.data_mem._mem[2] = 32'hdeadbeef;
         dut.data_mem._mem[3] = 32'hc001c0de;
 
-        // Set 3 lw instructions with different offset
+        // Load words with different addresses
+        // Last instr. is to try to load word into x0
         dut.instr_mem._mem[0] = 32'hffc4a303;           // lw x6, -4(x9)
         dut.instr_mem._mem[1] = 32'h0004a303;           // lw x6, 0(x9)
         dut.instr_mem._mem[2] = 32'h0044a303;           // lw x6, 4(x9)
+        dut.instr_mem._mem[3] = 32'h0044a003;           // lw x0, 4(x9)
 
         // Set control signals for lw
         reg_we = 1'b1;
@@ -75,6 +78,7 @@ module lw_tb;
         #11 assert(dut.dp.rf._reg[6] === 32'hdeadc0de);
         #20 assert(dut.dp.rf._reg[6] === 32'hdeadbeef);
         #20 assert(dut.dp.rf._reg[6] === 32'hc001c0de);
+        #20 assert(dut.dp.rf._reg[0] === 32'h00);
 
         #20;
         $finish;
