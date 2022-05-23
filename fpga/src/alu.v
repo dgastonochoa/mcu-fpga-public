@@ -17,11 +17,11 @@
  *      bit 3: result is negative
  */
 module alu (
-    input logic [31 : 0] a,
-    input logic [31 : 0] b,
-    input logic [1:0] op,
-    output logic [31 : 0] res,
-    output wire [3:0] flags
+    input   logic   [31:0]  a,
+    input   logic   [31:0]  b,
+    input   logic   [1:0]   op,
+    output  logic   [31:0]  res,
+    output  wire    [3:0]   flags
 );
     wire [31:0] s;
     wire co;
@@ -90,30 +90,4 @@ module alu (
     assign flags[2] = ~(|res);
     // neg
     assign flags[3] = res[31];
-endmodule
-
-module alu_slt (
-    input logic [31 : 0] a,
-    input logic [31 : 0] b,
-    input logic [2:0] op,
-    output logic [31 : 0] res,
-    output wire [3:0] flags
-);
-    wire [31:0] res_aux;
-    wire sign;
-    wire ov;
-
-    alu alu0(a, b, op[1:0], res_aux, flags);
-
-    assign sign = res_aux[31];
-    assign ov = flags[0];
-
-    always_comb begin
-        if (op == 3'b101) begin
-            res = {{31{1'b0}}, sign ^ ov};
-        end else begin
-            res = res_aux;
-        end
-    end
-
 endmodule
