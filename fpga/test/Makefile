@@ -19,6 +19,9 @@ tests := $(BUILDIR)/alu_logic_tb.xv 	\
 		 $(BUILDIR)/regfile_tb.xv 		\
 		 $(BUILDIR)/lw_tb.xv			\
 		 $(BUILDIR)/sw_tb.xv			\
+		 $(BUILDIR)/or_tb.xv			\
+		 $(BUILDIR)/and_tb.xv			\
+		 $(BUILDIR)/sub_tb.xv			\
 		 $(BUILDIR)/datapath_tb.xv
 
 all: $(tests)
@@ -34,6 +37,9 @@ $(BUILDIR)/mem_tb.xv: mem_tb.sv $(SRC)/mem.sv
 $(BUILDIR)/regfile_tb.xv: $(TSRCRV)/datapath/regfile_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv
 $(BUILDIR)/lw_tb.xv: $(TSRCRV)/datapath/lw_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
 $(BUILDIR)/sw_tb.xv: $(TSRCRV)/datapath/sw_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
+$(BUILDIR)/or_tb.xv: $(TSRCRV)/datapath/or_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
+$(BUILDIR)/and_tb.xv: $(TSRCRV)/datapath/and_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
+$(BUILDIR)/sub_tb.xv: $(TSRCRV)/datapath/sub_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
 $(BUILDIR)/datapath_tb.xv: $(TSRCRV)/datapath/datapath_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
 
 $(BUILDIR)/%_tb.xv:
