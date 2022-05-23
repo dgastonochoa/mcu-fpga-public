@@ -25,5 +25,9 @@ module extend #(parameter N = 12) (
     input   wire        imm_src,
     output  wire [31:0] ext_imm
 );
-    assign ext_imm = {{32-N{imm[31]}}, imm[31:20]};
+    wire [31:0] i_src, s_src;
+
+    assign i_src = {{32-N{imm[31]}}, imm[31:20]};
+    assign s_src = {{32-N{imm[31]}}, {imm[31:25], imm[11:7]}};
+    assign ext_imm = imm_src == 1 ? s_src : i_src;
 endmodule

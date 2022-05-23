@@ -73,7 +73,7 @@ module datapath(
 
 
     wire [31:0] srca;
-    regfile rf(instr[19:15], 5'b00, instr[11:7], data_in, reg_we, srca, data_out, clk);
+    regfile rf(instr[19:15], instr[24:20], instr[11:7], data_in, reg_we, srca, data_out, clk);
 
 
     wire [31:0] srcb;
