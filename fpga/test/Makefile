@@ -28,6 +28,7 @@ $(BUILDIR)/sw_tb.xv: $(TSRCRV)/datapath/sw_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(S
 $(BUILDIR)/datapath_tb.xv: $(TSRCRV)/datapath/datapath_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
 
 $(BUILDIR)/%_tb.xv:
+	@if [ ! -d "$(BUILDIR)" ]; then mkdir $(BUILDIR); fi
 	@echo "Building $@"
 	@iverilog -o $@ -g2012 -DSEED=$(RANDOM) -DVCD="\"$@.vcd\"" $^
 
