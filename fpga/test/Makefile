@@ -12,9 +12,9 @@ tests := $(BUILDIR)/alu_logic_tb.xv 	\
 all: $(tests)
 	$(foreach test,$^,vvp $(test);)
 
-$(BUILDIR)/alu_logic_tb.xv: alu_logic_tb.v $(SRC)/alu.v
-$(BUILDIR)/alu_add_tb.xv: alu_add_tb.v $(SRC)/alu.v
-$(BUILDIR)/alu_subs_tb.xv: alu_subs_tb.v $(SRC)/alu.v
+$(BUILDIR)/alu_logic_tb.xv: alu_logic_tb.sv $(SRC)/alu.sv
+$(BUILDIR)/alu_add_tb.xv: alu_add_tb.sv $(SRC)/alu.sv
+$(BUILDIR)/alu_subs_tb.xv: alu_subs_tb.sv $(SRC)/alu.sv
 
 $(BUILDIR)/%_tb.xv:
 	@echo "Building $@"
