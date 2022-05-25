@@ -64,10 +64,11 @@ module datapath(
     input   wire [31:0] read_data,
     input   wire        reg_we,
 
-    input   wire        imm_src,
+    input   wire [1:0]  imm_src,
     input   wire [1:0]  alu_ctrl,
     input   wire        alu_src,
     input   wire        result_src,
+    input   wire        pc_src,
 
     output  wire [31:0] pc,
 
@@ -77,10 +78,12 @@ module datapath(
     input   wire        rst,
     input   wire        clk
 );
-    wire [31:0] pc_next;
+    wire [31:0] pc_next, pc_plus_4, pc_plus_off;
     dff pc_ff(pc_next, pc, rst, clk);
 
-    assign pc_next = pc + 4;
+    assign pc_plus_4 = pc + 4;
+    assign pc_plus_off = pc + ext_imm;
+    assign pc_next = pc_src == 1'b1 ? pc_plus_off : pc_plus_4;
 
 
     wire [31:0] srca;

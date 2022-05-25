@@ -22,6 +22,7 @@ tests := $(BUILDIR)/alu_logic_tb.xv 	\
 		 $(BUILDIR)/or_tb.xv			\
 		 $(BUILDIR)/and_tb.xv			\
 		 $(BUILDIR)/sub_tb.xv			\
+		 $(BUILDIR)/beq_tb.xv			\
 		 $(BUILDIR)/datapath_tb.xv
 
 all: $(tests)
@@ -40,12 +41,13 @@ $(BUILDIR)/sw_tb.xv: $(TSRCRV)/datapath/sw_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(S
 $(BUILDIR)/or_tb.xv: $(TSRCRV)/datapath/or_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
 $(BUILDIR)/and_tb.xv: $(TSRCRV)/datapath/and_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
 $(BUILDIR)/sub_tb.xv: $(TSRCRV)/datapath/sub_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
+$(BUILDIR)/beq_tb.xv: $(TSRCRV)/datapath/beq_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
 $(BUILDIR)/datapath_tb.xv: $(TSRCRV)/datapath/datapath_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
 
 $(BUILDIR)/%_tb.xv:
 	@if [ ! -d "$(BUILDIR)" ]; then mkdir $(BUILDIR); fi
 	@echo "Building $@"
-	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
+	@$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
 
 $(BUILDIR)/2scomp: $(TESTUTILS)/2scomp.c dirs
 	$(CC) -o $@ -std=c11 $<

@@ -9,8 +9,9 @@
 
 module lw_tb;
 
-    reg reg_we, imm_src, mem_we, alu_src, res_src;
-    reg [1:0] alu_ctrl;
+    reg reg_we, mem_we, alu_src, res_src, pc_src;
+
+    reg [1:0] imm_src, alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
@@ -23,7 +24,7 @@ module lw_tb;
         imm_src,
         alu_ctrl,
         alu_src,
-        res_src,
+        res_src, pc_src,
         instr,
         alu_out,
         mem_rd_data,
@@ -66,11 +67,12 @@ module lw_tb;
 
         // Set control signals for lw
         reg_we = 1'b1;
-        imm_src = 1'b0;
+        imm_src = 2'b0;
         mem_we = 1'b0;
         alu_ctrl = alu_op_add;
         alu_src = alu_src_ext_imm;
         res_src = res_src_read_data;
+        pc_src = 1'b0;
 
         // Reset and test
         #2  rst = 1;

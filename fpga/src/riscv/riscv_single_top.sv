@@ -6,10 +6,10 @@ module riscv_single_top(
     // TODO control signals. To be handled by the control unit
     input   wire        reg_we,
     input   wire        mem_we,
-    input   wire        imm_src,
+    input   wire [1:0]  imm_src,
     input   wire [1:0]  alu_op,
     input   wire        alu_src,
-    input   wire        res_src,
+    input   wire        res_src, pc_src,
     ////////
 
     // Signals exposed for debugging purposes
@@ -31,7 +31,7 @@ module riscv_single_top(
         imm_src,
         alu_op,
         alu_src,
-        res_src,
+        res_src, pc_src,
         pc,
         alu_out,
         mem_wd_data,
