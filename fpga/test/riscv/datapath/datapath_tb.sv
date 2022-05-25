@@ -1,5 +1,8 @@
 `timescale 10ps/1ps
 
+`include "alu.vh"
+`include "riscv/datapath.vh"
+
 `ifndef VCD
     `define VCD "datapath_tb.vcd"
 `endif
@@ -61,12 +64,12 @@ module datapath_tb;
         dut.instr_mem._mem[3] = 32'hfe420ae3;           // beq x4, x4, L7
 
         reg_we = 1'b1;
-        imm_src = 2'b0;
+        imm_src = imm_src_itype;
         mem_we = 1'b0;
         alu_ctrl = alu_op_add;
         alu_src = alu_src_ext_imm;
         res_src = res_src_read_data;
-        pc_src = 1'b0;
+        pc_src = pc_src_plus_4;
         #5  rst = 1;
         #1  assert(pc === 0);
             assert(alu_out === 4);
@@ -76,41 +79,41 @@ module datapath_tb;
             assert(dut.dp.rf._reg[6] === 32'hdeadc0de);
 
         reg_we = 1'b0;
-        imm_src = 2'b1;
+        imm_src = imm_src_stype;
         mem_we = 1'b1;
         alu_ctrl = alu_op_add;
         alu_src = alu_src_ext_imm;
         res_src = res_src_read_data;
-        pc_src = 1'b0;
+        pc_src = pc_src_plus_4;
         #20 assert(pc === 8);
             assert(dut.data_mem._mem[4] === 32'hdeadc0de);
 
         reg_we = 1'b1;
-        imm_src = 2'b0;
+        imm_src = imm_src_itype;
         mem_we = 1'b0;
         alu_ctrl = alu_op_or;
         alu_src = alu_src_reg;
         res_src = res_src_alu_out;
-        pc_src = 1'b0;
+        pc_src = pc_src_plus_4;
         #20 assert(pc === 12);
             assert(dut.dp.rf._reg[4] === 32'hfffffffe);
 
         reg_we = 1'b0;
-        imm_src = 2'b10;
+        imm_src = imm_src_btype;
         mem_we = 1'b0;
         alu_ctrl = alu_op_sub;
         alu_src = alu_src_reg;
         res_src = 1'bx;
-        pc_src = 1'b1;
+        pc_src = pc_src_plus_off;
         #20  assert(pc === 0);
 
         reg_we = 1'b1;
-        imm_src = 2'b0;
+        imm_src = imm_src_itype;
         mem_we = 1'b0;
         alu_ctrl = alu_op_add;
         alu_src = alu_src_ext_imm;
         res_src = res_src_read_data;
-        pc_src = 1'b0;
+        pc_src = pc_src_plus_4;
         #20 assert(pc === 4);
             assert(dut.dp.rf._reg[6] === 32'hdeadc0de);
 

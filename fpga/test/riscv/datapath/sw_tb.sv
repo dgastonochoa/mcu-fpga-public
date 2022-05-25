@@ -71,12 +71,12 @@ module sw_tb;
 
         // Set control signals for sw
         reg_we = 1'b0;
-        imm_src = 2'b1;
+        imm_src = imm_src_stype;
         mem_we = 1'b1;
         alu_ctrl = alu_op_add;
         alu_src = alu_src_ext_imm;
         res_src = res_src_read_data;
-        pc_src = 1'b0;
+        pc_src = pc_src_plus_4;
 
         // Reset and test
         #2  rst = 1;

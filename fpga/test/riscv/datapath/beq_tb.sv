@@ -64,12 +64,12 @@ module beq_tb;
 
         // Set control signals for beq
         reg_we = 1'b0;
-        imm_src = 2'b10;
+        imm_src = imm_src_btype;
         mem_we = 1'b0;
         alu_ctrl = alu_op_sub;
         alu_src = alu_src_reg;
         res_src = 1'bx;
-        pc_src = 1'b1;
+        pc_src = pc_src_plus_off;
 
         // Reset and test
         #2  rst = 1;
