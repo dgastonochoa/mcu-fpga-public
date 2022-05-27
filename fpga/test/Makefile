@@ -12,14 +12,14 @@ RV_OBJCOPY=riscv64-unknown-elf-objcopy
 
 RANDOM := $(shell bash -c 'echo $$RANDOM')
 
-tests := $(BUILDIR)/datapath/lw_tb.xv			\
-		 $(BUILDIR)/datapath/sw_tb.xv			\
-		 $(BUILDIR)/datapath/or_tb.xv			\
-		 $(BUILDIR)/datapath/and_tb.xv			\
-		 $(BUILDIR)/datapath/sub_tb.xv			\
-		 $(BUILDIR)/datapath/beq_tb.xv			\
-		 $(BUILDIR)/datapath/datapath_tb.xv		\
-		 $(BUILDIR)/controller_tb.xv			\
+tests := $(BUILDIR)/riscv/lw_tb.xv			\
+		 $(BUILDIR)/riscv/sw_tb.xv			\
+		 $(BUILDIR)/riscv/or_tb.xv			\
+		 $(BUILDIR)/riscv/and_tb.xv			\
+		 $(BUILDIR)/riscv/sub_tb.xv			\
+		 $(BUILDIR)/riscv/beq_tb.xv			\
+		 $(BUILDIR)/riscv/datapath_tb.xv		\
+		 $(BUILDIR)/riscv/controller_tb.xv		\
 		 $(BUILDIR)/mem_tb.xv					\
 		 $(BUILDIR)/alu_logic_tb.xv				\
 		 $(BUILDIR)/alu_add_tb.xv				\
@@ -42,16 +42,15 @@ $(BUILDIR)/alu_add_tb.xv: alu_add_tb.sv $(SRC)/alu.sv
 $(BUILDIR)/alu_subs_tb.xv: alu_subs_tb.sv $(SRC)/alu.sv
 $(BUILDIR)/mem_tb.xv: mem_tb.sv $(SRC)/mem.sv
 
-$(BUILDIR)/controller_tb.xv: $(TSRCRV)/controller_tb.sv $(SRCRV)/controller.sv
-
-$(BUILDIR)/datapath/regfile_tb.xv: $(TSRCRV)/datapath/regfile_tb.sv $(test_sources)
-$(BUILDIR)/datapath/lw_tb.xv: $(TSRCRV)/datapath/lw_tb.sv $(test_sources)
-$(BUILDIR)/datapath/sw_tb.xv: $(TSRCRV)/datapath/sw_tb.sv $(test_sources)
-$(BUILDIR)/datapath/or_tb.xv: $(TSRCRV)/datapath/or_tb.sv $(test_sources)
-$(BUILDIR)/datapath/and_tb.xv: $(TSRCRV)/datapath/and_tb.sv $(test_sources)
-$(BUILDIR)/datapath/sub_tb.xv: $(TSRCRV)/datapath/sub_tb.sv $(test_sources)
-$(BUILDIR)/datapath/beq_tb.xv: $(TSRCRV)/datapath/beq_tb.sv $(test_sources)
-$(BUILDIR)/datapath/datapath_tb.xv: $(TSRCRV)/datapath/datapath_tb.sv $(test_sources)
+$(BUILDIR)/riscv/controller_tb.xv: $(TSRCRV)/controller_tb.sv $(SRCRV)/controller.sv
+$(BUILDIR)/riscv/regfile_tb.xv: $(TSRCRV)/regfile_tb.sv $(test_sources)
+$(BUILDIR)/riscv/lw_tb.xv: $(TSRCRV)/lw_tb.sv $(test_sources)
+$(BUILDIR)/riscv/sw_tb.xv: $(TSRCRV)/sw_tb.sv $(test_sources)
+$(BUILDIR)/riscv/or_tb.xv: $(TSRCRV)/or_tb.sv $(test_sources)
+$(BUILDIR)/riscv/and_tb.xv: $(TSRCRV)/and_tb.sv $(test_sources)
+$(BUILDIR)/riscv/sub_tb.xv: $(TSRCRV)/sub_tb.sv $(test_sources)
+$(BUILDIR)/riscv/beq_tb.xv: $(TSRCRV)/beq_tb.sv $(test_sources)
+$(BUILDIR)/riscv/datapath_tb.xv: $(TSRCRV)/datapath_tb.sv $(test_sources)
 
 %_tb.xv:
 	@echo "Building $@"
