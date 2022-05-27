@@ -66,7 +66,7 @@ module or_tb;
 
         // Set control signals for sw
         reg_we = 1'b1;
-        imm_src = imm_src_itype;
+        imm_src = 2'bx;
         mem_we = 1'b0;
         alu_ctrl = alu_op_or;
         alu_src = alu_src_reg;

@@ -23,7 +23,8 @@ tests := $(BUILDIR)/alu_logic_tb.xv 	\
 		 $(BUILDIR)/and_tb.xv			\
 		 $(BUILDIR)/sub_tb.xv			\
 		 $(BUILDIR)/beq_tb.xv			\
-		 $(BUILDIR)/datapath_tb.xv
+		 $(BUILDIR)/datapath_tb.xv		\
+		 $(BUILDIR)/controller_tb.xv
 
 all: $(tests)
 	$(foreach test,$^,vvp $(test);)
@@ -43,6 +44,7 @@ $(BUILDIR)/and_tb.xv: $(TSRCRV)/datapath/and_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $
 $(BUILDIR)/sub_tb.xv: $(TSRCRV)/datapath/sub_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
 $(BUILDIR)/beq_tb.xv: $(TSRCRV)/datapath/beq_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
 $(BUILDIR)/datapath_tb.xv: $(TSRCRV)/datapath/datapath_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
+$(BUILDIR)/controller_tb.xv: $(TSRCRV)/controller_tb.sv $(SRCRV)/controller.sv
 
 $(BUILDIR)/%_tb.xv:
 	@if [ ! -d "$(BUILDIR)" ]; then mkdir $(BUILDIR); fi

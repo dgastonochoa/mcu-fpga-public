@@ -2,16 +2,30 @@
 `define RISCV_PARAMS_H
 
 // datapath parameters
+
+/**
+ * Immediate source. Indicates the type of instruction
+ * as a function of how is the immediate encoded in it.
+ */
 localparam imm_src_itype        = 2'b00;
 localparam imm_src_stype        = 2'b01;
 localparam imm_src_btype        = 2'b10;
 
-localparam alu_src_ext_imm      = 1'b1;
+/**
+ * ALU's second operand source (register, immediate...)
+ */
 localparam alu_src_reg          = 1'b0;
+localparam alu_src_ext_imm      = 1'b1;
 
-localparam res_src_read_data    = 1'b1;
+/**
+ * Source of the result to be written in the register file.
+ */
 localparam res_src_alu_out      = 1'b0;
+localparam res_src_read_data    = 1'b1;
 
+/**
+ * Indicates the source of the next PC (+4, +offset...)
+ */
 localparam pc_src_plus_4        = 1'b0;
 localparam pc_src_plus_off      = 1'b1;
 
