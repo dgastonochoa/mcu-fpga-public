@@ -1,76 +1,74 @@
-BUILDIR=./build
-TESTUTILS=./test-utils
-SRC=../src
-SRCRV=$(SRC)/riscv
-TSRCRV=./riscv
-INC=../include
+PREFIX ?= ./build
 
-CC=gcc
-VV=iverilog
-RV_AS=riscv64-unknown-elf-as
-RV_OBJCOPY=riscv64-unknown-elf-objcopy
+SRC := ../src
+SRCRV := $(SRC)/riscv
+INC := ../include
 
+TSRCRV := ./riscv
+TESTUTILS := ./test-utils
+RISCV_TEST_DIR := $(PREFIX)/riscv
+
+CC := gcc
+VV := iverilog
+RV_AS := riscv64-unknown-elf-as
+RV_OBJCOPY := riscv64-unknown-elf-objcopy
 RANDOM := $(shell bash -c 'echo $$RANDOM')
 
-tests := $(BUILDIR)/riscv/lw_tb.xv			\
-		 $(BUILDIR)/riscv/sw_tb.xv			\
-		 $(BUILDIR)/riscv/or_tb.xv			\
-		 $(BUILDIR)/riscv/and_tb.xv			\
-		 $(BUILDIR)/riscv/sub_tb.xv			\
-		 $(BUILDIR)/riscv/beq_tb.xv			\
-		 $(BUILDIR)/riscv/addi_tb.xv		\
-		 $(BUILDIR)/riscv/datapath_tb.xv	\
-		 $(BUILDIR)/riscv/controller_tb.xv	\
-		 $(BUILDIR)/mem_tb.xv				\
-		 $(BUILDIR)/alu_logic_tb.xv			\
-		 $(BUILDIR)/alu_add_tb.xv			\
-		 $(BUILDIR)/alu_subs_tb.xv
 
-test_sources := $(SRC)/alu.sv 					\
-				$(SRC)/mem.sv 					\
-				$(SRC)/utils.sv 				\
-				$(SRCRV)/datapath.sv 			\
-				$(SRCRV)/riscv_single_top.sv 	\
-				$(SRCRV)/controller.sv
+tests := $(PREFIX)/mem_tb.xv				\
+		 $(PREFIX)/alu_logic_tb.xv			\
+		 $(PREFIX)/alu_add_tb.xv			\
+		 $(PREFIX)/alu_subs_tb.xv
 
-all: $(tests)
+riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/sw_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/or_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/and_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/sub_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/beq_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/addi_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/datapath_tb.xv		\
+		 	   $(RISCV_TEST_DIR)/controller_tb.xv
+
+common_src := $(SRC)/alu.sv 	\
+			  $(SRC)/mem.sv 	\
+			  $(SRC)/utils.sv
+
+riscv_src :=  $(SRCRV)/datapath.sv 			\
+			  $(SRCRV)/riscv_single_top.sv 	\
+			  $(SRCRV)/controller.sv
+
+
+all: $(tests) $(riscv_tests)
 	$(foreach test,$^,vvp $(test);)
 
-gen_as: $(BUILDIR)/as_instr.bin
+gen_as: $(PREFIX)/as_instr.bin
 
-$(BUILDIR)/alu_logic_tb.xv: alu_logic_tb.sv $(SRC)/alu.sv
-$(BUILDIR)/alu_add_tb.xv: alu_add_tb.sv $(SRC)/alu.sv
-$(BUILDIR)/alu_subs_tb.xv: alu_subs_tb.sv $(SRC)/alu.sv
-$(BUILDIR)/mem_tb.xv: mem_tb.sv $(SRC)/mem.sv
+$(tests): | dirs
 
-$(BUILDIR)/riscv/controller_tb.xv: $(TSRCRV)/controller_tb.sv $(SRCRV)/controller.sv
-$(BUILDIR)/riscv/regfile_tb.xv: $(TSRCRV)/regfile_tb.sv $(test_sources)
-$(BUILDIR)/riscv/lw_tb.xv: $(TSRCRV)/lw_tb.sv $(test_sources)
-$(BUILDIR)/riscv/sw_tb.xv: $(TSRCRV)/sw_tb.sv $(test_sources)
-$(BUILDIR)/riscv/or_tb.xv: $(TSRCRV)/or_tb.sv $(test_sources)
-$(BUILDIR)/riscv/and_tb.xv: $(TSRCRV)/and_tb.sv $(test_sources)
-$(BUILDIR)/riscv/sub_tb.xv: $(TSRCRV)/sub_tb.sv $(test_sources)
-$(BUILDIR)/riscv/beq_tb.xv: $(TSRCRV)/beq_tb.sv $(test_sources)
-$(BUILDIR)/riscv/addi_tb.xv: $(TSRCRV)/addi_tb.sv $(test_sources)
-$(BUILDIR)/riscv/datapath_tb.xv: $(TSRCRV)/datapath_tb.sv $(test_sources)
+$(riscv_tests): | dirs
 
-%_tb.xv:
+$(PREFIX)/%.xv: %.sv $(common_src)
 	@echo "Building $@"
-	@mkdir -p $(dir $@)
 	@$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
 
-$(BUILDIR)/2scomp: $(TESTUTILS)/2scomp.c dirs
+$(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src)
+	@echo "Building $@"
+	@$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
+
+$(PREFIX)/2scomp: $(TESTUTILS)/2scomp.c dirs
 	$(CC) -o $@ -std=c11 $<
 
-$(BUILDIR)/as_instr.bin: $(TESTUTILS)/as_instr.s dirs
+$(PREFIX)/as_instr.bin: $(TESTUTILS)/as_instr.s dirs
 	@$(RV_AS) -o $@.elf $<
 	@$(RV_OBJCOPY) -O binary $@.elf $@.bin
 	@xxd -e -c 4 $@.bin
 
 .PHONY: clean
 clean:
-	@rm -rf $(BUILDIR)/*
+	@rm -rf $(PREFIX)/*
 
 .PHONY: dirs
 dirs:
-	@if [ ! -d "$(BUILDIR)" ]; then mkdir -p $(BUILDIR); fi
+	@mkdir -p $(PREFIX)
+	@mkdir -p $(RISCV_TEST_DIR)
