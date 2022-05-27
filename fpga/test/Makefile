@@ -31,6 +31,11 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/datapath_tb.xv		\
 		 	   $(RISCV_TEST_DIR)/controller_tb.xv
 
+tests_waves := $(addsuffix .vcd,$(tests))
+
+riscv_tests_waves := $(addsuffix .vcd,$(riscv_tests))
+
+
 common_src := $(SRC)/alu.sv 	\
 			  $(SRC)/mem.sv 	\
 			  $(SRC)/utils.sv
@@ -40,8 +45,10 @@ riscv_src :=  $(SRCRV)/datapath.sv 			\
 			  $(SRCRV)/controller.sv
 
 
-all: $(tests) $(riscv_tests)
-	$(foreach test,$^,vvp $(test);)
+test: $(tests) $(riscv_tests)
+	$(foreach test,$^,vvp $(test) -none;)
+
+wavedumps: $(tests_waves) $(riscv_tests_waves)
 
 gen_as: $(PREFIX)/as_instr.bin
 
@@ -49,13 +56,20 @@ $(tests): | dirs
 
 $(riscv_tests): | dirs
 
+$(wavedumps): | dirs
+
+
 $(PREFIX)/%.xv: %.sv $(common_src)
-	@echo "Building $@"
 	@$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
 
 $(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src)
-	@echo "Building $@"
 	@$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
+
+$(PREFIX)/%.xv.vcd: $(PREFIX)/%.xv
+	$(VVP) $<
+
+$(RISCV_TEST_DIR)/%.xv.vcd: $(RISCV_TEST_DIR)/%.xv
+	$(VVP) $<
 
 $(PREFIX)/2scomp: $(TESTUTILS)/2scomp.c dirs
 	$(CC) -o $@ -std=c11 $<
@@ -64,6 +78,7 @@ $(PREFIX)/as_instr.bin: $(TESTUTILS)/as_instr.s dirs
 	@$(RV_AS) -o $@.elf $<
 	@$(RV_OBJCOPY) -O binary $@.elf $@.bin
 	@xxd -e -c 4 $@.bin
+
 
 .PHONY: clean
 clean:
