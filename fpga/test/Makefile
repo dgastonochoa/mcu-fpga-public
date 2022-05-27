@@ -45,12 +45,24 @@ riscv_src :=  $(SRCRV)/datapath.sv 			\
 			  $(SRCRV)/controller.sv
 
 
+#
+# Build al tests and execute them without generating wave dumps
+#
 test: $(tests) $(riscv_tests)
 	$(foreach test,$^,vvp $(test) -none;)
 
 wavedumps: $(tests_waves) $(riscv_tests_waves)
 
-gen_as: $(PREFIX)/as_instr.bin
+all: test wavedumps
+
+#
+# This target is used to assembly riscv instructions
+# to be used in the test benches.
+#
+gen_as $(PREFIX)/as_instr.bin: $(TESTUTILS)/as_instr.s | dirs
+	@$(RV_AS) -o $(PREFIX)/$@.elf $<
+	@$(RV_OBJCOPY) -O binary $(PREFIX)/$@.elf $(PREFIX)/$@.bin
+	@xxd -e -c 4 $(PREFIX)/$@.bin
 
 $(tests): | dirs
 
@@ -73,11 +85,6 @@ $(RISCV_TEST_DIR)/%.xv.vcd: $(RISCV_TEST_DIR)/%.xv
 
 $(PREFIX)/2scomp: $(TESTUTILS)/2scomp.c dirs
 	$(CC) -o $@ -std=c11 $<
-
-$(PREFIX)/as_instr.bin: $(TESTUTILS)/as_instr.s dirs
-	@$(RV_AS) -o $@.elf $<
-	@$(RV_OBJCOPY) -O binary $@.elf $@.bin
-	@xxd -e -c 4 $@.bin
 
 
 .PHONY: clean
