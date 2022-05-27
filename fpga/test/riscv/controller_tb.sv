@@ -11,8 +11,8 @@ module controller_tb;
     reg [31:0] instr;
     reg alu_zero;
 
-    wire reg_we, mem_we, alu_src, res_src, pc_src;
-    wire [1:0] imm_src, alu_ctrl;
+    wire reg_we, mem_we, alu_src, pc_src;
+    wire [1:0] imm_src, alu_ctrl, res_src;
 
     controller ctrl(
         instr,
@@ -20,7 +20,7 @@ module controller_tb;
         reg_we,
         mem_we,
         alu_src,
-        result_src,
+        res_src,
         pc_src,
         imm_src,
         alu_ctrl
@@ -38,7 +38,7 @@ module controller_tb;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === alu_src_ext_imm);
-            assert(result_src === res_src_read_data);
+            assert(res_src === res_src_read_data);
             assert(pc_src === pc_src_plus_4);
             assert(imm_src === imm_src_itype);
             assert(alu_ctrl === alu_op_add);
@@ -47,7 +47,7 @@ module controller_tb;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === alu_src_ext_imm);
-            assert(result_src === res_src_read_data);
+            assert(res_src === res_src_read_data);
             assert(pc_src === pc_src_plus_4);
             assert(imm_src === imm_src_itype);
             assert(alu_ctrl === alu_op_add);
@@ -60,7 +60,7 @@ module controller_tb;
         #5  assert(reg_we === 1'b0);
             assert(mem_we === 1'b1);
             assert(alu_src === alu_src_ext_imm);
-            assert(result_src === res_src_read_data);
+            assert(res_src === res_src_read_data);
             assert(pc_src === pc_src_plus_4);
             assert(imm_src === imm_src_stype);
             assert(alu_ctrl === alu_op_add);
@@ -69,7 +69,7 @@ module controller_tb;
         #5  assert(reg_we === 1'b0);
             assert(mem_we === 1'b1);
             assert(alu_src === alu_src_ext_imm);
-            assert(result_src === res_src_read_data);
+            assert(res_src === res_src_read_data);
             assert(pc_src === pc_src_plus_4);
             assert(imm_src === imm_src_stype);
             assert(alu_ctrl === alu_op_add);
@@ -82,7 +82,7 @@ module controller_tb;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === alu_src_reg);
-            assert(result_src === res_src_alu_out);
+            assert(res_src === res_src_alu_out);
             assert(pc_src === pc_src_plus_4);
             assert(imm_src === 2'bx);
             assert(alu_ctrl === alu_op_or);
@@ -91,7 +91,7 @@ module controller_tb;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === alu_src_reg);
-            assert(result_src === res_src_alu_out);
+            assert(res_src === res_src_alu_out);
             assert(pc_src === pc_src_plus_4);
             assert(imm_src === 2'bx);
             assert(alu_ctrl === alu_op_or);
@@ -104,7 +104,7 @@ module controller_tb;
         #5  assert(reg_we === 1'b0);
             assert(mem_we === 1'b0);
             assert(alu_src === alu_src_reg);
-            assert(result_src === 1'bx);
+            assert(res_src === 2'bx);
             assert(pc_src === pc_src_plus_4);
             assert(imm_src === imm_src_btype);
             assert(alu_ctrl === alu_op_sub);
@@ -113,7 +113,7 @@ module controller_tb;
         #5  assert(reg_we === 1'b0);
             assert(mem_we === 1'b0);
             assert(alu_src === alu_src_reg);
-            assert(result_src === 1'bx);
+            assert(res_src === 2'bx);
             assert(pc_src === pc_src_plus_off);
             assert(imm_src === imm_src_btype);
             assert(alu_ctrl === alu_op_sub);
@@ -126,7 +126,7 @@ module controller_tb;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === alu_src_ext_imm);
-            assert(result_src === res_src_alu_out);
+            assert(res_src === res_src_alu_out);
             assert(pc_src === pc_src_plus_4);
             assert(imm_src === imm_src_itype);
             assert(alu_ctrl === alu_op_add);
@@ -136,7 +136,30 @@ module controller_tb;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === alu_src_ext_imm);
-            assert(result_src === res_src_alu_out);
+            assert(res_src === res_src_alu_out);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === imm_src_itype);
+            assert(alu_ctrl === alu_op_add);
+
+        //
+        // jal
+        //
+        alu_zero = 0;
+        instr = 32'h00a00213;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_ext_imm);
+            assert(res_src === res_src_alu_out);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === imm_src_itype);
+            assert(alu_ctrl === alu_op_add);
+
+        alu_zero = 1;
+        instr = 32'h00a00213;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_ext_imm);
+            assert(res_src === res_src_alu_out);
             assert(pc_src === pc_src_plus_4);
             assert(imm_src === imm_src_itype);
             assert(alu_ctrl === alu_op_add);

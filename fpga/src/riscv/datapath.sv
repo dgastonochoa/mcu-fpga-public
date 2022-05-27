@@ -7,22 +7,24 @@
  * @param imm_src Type of instruction (I-type, R-type etc.)
  * @param ext_imm SIgn-extended immediate
  */
-module extend #(parameter N = 12) (
+module extend(
     input   wire    [31:0] instr,
     input   wire    [1:0]  imm_src,
     output  logic   [31:0] ext_imm
 );
-    wire [31:0] i_src, s_src, b_src;
+    wire [31:0] i_src, s_src, b_src, j_src;
 
-    assign i_src = {{32-N{instr[31]}}, instr[31:20]};
-    assign s_src = {{32-N{instr[31]}}, {instr[31:25], instr[11:7]}};
-    assign b_src = {{32-(N-1){instr[31]}}, {instr[31], instr[7], instr[30:25], instr[11:8], 1'b0}};
+    assign i_src = {{32-12{instr[31]}}, instr[31:20]};
+    assign s_src = {{32-12{instr[31]}}, {instr[31:25], instr[11:7]}};
+    assign b_src = {{32-13{instr[31]}}, {instr[31], instr[7], instr[30:25], instr[11:8], 1'b0}};
+    assign j_src = {{32-21{instr[31]}}, {instr[31], instr[19:12], instr[20], instr[30:21], 1'b0}};
 
     always_comb begin
         case (imm_src)
         imm_src_itype: ext_imm = i_src;
         imm_src_stype: ext_imm = s_src;
         imm_src_btype: ext_imm = b_src;
+        imm_src_jtype: ext_imm = j_src;
         endcase
     end
 endmodule
@@ -95,7 +97,7 @@ module datapath(
     input   wire [1:0]  imm_src,
     input   wire [1:0]  alu_ctrl,
     input   wire        alu_src,
-    input   wire        result_src,
+    input   wire [1:0]  result_src,
     input   wire        pc_src,
 
     output  wire [31:0] pc,
@@ -116,10 +118,8 @@ module datapath(
 
 
     wire [31:0] srca;
-    wire [31:0] reg_wr_data;
+    logic [31:0] reg_wr_data;
     regfile rf(instr[19:15], instr[24:20], instr[11:7], reg_wr_data, reg_we, srca, write_data, clk);
-
-    assign reg_wr_data = result_src == res_src_read_data ? read_data : alu_out;
 
 
     wire [31:0] ext_imm;
@@ -130,4 +130,13 @@ module datapath(
     alu alu0(srca, srcb, alu_ctrl, alu_out, alu_flags);
 
     assign srcb = alu_src == alu_src_ext_imm ? ext_imm : write_data;
+
+    always_comb begin
+        case (result_src)
+        res_src_alu_out: reg_wr_data = alu_out;
+        res_src_read_data: reg_wr_data = read_data;
+        res_src_pc_plus_4: reg_wr_data = pc_plus_4;
+        default: reg_wr_data = 32'hx;
+        endcase
+    end
 endmodule
