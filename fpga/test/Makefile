@@ -37,13 +37,13 @@ $(BUILDIR)/alu_subs_tb.xv: alu_subs_tb.sv $(SRC)/alu.sv
 
 $(BUILDIR)/mem_tb.xv: mem_tb.sv $(SRC)/mem.sv
 $(BUILDIR)/regfile_tb.xv: $(TSRCRV)/datapath/regfile_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv
-$(BUILDIR)/lw_tb.xv: $(TSRCRV)/datapath/lw_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
-$(BUILDIR)/sw_tb.xv: $(TSRCRV)/datapath/sw_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
-$(BUILDIR)/or_tb.xv: $(TSRCRV)/datapath/or_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
-$(BUILDIR)/and_tb.xv: $(TSRCRV)/datapath/and_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
-$(BUILDIR)/sub_tb.xv: $(TSRCRV)/datapath/sub_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
-$(BUILDIR)/beq_tb.xv: $(TSRCRV)/datapath/beq_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
-$(BUILDIR)/datapath_tb.xv: $(TSRCRV)/datapath/datapath_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv
+$(BUILDIR)/lw_tb.xv: $(TSRCRV)/datapath/lw_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv $(SRCRV)/controller.sv
+$(BUILDIR)/sw_tb.xv: $(TSRCRV)/datapath/sw_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv $(SRCRV)/controller.sv
+$(BUILDIR)/or_tb.xv: $(TSRCRV)/datapath/or_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv $(SRCRV)/controller.sv
+$(BUILDIR)/and_tb.xv: $(TSRCRV)/datapath/and_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv $(SRCRV)/controller.sv
+$(BUILDIR)/sub_tb.xv: $(TSRCRV)/datapath/sub_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv $(SRCRV)/controller.sv
+$(BUILDIR)/beq_tb.xv: $(TSRCRV)/datapath/beq_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv $(SRCRV)/controller.sv
+$(BUILDIR)/datapath_tb.xv: $(TSRCRV)/datapath/datapath_tb.sv $(SRC)/alu.sv $(SRC)/mem.sv $(SRC)/utils.sv $(SRCRV)/datapath.sv $(SRCRV)/riscv_single_top.sv $(SRCRV)/controller.sv
 $(BUILDIR)/controller_tb.xv: $(TSRCRV)/controller_tb.sv $(SRCRV)/controller.sv
 
 $(BUILDIR)/%_tb.xv:

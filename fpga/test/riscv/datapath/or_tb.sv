@@ -8,8 +8,8 @@
 `endif
 
 module or_tb;
-    reg reg_we, mem_we, alu_src, res_src, pc_src;
-    reg [1:0] imm_src, alu_ctrl;
+    wire reg_we, mem_we, alu_src, res_src, pc_src;
+    wire [1:0] imm_src, alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
@@ -63,15 +63,6 @@ module or_tb;
         dut.instr_mem._mem[0] = 32'h00626033;           // or x0, x4, x6
         dut.instr_mem._mem[1] = 32'h0002e233;           // or x4, x5, x0
         dut.instr_mem._mem[2] = 32'h00626233;           // or x4, x4, x6
-
-        // Set control signals for sw
-        reg_we = 1'b1;
-        imm_src = 2'bx;
-        mem_we = 1'b0;
-        alu_ctrl = alu_op_or;
-        alu_src = alu_src_reg;
-        res_src = res_src_alu_out;
-        pc_src = pc_src_plus_4;
 
         // Reset and test
         #2  rst = 1;

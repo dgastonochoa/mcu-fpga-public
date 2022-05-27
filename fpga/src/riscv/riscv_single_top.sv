@@ -3,27 +3,25 @@
  * memories.
  */
 module riscv_single_top(
-    // TODO control signals. To be handled by the control unit
-    input   wire        reg_we,
-    input   wire        mem_we,
-    input   wire [1:0]  imm_src,
-    input   wire [1:0]  alu_op,
-    input   wire        alu_src,
-    input   wire        res_src, pc_src,
-    ////////
-
     // Signals exposed for debugging purposes
+    output  wire        reg_we,
+    output  wire        mem_we,
+    output  wire [1:0]  imm_src,
+    output  wire [1:0]  alu_op,
+    output  wire        alu_src,
+    output  wire        res_src, pc_src,
     output  wire [31:0] instr,
     output  wire [31:0] alu_out,
     output  wire [31:0] mem_rd_data,
     output  wire [31:0] mem_wd_data,
-
     output  wire [31:0] pc,
     ///////
 
     input   wire        rst,
     input   wire        clk
 );
+    wire [3:0] alu_flags;
+
     datapath dp(
         instr,
         mem_rd_data,
@@ -34,9 +32,22 @@ module riscv_single_top(
         res_src, pc_src,
         pc,
         alu_out,
+        alu_flags,
         mem_wd_data,
         rst,
         clk
+    );
+
+    controller co(
+        instr,
+        alu_flags[2],
+        reg_we,
+        mem_we,
+        alu_src,
+        res_src,
+        pc_src,
+        imm_src,
+        alu_op
     );
 
     mem data_mem(alu_out, mem_wd_data, mem_we, mem_rd_data, clk);

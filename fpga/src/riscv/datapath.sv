@@ -101,6 +101,7 @@ module datapath(
     output  wire [31:0] pc,
 
     output  wire [31:0] alu_out,
+    output  wire [3:0]  alu_flags,
     output  wire [31:0] write_data,
 
     input   wire        rst,
@@ -125,7 +126,6 @@ module datapath(
     extend ext(instr, imm_src, ext_imm);
 
 
-    wire [3:0] alu_flags;
     wire [31:0] srcb;
     alu alu0(srca, srcb, alu_ctrl, alu_out, alu_flags);
 

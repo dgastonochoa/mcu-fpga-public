@@ -8,8 +8,8 @@
 `endif
 
 module beq_tb;
-    reg reg_we, mem_we, alu_src, res_src, pc_src;
-    reg [1:0] imm_src, alu_ctrl;
+    wire reg_we, mem_we, alu_src, res_src, pc_src;
+    wire [1:0] imm_src, alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
@@ -61,15 +61,6 @@ module beq_tb;
         dut.instr_mem._mem[0] = 32'h00400a63;       // beq x0, x4, 20
         dut.instr_mem._mem[5] = 32'h00400263;       // beq x0, x4, 4
         dut.instr_mem._mem[6] = 32'hfe4004e3;       // beq x0, x4, -6
-
-        // Set control signals for beq
-        reg_we = 1'b0;
-        imm_src = imm_src_btype;
-        mem_we = 1'b0;
-        alu_ctrl = alu_op_sub;
-        alu_src = alu_src_reg;
-        res_src = 1'bx;
-        pc_src = pc_src_plus_off;
 
         // Reset and test
         #2  rst = 1;
