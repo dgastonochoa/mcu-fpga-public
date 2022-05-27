@@ -18,11 +18,12 @@ tests := $(BUILDIR)/riscv/lw_tb.xv			\
 		 $(BUILDIR)/riscv/and_tb.xv			\
 		 $(BUILDIR)/riscv/sub_tb.xv			\
 		 $(BUILDIR)/riscv/beq_tb.xv			\
-		 $(BUILDIR)/riscv/datapath_tb.xv		\
-		 $(BUILDIR)/riscv/controller_tb.xv		\
-		 $(BUILDIR)/mem_tb.xv					\
-		 $(BUILDIR)/alu_logic_tb.xv				\
-		 $(BUILDIR)/alu_add_tb.xv				\
+		 $(BUILDIR)/riscv/addi_tb.xv		\
+		 $(BUILDIR)/riscv/datapath_tb.xv	\
+		 $(BUILDIR)/riscv/controller_tb.xv	\
+		 $(BUILDIR)/mem_tb.xv				\
+		 $(BUILDIR)/alu_logic_tb.xv			\
+		 $(BUILDIR)/alu_add_tb.xv			\
 		 $(BUILDIR)/alu_subs_tb.xv
 
 test_sources := $(SRC)/alu.sv 					\
@@ -50,6 +51,7 @@ $(BUILDIR)/riscv/or_tb.xv: $(TSRCRV)/or_tb.sv $(test_sources)
 $(BUILDIR)/riscv/and_tb.xv: $(TSRCRV)/and_tb.sv $(test_sources)
 $(BUILDIR)/riscv/sub_tb.xv: $(TSRCRV)/sub_tb.sv $(test_sources)
 $(BUILDIR)/riscv/beq_tb.xv: $(TSRCRV)/beq_tb.sv $(test_sources)
+$(BUILDIR)/riscv/addi_tb.xv: $(TSRCRV)/addi_tb.sv $(test_sources)
 $(BUILDIR)/riscv/datapath_tb.xv: $(TSRCRV)/datapath_tb.sv $(test_sources)
 
 %_tb.xv:

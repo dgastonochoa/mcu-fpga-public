@@ -118,6 +118,29 @@ module controller_tb;
             assert(imm_src === imm_src_btype);
             assert(alu_ctrl === alu_op_sub);
 
+        //
+        // addi
+        //
+        alu_zero = 0;
+        instr = 32'h00a00213;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_ext_imm);
+            assert(result_src === res_src_alu_out);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === imm_src_itype);
+            assert(alu_ctrl === alu_op_add);
+
+        alu_zero = 1;
+        instr = 32'h00a00213;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_ext_imm);
+            assert(result_src === res_src_alu_out);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === imm_src_itype);
+            assert(alu_ctrl === alu_op_add);
+
         $finish;
     end
 

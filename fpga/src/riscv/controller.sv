@@ -1,6 +1,7 @@
 `include "riscv/datapath.vh"
 
-localparam op_i_type = 7'b0000011;
+localparam op_i_type_l = 7'b0000011;
+localparam op_i_type = 7'b0010011;
 localparam op_s_type = 7'b0100011;
 localparam op_r_type = 7'b0110011;
 localparam op_b_type = 7'b1100011;
@@ -28,11 +29,12 @@ module alu_dec(
 
     always_comb begin
         case (op)
-        op_r_type: alu_ctrl = r_type_alu_ctr;
-        op_i_type: alu_ctrl = alu_op_add;
-        op_s_type: alu_ctrl = alu_op_add;
-        op_b_type: alu_ctrl = alu_op_sub;
-        default: alu_ctrl = 2'bx;
+        op_r_type:      alu_ctrl = r_type_alu_ctr;
+        op_i_type:      alu_ctrl = alu_op_add;
+        op_i_type_l:    alu_ctrl = alu_op_add;
+        op_s_type:      alu_ctrl = alu_op_add;
+        op_b_type:      alu_ctrl = alu_op_sub;
+        default:        alu_ctrl = 2'bx;
         endcase
     end
 endmodule
@@ -83,11 +85,13 @@ module controller(
 
     always_comb begin
         case (op)
-        //                  reg_we  mem_we  alu_src            result_src        pc_src         imm_src
-        op_i_type: ctrls = {1'b1,  1'b0,    alu_src_ext_imm, res_src_read_data, pc_src_plus_4,  imm_src_itype};
-        op_s_type: ctrls = {1'b0,  1'b1,    alu_src_ext_imm, res_src_read_data, pc_src_plus_4,  imm_src_stype};
-        op_r_type: ctrls = {1'b1,  1'b0,    alu_src_reg,     res_src_alu_out,   pc_src_plus_4,  2'bx         };
-        op_b_type: ctrls = {1'b0,  1'b0,    alu_src_reg,     1'bx,              pc_src_beq,     imm_src_btype};
+        //                       reg_we  mem_we  alu_src            result_src        pc_src         imm_src
+        op_i_type_l:    ctrls = {1'b1,  1'b0,    alu_src_ext_imm, res_src_read_data, pc_src_plus_4,  imm_src_itype};
+        op_i_type:      ctrls = {1'b1,  1'b0,    alu_src_ext_imm, res_src_alu_out,   pc_src_plus_4,  imm_src_itype};
+        op_s_type:      ctrls = {1'b0,  1'b1,    alu_src_ext_imm, res_src_read_data, pc_src_plus_4,  imm_src_stype};
+        op_r_type:      ctrls = {1'b1,  1'b0,    alu_src_reg,     res_src_alu_out,   pc_src_plus_4,  2'bx         };
+        op_b_type:      ctrls = {1'b0,  1'b0,    alu_src_reg,     1'bx,              pc_src_beq,     imm_src_btype};
+        default:        ctrls = 9'bx;
         endcase
     end
 endmodule
