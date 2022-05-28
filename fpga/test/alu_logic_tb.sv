@@ -178,12 +178,24 @@ module alu_logic_tb;
         assert(res === 32'b00);
         assert(flags === 4'b0100);
 
-        // sll_1_cannot_enable_ov
-        op = 5;
-        a = 32'h80000000;
+
+        //
+        // srl
+        //
+        // srl_works_1
+        op = 6;
+        a = 32'b00001111;
+        b = 32'd3;
+        #`WAIT_DELAY;
+        assert(res === 32'd1);
+        assert(flags === 4'b0000);
+
+        // srl_can_enable_zero
+        op = 6;
+        a = 32'd1;
         b = 32'd1;
         #`WAIT_DELAY;
-        assert(res === 32'b00);
+        assert(res === 32'd0);
         assert(flags === 4'b0100);
 
         #`WAIT_DELAY;

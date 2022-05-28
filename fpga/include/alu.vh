@@ -7,5 +7,6 @@ localparam alu_op_and = 3'b010;
 localparam alu_op_or  = 3'b011;
 localparam alu_op_xor = 3'b100;
 localparam alu_op_sll = 3'b101;
+localparam alu_op_srl = 3'b110;
 
 `endif // ALU_H
