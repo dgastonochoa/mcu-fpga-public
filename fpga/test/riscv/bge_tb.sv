@@ -4,10 +4,10 @@
 `include "riscv/datapath.vh"
 
 `ifndef VCD
-    `define VCD "blt_tb.vcd"
+    `define VCD "bge_tb.vcd"
 `endif
 
-module blt_tb;
+module bge_tb;
     wire reg_we, mem_we, alu_src, pc_src;
     wire [1:0] imm_src, res_src;
     wire [2:0] alu_ctrl;
@@ -37,15 +37,15 @@ module blt_tb;
 
     initial begin
         $dumpfile(`VCD);
-        $dumpvars(1, blt_tb);
+        $dumpvars(1, bge_tb);
 
         dut.dp.rf._reg[0] = 32'd00;
         dut.dp.rf._reg[4] = 32'd10;
         dut.dp.rf._reg[5] = 32'd20;
 
-        dut.instr_mem._mem[0] = 32'h00404863;       // blt x0, x4, 16
-        dut.instr_mem._mem[4] = 32'h00424463;       // blt x4, x4, 24
-        dut.instr_mem._mem[5] = 32'hfe5246e3;       // blt x4, x5, 0
+        dut.instr_mem._mem[0] = 32'h00025863;       // bge x4, x0, 16
+        dut.instr_mem._mem[4] = 32'h00425263;       // bge x4, x4, 20
+        dut.instr_mem._mem[5] = 32'hfe42d6e3;       // bge x5, x4, 0
 
 
         // Reset and test

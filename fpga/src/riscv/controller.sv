@@ -93,9 +93,10 @@ module controller(
 
     always_comb begin
         case (func3)
-        3'b000: pc_src_b_type = alu_zero ? pc_src_plus_off : pc_src_plus_4;
-        3'b001: pc_src_b_type = alu_zero ? pc_src_plus_4 : pc_src_plus_off;
-        3'b100: pc_src_b_type = alu_neg ? pc_src_plus_off : pc_src_plus_4;
+        3'b000: pc_src_b_type = alu_zero ? pc_src_plus_off : pc_src_plus_4;     // beq
+        3'b001: pc_src_b_type = alu_zero ? pc_src_plus_4 : pc_src_plus_off;     // bne
+        3'b100: pc_src_b_type = alu_neg ? pc_src_plus_off : pc_src_plus_4;      // blt
+        3'b101: pc_src_b_type = alu_neg ? pc_src_plus_4 : pc_src_plus_off;      // bge
         default: pc_src_b_type = 3'bx;
         endcase
     end
