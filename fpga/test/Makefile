@@ -29,6 +29,7 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/sll_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/srl_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/beq_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/bne_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/addi_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/jal_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/datapath_tb.xv		\
