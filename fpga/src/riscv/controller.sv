@@ -61,7 +61,7 @@ endmodule
  */
 module controller(
     input   wire [31:0] instr,
-    input   wire        alu_zero,
+    input   wire [3:0]  alu_flags,
 
     output  wire        reg_we,
     output  wire        mem_we,
@@ -86,10 +86,16 @@ module controller(
     assign {reg_we, mem_we, alu_src, result_src, pc_src, imm_src} = ctrls;
 
     logic pc_src_b_type;
+    wire alu_zero, alu_neg;
+
+    assign alu_zero = alu_flags[2];
+    assign alu_neg = alu_flags[3];
+
     always_comb begin
         case (func3)
         3'b000: pc_src_b_type = alu_zero ? pc_src_plus_off : pc_src_plus_4;
         3'b001: pc_src_b_type = alu_zero ? pc_src_plus_4 : pc_src_plus_off;
+        3'b100: pc_src_b_type = alu_neg ? pc_src_plus_off : pc_src_plus_4;
         default: pc_src_b_type = 3'bx;
         endcase
     end

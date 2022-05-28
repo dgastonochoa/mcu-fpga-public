@@ -41,7 +41,7 @@ module riscv_single_top(
 
     controller co(
         instr,
-        alu_flags[2],
+        alu_flags,
         reg_we,
         mem_we,
         alu_src,
