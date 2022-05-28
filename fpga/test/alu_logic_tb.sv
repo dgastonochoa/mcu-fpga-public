@@ -134,6 +134,58 @@ module alu_logic_tb;
         assert(res === 32'b010101);
         assert(flags === 4'b0000);
 
+
+        //
+        // sll
+        //
+        // sll_cannot_en_ov_flag_1
+        op = 5;
+        a = 32'hffffffff;
+        b = 32'hffffffff;
+        #`WAIT_DELAY;
+        assert(res === 32'h00);
+        assert(flags === 4'b0100);
+
+        // sll_cannot_en_ov_flag_2
+        op = 5;
+        a = 32'hffffffff;
+        b = 32'h7fffffff;
+        #`WAIT_DELAY;
+        assert(res === 32'h00000000);
+        assert(flags === 4'b0100);
+
+        // sll_works_1
+        op = 5;
+        a = 32'b00001111;
+        b = 32'd4;
+        #`WAIT_DELAY;
+        assert(res === 32'b11110000);
+        assert(flags === 4'b0000);
+
+        // sll_works_2
+        op = 5;
+        a = 32'b00001111;
+        b = 32'd31;
+        #`WAIT_DELAY;
+        assert(res === 32'h80000000);
+        assert(flags === 4'b1000);
+
+        // sll_can_enable_zero
+        op = 5;
+        a = 32'b00001111;
+        b = 32'd32;
+        #`WAIT_DELAY;
+        assert(res === 32'b00);
+        assert(flags === 4'b0100);
+
+        // sll_1_cannot_enable_ov
+        op = 5;
+        a = 32'h80000000;
+        b = 32'd1;
+        #`WAIT_DELAY;
+        assert(res === 32'b00);
+        assert(flags === 4'b0100);
+
         #`WAIT_DELAY;
         $finish;
     end

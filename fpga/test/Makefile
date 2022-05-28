@@ -26,6 +26,7 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/and_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/sub_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/xor_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/sll_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/beq_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/addi_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/jal_tb.xv			\
@@ -73,10 +74,10 @@ $(wavedumps): | dirs
 
 
 $(PREFIX)/%.xv: %.sv $(common_src)
-	@$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
+	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
 
 $(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src)
-	@$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
+	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
 
 $(PREFIX)/%.xv.vcd: $(PREFIX)/%.xv
 	$(VVP) $<

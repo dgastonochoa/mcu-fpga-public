@@ -46,6 +46,7 @@ module alu (
         alu_op_and: res = a & b;
         alu_op_or: res = a | b;
         alu_op_xor: res = a ^ b;
+        alu_op_sll: res = a << b;
         default: res = 3'bx;
         endcase
     end

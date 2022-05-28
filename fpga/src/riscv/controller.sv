@@ -25,6 +25,7 @@ module alu_dec(
         3'b110: r_type_alu_ctr = alu_op_or;
         3'b111: r_type_alu_ctr = alu_op_and;
         3'b100: r_type_alu_ctr = alu_op_xor;
+        3'b001: r_type_alu_ctr = alu_op_sll;
         default: r_type_alu_ctr = 3'bx;
         endcase
     end
