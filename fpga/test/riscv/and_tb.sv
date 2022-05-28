@@ -9,7 +9,8 @@
 
 module and_tb;
     wire reg_we, mem_we, alu_src, pc_src;
-    wire [1:0] imm_src, alu_ctrl, res_src;
+    wire [1:0] imm_src, res_src;
+    wire [2:0] alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;

@@ -16,7 +16,7 @@
 module alu (
     input   logic   [31:0]  a,
     input   logic   [31:0]  b,
-    input   logic   [1:0]   op,
+    input   logic   [2:0]   op,
     output  logic   [31:0]  res,
     output  wire    [3:0]   flags
 );
@@ -45,6 +45,8 @@ module alu (
 
         alu_op_and: res = a & b;
         alu_op_or: res = a | b;
+        alu_op_xor: res = a ^ b;
+        default: res = 3'bx;
         endcase
     end
 
@@ -82,7 +84,7 @@ module alu (
     // overflow
     assign flags[0] = ov;
     // cout
-    assign flags[1] = co & ~op[1];
+    assign flags[1] = co & ~op[1] & ~op[2];
     // zero
     assign flags[2] = ~(|res);
     // neg

@@ -8,7 +8,7 @@
 
 module alu_logic_tb;
     reg signed [31:0] a, b;
-    reg signed [1:0] op;
+    reg signed [2:0] op;
 
     wire signed [31:0] res;
     wire [3:0] flags;
@@ -19,7 +19,10 @@ module alu_logic_tb;
         $dumpfile(`VCD);
         $dumpvars(1, alu_logic_tb);
 
-        // and 0 works
+        //
+        // and
+        //
+        // x_and_0_works
         op = 2;
         a = 32'hffffffff;
         b = 0;
@@ -27,7 +30,7 @@ module alu_logic_tb;
         assert(res === 0);
         assert(flags === 4'b0100);
 
-        // and all ffs works
+        // and_cannot_enable_ov_flag_1
         op = 2;
         a = 32'hffffffff;
         b = 32'hffffffff;
@@ -35,7 +38,15 @@ module alu_logic_tb;
         assert(res === 32'hffffffff);
         assert(flags === 4'b1000);
 
-        // and works (1)
+        // and_cannot_enable_ov_flag_2
+        op = 2;
+        a = 32'hffffffff;
+        b = 32'h7fffffff;
+        #`WAIT_DELAY;
+        assert(res === 32'h7fffffff);
+        assert(flags === 4'b0000);
+
+        // and_works_1
         op = 2;
         a = 32'hffffffff;
         b = 32'b111000;
@@ -43,7 +54,7 @@ module alu_logic_tb;
         assert(res === 32'b111000);
         assert(flags === 4'b0000);
 
-        // and works (1)
+        // and_works_2
         op = 2;
         a = 32'b111000;
         b = 32'hffffffff;
@@ -52,7 +63,10 @@ module alu_logic_tb;
         assert(flags === 4'b0000);
 
 
-
+        //
+        // or
+        //
+        // or_works_1
         op = 3;
         a = 32'hffffffff;
         b = 0;
@@ -60,11 +74,64 @@ module alu_logic_tb;
         assert(res === 32'hffffffff);
         assert(flags === 4'b1000);
 
+        // or_works_2
         op = 3;
         a = 32'h0;
         b = 32'b111000;
         #`WAIT_DELAY;
         assert(res === 32'b111000);
+        assert(flags === 4'b0000);
+
+        // or_cannot_en_ov_flag_1
+        op = 3;
+        a = 32'hffffffff;
+        b = 32'hffffffff;
+        #`WAIT_DELAY;
+        assert(res === 32'hffffffff);
+        assert(flags === 4'b1000);
+
+        // or_cannot_en_ov_flag_2
+        op = 3;
+        a = 32'hffffffff;
+        b = 32'h7fffffff;
+        #`WAIT_DELAY;
+        assert(res === 32'hffffffff);
+        assert(flags === 4'b1000);
+
+
+        //
+        // xor
+        //
+        // xor_cannot_en_ov_flag_1
+        op = 4;
+        a = 32'hffffffff;
+        b = 32'hffffffff;
+        #`WAIT_DELAY;
+        assert(res === 32'h00);
+        assert(flags === 4'b0100);
+
+        // xor_cannot_en_ov_flag_2
+        op = 4;
+        a = 32'hffffffff;
+        b = 32'h7fffffff;
+        #`WAIT_DELAY;
+        assert(res === 32'h80000000);
+        assert(flags === 4'b1000);
+
+        // xor_works_1
+        op = 4;
+        a = 32'b010101;
+        b = 32'b101010;
+        #`WAIT_DELAY;
+        assert(res === 32'b111111);
+        assert(flags === 4'b0000);
+
+        // xor_works_2
+        op = 4;
+        a = 32'b111111;
+        b = 32'b101010;
+        #`WAIT_DELAY;
+        assert(res === 32'b010101);
         assert(flags === 4'b0000);
 
         #`WAIT_DELAY;

@@ -95,7 +95,7 @@ module datapath(
     input   wire        reg_we,
 
     input   wire [1:0]  imm_src,
-    input   wire [1:0]  alu_ctrl,
+    input   wire [2:0]  alu_ctrl,
     input   wire        alu_src,
     input   wire [1:0]  result_src,
     input   wire        pc_src,

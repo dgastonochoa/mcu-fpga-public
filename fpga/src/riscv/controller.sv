@@ -15,16 +15,17 @@ module alu_dec(
     input   wire    [6:0] op,
     input   wire    [2:0] func3,
     input   wire    [6:0] func7,
-    output  logic   [1:0] alu_ctrl
+    output  logic   [2:0] alu_ctrl
 );
-    logic [1:0] r_type_alu_ctr;
+    logic [2:0] r_type_alu_ctr;
 
     always_comb begin
         case (func3)
         3'b000: r_type_alu_ctr = func7 == 7'b0 ? alu_op_add : alu_op_sub;
         3'b110: r_type_alu_ctr = alu_op_or;
         3'b111: r_type_alu_ctr = alu_op_and;
-        default: r_type_alu_ctr = 2'bx;
+        3'b100: r_type_alu_ctr = alu_op_xor;
+        default: r_type_alu_ctr = 3'bx;
         endcase
     end
 
@@ -35,7 +36,7 @@ module alu_dec(
         op_i_type_l:    alu_ctrl = alu_op_add;
         op_s_type:      alu_ctrl = alu_op_add;
         op_b_type:      alu_ctrl = alu_op_sub;
-        default:        alu_ctrl = 2'bx;
+        default:        alu_ctrl = 3'bx;
         endcase
     end
 endmodule
@@ -68,7 +69,7 @@ module controller(
     output  wire        pc_src,
     output  wire [1:0]  imm_src,
 
-    output  wire [1:0]  alu_ctrl
+    output  wire [2:0]  alu_ctrl
 );
     wire [6:0] op;
     wire [2:0] func3;

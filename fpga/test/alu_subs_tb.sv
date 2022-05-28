@@ -8,7 +8,7 @@
 
 module alu_tb;
     reg signed [31:0] a, b;
-    reg signed [1:0] op;
+    reg signed [2:0] op;
 
     wire signed [31:0] res;
     wire [3:0] flags;

@@ -4,10 +4,10 @@
 `include "riscv/datapath.vh"
 
 `ifndef VCD
-    `define VCD "beq_tb.vcd"
+    `define VCD "xor_tb.vcd"
 `endif
 
-module beq_tb;
+module xor_tb;
     wire reg_we, mem_we, alu_src, pc_src;
     wire [1:0] imm_src, res_src;
     wire [2:0] alu_ctrl;
@@ -54,22 +54,25 @@ module beq_tb;
 
     initial begin
         $dumpfile(`VCD);
-        $dumpvars(1, beq_tb);
+        $dumpvars(1, xor_tb);
 
         dut.dp.rf._reg[0] = 32'd00;
-        dut.dp.rf._reg[4] = 32'd00;
+        dut.dp.rf._reg[4] = 32'b00;
+        dut.dp.rf._reg[5] = 32'b101010;
+        dut.dp.rf._reg[6] = 32'b010101;
 
-        dut.instr_mem._mem[0] = 32'h00400a63;       // beq x0, x4, 20
-        dut.instr_mem._mem[5] = 32'h00400263;       // beq x0, x4, 4
-        dut.instr_mem._mem[6] = 32'hfe4004e3;       // beq x0, x4, -6
+        dut.instr_mem._mem[0] = 32'h0062c033;   // xor     x0, x5, x6
+        dut.instr_mem._mem[1] = 32'h0062c233;   // xor     x4, x5, x6
+        dut.instr_mem._mem[2] = 32'h00624233;   // xor     x4, x4, x6
+        dut.instr_mem._mem[3] = 32'h00424233;   // xor     x4, x4, x4
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-            assert(pc === 32'd00);
-        #11 assert(pc === 32'd20);
-        #20 assert(pc === 32'd24);
-        #20 assert(pc === 32'd00);
+        #11 assert(dut.dp.rf._reg[0] === 32'h00);
+        #20 assert(dut.dp.rf._reg[4] === 32'b111111);
+        #20 assert(dut.dp.rf._reg[4] === 32'b101010);
+        #20 assert(dut.dp.rf._reg[4] === 32'b0);
 
         #5;
         $finish;
