@@ -44,29 +44,11 @@ module controller_tb;
             assert(imm_src === imm_src_itype);
             assert(alu_ctrl === alu_op_add);
 
-        alu_flags = 4'b0100;
-        #5  assert(reg_we === 1'b1);
-            assert(mem_we === 1'b0);
-            assert(alu_src === alu_src_ext_imm);
-            assert(res_src === res_src_read_data);
-            assert(pc_src === pc_src_plus_4);
-            assert(imm_src === imm_src_itype);
-            assert(alu_ctrl === alu_op_add);
-
         //
         // sw
         //
         alu_flags = 4'b0;
         instr = 32'h0064a423;
-        #5  assert(reg_we === 1'b0);
-            assert(mem_we === 1'b1);
-            assert(alu_src === alu_src_ext_imm);
-            assert(res_src === res_src_read_data);
-            assert(pc_src === pc_src_plus_4);
-            assert(imm_src === imm_src_stype);
-            assert(alu_ctrl === alu_op_add);
-
-        alu_flags = 4'b0100;
         #5  assert(reg_we === 1'b0);
             assert(mem_we === 1'b1);
             assert(alu_src === alu_src_ext_imm);
@@ -88,14 +70,83 @@ module controller_tb;
             assert(imm_src === 2'bx);
             assert(alu_ctrl === alu_op_or);
 
-        alu_flags = 4'b0100;
+        //
+        // add
+        //
+        alu_flags = 4'b0;
+        instr = 32'h003180b3;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === alu_src_reg);
             assert(res_src === res_src_alu_out);
             assert(pc_src === pc_src_plus_4);
             assert(imm_src === 2'bx);
-            assert(alu_ctrl === alu_op_or);
+            assert(alu_ctrl === alu_op_add);
+
+        //
+        // sub
+        //
+        alu_flags = 4'b0;
+        instr = 32'h403180b3;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === res_src_alu_out);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === 2'bx);
+            assert(alu_ctrl === alu_op_sub);
+
+        //
+        // and
+        //
+        alu_flags = 4'b0;
+        instr = 32'h0031f0b3;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === res_src_alu_out);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === 2'bx);
+            assert(alu_ctrl === alu_op_and);
+
+        //
+        // xor
+        //
+        alu_flags = 4'b0;
+        instr = 32'h0031c0b3;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === res_src_alu_out);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === 2'bx);
+            assert(alu_ctrl === alu_op_xor);
+
+        //
+        // sll
+        //
+        alu_flags = 4'b0;
+        instr = 32'h003190b3;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === res_src_alu_out);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === 2'bx);
+            assert(alu_ctrl === alu_op_sll);
+
+        //
+        // srl
+        //
+        alu_flags = 4'b0;
+        instr = 32'h0031d0b3;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === res_src_alu_out);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === 2'bx);
+            assert(alu_ctrl === alu_op_srl);
 
         //
         // beq
@@ -120,19 +171,75 @@ module controller_tb;
             assert(alu_ctrl === alu_op_sub);
 
         //
+        // bne
+        //
+        alu_flags = 4'b0;
+        instr = 32'h00311863;
+        #5  assert(reg_we === 1'b0);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === 2'bx);
+            assert(pc_src === pc_src_plus_off);
+            assert(imm_src === imm_src_btype);
+            assert(alu_ctrl === alu_op_sub);
+
+        alu_flags = 4'b0100;
+        #5  assert(reg_we === 1'b0);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === 2'bx);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === imm_src_btype);
+            assert(alu_ctrl === alu_op_sub);
+
+        //
+        // blt
+        //
+        alu_flags = 4'b1000;
+        instr = 32'h00314863;
+        #5  assert(reg_we === 1'b0);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === 2'bx);
+            assert(pc_src === pc_src_plus_off);
+            assert(imm_src === imm_src_btype);
+            assert(alu_ctrl === alu_op_sub);
+
+        alu_flags = 4'b0000;
+        #5  assert(reg_we === 1'b0);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === 2'bx);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === imm_src_btype);
+            assert(alu_ctrl === alu_op_sub);
+
+        //
+        // bge
+        //
+        alu_flags = 4'b1000;
+        instr = 32'h00315863;
+        #5  assert(reg_we === 1'b0);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === 2'bx);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === imm_src_btype);
+            assert(alu_ctrl === alu_op_sub);
+
+        alu_flags = 4'b0000;
+        #5  assert(reg_we === 1'b0);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === 2'bx);
+            assert(pc_src === pc_src_plus_off);
+            assert(imm_src === imm_src_btype);
+            assert(alu_ctrl === alu_op_sub);
+
+        //
         // addi
         //
         alu_flags = 4'b0;
-        instr = 32'h00a00213;
-        #5  assert(reg_we === 1'b1);
-            assert(mem_we === 1'b0);
-            assert(alu_src === alu_src_ext_imm);
-            assert(res_src === res_src_alu_out);
-            assert(pc_src === pc_src_plus_4);
-            assert(imm_src === imm_src_itype);
-            assert(alu_ctrl === alu_op_add);
-
-        alu_flags = 4'b0100;
         instr = 32'h00a00213;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
@@ -146,16 +253,6 @@ module controller_tb;
         // jal
         //
         alu_flags = 4'b0;
-        instr = 32'h00a00213;
-        #5  assert(reg_we === 1'b1);
-            assert(mem_we === 1'b0);
-            assert(alu_src === alu_src_ext_imm);
-            assert(res_src === res_src_alu_out);
-            assert(pc_src === pc_src_plus_4);
-            assert(imm_src === imm_src_itype);
-            assert(alu_ctrl === alu_op_add);
-
-        alu_flags = 4'b0100;
         instr = 32'h00a00213;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
