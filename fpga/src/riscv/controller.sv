@@ -101,6 +101,7 @@ module controller(
         3'b100: pc_src_b_type = (alu_neg ^ alu_ov) ? pc_src_plus_off : pc_src_plus_4;   // blt
         3'b101: pc_src_b_type = (alu_neg ^ alu_ov) ? pc_src_plus_4 : pc_src_plus_off;   // bge
         3'b110: pc_src_b_type = alu_cout ? pc_src_plus_4: pc_src_plus_off;              // bltu
+        3'b111: pc_src_b_type = alu_cout ? pc_src_plus_off : pc_src_plus_4;             // bgeu
         default: pc_src_b_type = 3'bx;
         endcase
     end
