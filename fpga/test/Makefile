@@ -10,8 +10,7 @@ RISCV_TEST_DIR := $(PREFIX)/riscv
 
 CC := gcc
 VV := iverilog
-RV_AS := riscv64-unknown-elf-as
-RV_OBJCOPY := riscv64-unknown-elf-objcopy
+
 RANDOM := $(shell bash -c 'echo $$RANDOM')
 
 
@@ -61,15 +60,6 @@ test: $(tests) $(riscv_tests)
 wavedumps: $(tests_waves) $(riscv_tests_waves)
 
 all: test wavedumps
-
-#
-# This target is used to assembly riscv instructions
-# to be used in the test benches.
-#
-gen_as $(PREFIX)/as_instr.bin: $(TESTUTILS)/as_instr.s | dirs
-	@$(RV_AS) -o $(PREFIX)/$@.elf $<
-	@$(RV_OBJCOPY) -O binary $(PREFIX)/$@.elf $(PREFIX)/$@.bin
-	@xxd -e -c 4 $(PREFIX)/$@.bin
 
 $(tests): | dirs
 
