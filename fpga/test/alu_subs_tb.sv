@@ -3,10 +3,10 @@
 `define WAIT_DELAY 180
 
 `ifndef VCD
-    `define VCD "alu_tb.vcd"
+    `define VCD "alu_sub_tb.vcd"
 `endif
 
-module alu_tb;
+module alu_sub_tb;
     reg signed [31:0] a, b;
     reg signed [2:0] op;
 
@@ -17,7 +17,7 @@ module alu_tb;
 
     initial begin
         $dumpfile(`VCD);
-        $dumpvars(1, alu_tb);
+        $dumpvars(1, alu_sub_tb);
 
         // can subs. two 0
         op = 1;
@@ -79,6 +79,13 @@ module alu_tb;
         b = 5;
         #`WAIT_DELAY;
         assert(flags === 4'b1010);
+
+        // cout and overflow are detected
+        op = 1;
+        a = 32'h80000000;
+        b = 32'h00000002;
+        #`WAIT_DELAY;
+        assert(flags === 4'b0011);
 
         $finish;
     end

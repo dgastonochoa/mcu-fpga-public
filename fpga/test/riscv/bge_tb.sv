@@ -43,10 +43,18 @@ module bge_tb;
         dut.dp.rf._reg[4] = 32'd10;
         dut.dp.rf._reg[5] = 32'd20;
 
-        dut.instr_mem._mem[0] = 32'h00025863;       // bge x4, x0, 16
-        dut.instr_mem._mem[4] = 32'h00425263;       // bge x4, x4, 20
-        dut.instr_mem._mem[5] = 32'hfe42d6e3;       // bge x5, x4, 0
+        // bge'ing these 2 regs. (a < b; b = big. neg. num., a = 2)
+        // will produce the special case in which comparing two
+        // signed numbers a and b, begin a greater than b, won't cause
+        // an ALU's neg flag to be 0, but an overflow.
+        dut.dp.rf._reg[6] = 32'd02;
+        dut.dp.rf._reg[7] = 32'h80000000;
 
+        dut.instr_mem._mem[0] = 32'h00025863;   // bge x4, x0, 16
+        dut.instr_mem._mem[4] = 32'h00425263;   // bge x4, x4, 4
+        dut.instr_mem._mem[5] = 32'h00735863;   // bge x6, x7, 4
+        dut.instr_mem._mem[9] = 32'hfc525ee3;   // blt x4, x5, -36
+        dut.instr_mem._mem[10] = 32'hfc42dce3;   // blt x5, x4, -40
 
         // Reset and test
         #2  rst = 1;
@@ -54,6 +62,8 @@ module bge_tb;
             assert(pc === 32'd00);
         #11 assert(pc === 32'd16);
         #20 assert(pc === 32'd20);
+        #20 assert(pc === 32'd36);
+        #20 assert(pc === 32'd40);
         #20 assert(pc === 32'd00);
 
         #5;

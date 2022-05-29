@@ -18,7 +18,8 @@ RANDOM := $(shell bash -c 'echo $$RANDOM')
 tests := $(PREFIX)/mem_tb.xv				\
 		 $(PREFIX)/alu_logic_tb.xv			\
 		 $(PREFIX)/alu_add_tb.xv			\
-		 $(PREFIX)/alu_subs_tb.xv
+		 $(PREFIX)/alu_subs_tb.xv			\
+		 $(PREFIX)/alu_cmp_tb.xv
 
 riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/sw_tb.xv			\

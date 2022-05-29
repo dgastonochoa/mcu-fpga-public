@@ -85,18 +85,21 @@ module controller(
     logic [9:0] ctrls;
     assign {reg_we, mem_we, alu_src, result_src, pc_src, imm_src} = ctrls;
 
+
+    // These wires are quired because icarus verilog doesn't
+    // support index accesses within an `always_comb` block.
+    wire alu_ov, alu_cout, alu_zero, alu_neg;
+
+    assign {alu_neg, alu_zero, alu_cout, alu_ov} = alu_flags[3:0];
+
+
     logic pc_src_b_type;
-    wire alu_zero, alu_neg;
-
-    assign alu_zero = alu_flags[2];
-    assign alu_neg = alu_flags[3];
-
     always_comb begin
         case (func3)
-        3'b000: pc_src_b_type = alu_zero ? pc_src_plus_off : pc_src_plus_4;     // beq
-        3'b001: pc_src_b_type = alu_zero ? pc_src_plus_4 : pc_src_plus_off;     // bne
-        3'b100: pc_src_b_type = alu_neg ? pc_src_plus_off : pc_src_plus_4;      // blt
-        3'b101: pc_src_b_type = alu_neg ? pc_src_plus_4 : pc_src_plus_off;      // bge
+        3'b000: pc_src_b_type = alu_zero ? pc_src_plus_off : pc_src_plus_4;             // beq
+        3'b001: pc_src_b_type = alu_zero ? pc_src_plus_4 : pc_src_plus_off;             // bne
+        3'b100: pc_src_b_type = (alu_neg ^ alu_ov) ? pc_src_plus_off : pc_src_plus_4;   // blt
+        3'b101: pc_src_b_type = (alu_neg ^ alu_ov) ? pc_src_plus_4 : pc_src_plus_off;   // bge
         default: pc_src_b_type = 3'bx;
         endcase
     end
