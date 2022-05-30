@@ -27,6 +27,7 @@ module alu_dec(
         3'b100: r_type_alu_ctr = alu_op_xor;
         3'b001: r_type_alu_ctr = alu_op_sll;
         3'b101: r_type_alu_ctr = func7 == 7'b0 ? alu_op_srl : alu_op_sra;
+        3'b010: r_type_alu_ctr = alu_op_slt;
         default: r_type_alu_ctr = 3'bx;
         endcase
     end
@@ -98,8 +99,11 @@ module controller(
         case (func3)
         3'b000: pc_src_b_type = alu_zero ? pc_src_plus_off : pc_src_plus_4;             // beq
         3'b001: pc_src_b_type = alu_zero ? pc_src_plus_4 : pc_src_plus_off;             // bne
+
+        // TODO This two xor's can be optimized by using alu_ctrl = alu_op_slt
         3'b100: pc_src_b_type = (alu_neg ^ alu_ov) ? pc_src_plus_off : pc_src_plus_4;   // blt
         3'b101: pc_src_b_type = (alu_neg ^ alu_ov) ? pc_src_plus_4 : pc_src_plus_off;   // bge
+
         3'b110: pc_src_b_type = alu_cout ? pc_src_plus_4: pc_src_plus_off;              // bltu
         3'b111: pc_src_b_type = alu_cout ? pc_src_plus_off : pc_src_plus_4;             // bgeu
         default: pc_src_b_type = 3'bx;

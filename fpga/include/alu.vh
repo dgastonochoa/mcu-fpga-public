@@ -9,5 +9,6 @@ localparam alu_op_xor = 4'b0100;
 localparam alu_op_sll = 4'b0101;
 localparam alu_op_srl = 4'b0110;
 localparam alu_op_sra = 4'b0111;
+localparam alu_op_slt = 4'b1000;
 
 `endif // ALU_H
