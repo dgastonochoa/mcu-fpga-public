@@ -48,6 +48,7 @@ module alu (
         alu_op_xor: res = a ^ b;
         alu_op_sll: res = a << b;
         alu_op_srl: res = a >> b;
+        alu_op_sra: res = a >>> b;
         default: res = 4'bx;
         endcase
     end

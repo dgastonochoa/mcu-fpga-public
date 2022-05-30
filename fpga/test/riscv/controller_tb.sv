@@ -306,6 +306,19 @@ module controller_tb;
             assert(imm_src === imm_src_itype);
             assert(alu_ctrl === alu_op_add);
 
+        //
+        // sra
+        //
+        alu_flags = 4'b0;
+        instr = 32'h4062d233;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_reg);
+            assert(res_src === res_src_alu_out);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === 2'bx);
+            assert(alu_ctrl === alu_op_sra);
+
         $finish;
     end
 
