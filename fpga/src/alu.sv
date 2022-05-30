@@ -16,7 +16,7 @@
 module alu (
     input   logic   [31:0]  a,
     input   logic   [31:0]  b,
-    input   logic   [2:0]   op,
+    input   logic   [3:0]   op,
     output  logic   [31:0]  res,
     output  wire    [3:0]   flags
 );
@@ -48,7 +48,7 @@ module alu (
         alu_op_xor: res = a ^ b;
         alu_op_sll: res = a << b;
         alu_op_srl: res = a >> b;
-        default: res = 3'bx;
+        default: res = 4'bx;
         endcase
     end
 

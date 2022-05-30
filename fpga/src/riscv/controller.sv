@@ -15,9 +15,9 @@ module alu_dec(
     input   wire    [6:0] op,
     input   wire    [2:0] func3,
     input   wire    [6:0] func7,
-    output  logic   [2:0] alu_ctrl
+    output  logic   [3:0] alu_ctrl
 );
-    logic [2:0] r_type_alu_ctr;
+    logic [3:0] r_type_alu_ctr;
 
     always_comb begin
         case (func3)
@@ -71,7 +71,7 @@ module controller(
     output  wire        pc_src,
     output  wire [1:0]  imm_src,
 
-    output  wire [2:0]  alu_ctrl
+    output  wire [3:0]  alu_ctrl
 );
     wire [6:0] op;
     wire [2:0] func3;

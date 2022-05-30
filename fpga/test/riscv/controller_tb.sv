@@ -13,7 +13,7 @@ module controller_tb;
 
     wire reg_we, mem_we, alu_src, pc_src;
     wire [1:0] imm_src, res_src;
-    wire [2:0] alu_ctrl;
+    wire [3:0] alu_ctrl;
 
     controller ctrl(
         instr,
