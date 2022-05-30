@@ -49,13 +49,18 @@ module alu (
             res = {{31{1'b0}}, (s[31] ^ ov)};
         end
 
+        alu_op_sltu: begin
+            b_op = nb;
+            cin = 1'b1;
+            res = {{31{1'b0}}, ~co};
+        end
+
         alu_op_and: res = a & b;
         alu_op_or: res = a | b;
         alu_op_xor: res = a ^ b;
         alu_op_sll: res = a << b;
         alu_op_srl: res = a >> b;
         alu_op_sra: res = a >>> b;
-
         default: res = 4'bx;
         endcase
     end
