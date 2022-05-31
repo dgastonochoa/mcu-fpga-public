@@ -85,7 +85,7 @@ module controller(
     assign func7 = instr[31:25];
     alu_dec ad(op, func3, func7, alu_ctrl);
 
-    logic [10:0] ctrls;
+    logic [8:0] ctrls;
     assign {reg_we, mem_we, alu_src, result_src, pc_src, imm_src} = ctrls;
 
 
