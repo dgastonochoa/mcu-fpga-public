@@ -9,8 +9,8 @@
 
 module srl_tb;
     wire reg_we, mem_we;
-    wire [1:0] res_src, pc_src, alu_src;
-    wire [2:0] imm_src;
+    wire [1:0] res_src, pc_src;
+    wire [2:0] imm_src, alu_src;
     wire [3:0] alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
@@ -35,13 +35,6 @@ module srl_tb;
     );
 
     always #10 clk = ~clk;
-
-    //
-    // Debug signals
-    //
-    wire [31:0] alu_a, alu_b;
-    assign alu_a = dut.dp.srca;
-    assign alu_b = dut.dp.srcb;
 
     initial begin
         $dumpfile(`VCD);

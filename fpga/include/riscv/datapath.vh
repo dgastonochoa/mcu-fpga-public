@@ -11,12 +11,14 @@ localparam imm_src_itype        = 3'b000;
 localparam imm_src_stype        = 3'b001;
 localparam imm_src_btype        = 3'b010;
 localparam imm_src_jtype        = 3'b011;
+localparam imm_src_utype        = 3'b100;
 
 /**
  * ALU's second operand source (register, immediate...)
  */
 localparam alu_src_reg          = 2'b00;
 localparam alu_src_ext_imm      = 2'b01;
+localparam alu_src_pc_ext_imm   = 2'b10;
 
 /**
  * Source of the result to be written in the register file.

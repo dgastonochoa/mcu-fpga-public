@@ -359,6 +359,19 @@ module controller_tb;
             assert(imm_src === imm_src_itype);
             assert(alu_ctrl === 3'bx);
 
+        //
+        // auipc
+        //
+        alu_flags = 4'b0;
+        instr = 32'h00014097;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === alu_src_pc_ext_imm);
+            assert(res_src === res_src_alu_out);
+            assert(pc_src === pc_src_plus_4);
+            assert(imm_src === imm_src_utype);
+            assert(alu_ctrl === alu_op_add);
+
         $finish;
     end
 

@@ -36,6 +36,33 @@ module auipc_tb;
 
     always #10 clk = ~clk;
 
+    //
+    // Debug signals
+    //
+    wire [31:0] pc_plus_4;
+    wire [31:0] pc_plus_off;
+    wire [31:0] pc_reg_plus_off;
+    wire [31:0] pc_next;
+    wire [31:0] reg_rd1;
+    wire [31:0] reg_rd2;
+    wire [31:0] reg_wr_data;
+    wire [31:0] alu_srca;
+    wire [31:0] alu_srcb;
+    wire [31:0] ext_imm;
+    wire [31:0] res;
+
+    assign pc_plus_4 = dut.dp.pc_plus_4;
+    assign pc_plus_off = dut.dp.pc_plus_off;
+    assign pc_reg_plus_off = dut.dp.pc_reg_plus_off;
+    assign pc_next = dut.dp.pc_next;
+    assign reg_rd1 = dut.dp.reg_rd1;
+    assign reg_rd2 = dut.dp.reg_rd2;
+    assign reg_wr_data = dut.dp.reg_wr_data;
+    assign alu_srca = dut.dp.alu_srca;
+    assign alu_srcb =  dut.dp.alu_srcb;
+    assign ext_imm = dut.dp.ext_imm;
+    assign res = dut.dp.rf._reg[1];
+
 
     initial begin
         $dumpfile(`VCD);
@@ -44,13 +71,14 @@ module auipc_tb;
         dut.dp.rf._reg[0] = 32'd00;
         dut.dp.rf._reg[1] = 32'd12;
 
-        dut.instr_mem._mem[0] = 32'h0ffff097;
+        dut.instr_mem._mem[0] = 32'h00014097;   // auipc   x1, 20
+        dut.instr_mem._mem[1] = 32'h00014097;   // auipc   x1, 20
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-            assert(pc === 32'd00);
-        #11 assert(pc === (32'hffff << 12) + 12 + 4);
+        #11 assert(dut.dp.rf._reg[1] === (32'd20 << 12));
+        #20 assert(dut.dp.rf._reg[1] === (32'd20 << 12) + 4);
 
         #5;
         $finish;
