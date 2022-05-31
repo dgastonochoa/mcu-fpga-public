@@ -8,8 +8,8 @@
 `endif
 
 module sw_tb;
-    wire reg_we, mem_we, alu_src, pc_src;
-    wire [1:0] imm_src, res_src;
+    wire reg_we, mem_we, alu_src;
+    wire [1:0] imm_src, res_src, pc_src;
     wire [3:0] alu_ctrl;
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;

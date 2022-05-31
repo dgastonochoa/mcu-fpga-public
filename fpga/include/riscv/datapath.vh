@@ -28,7 +28,7 @@ localparam res_src_pc_plus_4    = 2'b10;
 /**
  * Indicates the source of the next PC (+4, +offset...)
  */
-localparam pc_src_plus_4        = 1'b0;
-localparam pc_src_plus_off      = 1'b1;
+localparam pc_src_plus_4        = 2'b00;
+localparam pc_src_plus_off      = 2'b01;
 
 `endif // RISCV_PARAMS_H

@@ -10,7 +10,7 @@ module riscv_single_top(
     output  wire [3:0]  alu_op,
     output  wire        alu_src,
     output  wire [1:0]  res_src,
-    output  wire        pc_src,
+    output  wire [1:0]  pc_src,
     output  wire [31:0] instr,
     output  wire [31:0] alu_out,
     output  wire [31:0] mem_rd_data,

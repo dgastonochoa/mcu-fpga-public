@@ -70,7 +70,7 @@ module controller(
 
     output  wire        alu_src,
     output  wire [1:0]  result_src,
-    output  wire        pc_src,
+    output  wire [1:0]  pc_src,
     output  wire [1:0]  imm_src,
 
     output  wire [3:0]  alu_ctrl
@@ -84,7 +84,7 @@ module controller(
     assign func7 = instr[31:25];
     alu_dec ad(op, func3, func7, alu_ctrl);
 
-    logic [9:0] ctrls;
+    logic [10:0] ctrls;
     assign {reg_we, mem_we, alu_src, result_src, pc_src, imm_src} = ctrls;
 
 
@@ -95,7 +95,7 @@ module controller(
     assign {alu_neg, alu_zero, alu_cout, alu_ov} = alu_flags[3:0];
 
 
-    logic pc_src_b_type;
+    logic [1:0] pc_src_b_type;
     always_comb begin
         case (func3)
         3'b000: pc_src_b_type = alu_zero ? pc_src_plus_off : pc_src_plus_4;             // beq

@@ -98,7 +98,7 @@ module datapath(
     input   wire [3:0]  alu_ctrl,
     input   wire        alu_src,
     input   wire [1:0]  result_src,
-    input   wire        pc_src,
+    input   wire [1:0]  pc_src,
 
     output  wire [31:0] pc,
 
@@ -114,7 +114,7 @@ module datapath(
 
     assign pc_plus_4 = pc + 4;
     assign pc_plus_off = pc + ext_imm;
-    assign pc_next = pc_src == 1'b1 ? pc_plus_off : pc_plus_4;
+    assign pc_next = pc_src == 2'b1 ? pc_plus_off : pc_plus_4;
 
 
     wire [31:0] srca;

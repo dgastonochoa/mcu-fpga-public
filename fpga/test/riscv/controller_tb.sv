@@ -11,8 +11,8 @@ module controller_tb;
     reg [31:0] instr;
     reg [3:0] alu_flags;
 
-    wire reg_we, mem_we, alu_src, pc_src;
-    wire [1:0] imm_src, res_src;
+    wire reg_we, mem_we, alu_src;
+    wire [1:0] imm_src, res_src, pc_src;
     wire [3:0] alu_ctrl;
 
     controller ctrl(
