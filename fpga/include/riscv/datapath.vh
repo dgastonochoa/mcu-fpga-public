@@ -30,5 +30,6 @@ localparam res_src_pc_plus_4    = 2'b10;
  */
 localparam pc_src_plus_4        = 2'b00;
 localparam pc_src_plus_off      = 2'b01;
+localparam pc_src_reg_plus_off  = 2'b10;
 
 `endif // RISCV_PARAMS_H

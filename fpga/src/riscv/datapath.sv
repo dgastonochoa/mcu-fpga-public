@@ -109,12 +109,19 @@ module datapath(
     input   wire        rst,
     input   wire        clk
 );
-    wire [31:0] pc_next, pc_plus_4, pc_plus_off;
+    wire [31:0] pc_plus_4, pc_plus_off, pc_reg_plus_off;
     dff pc_ff(pc_next, pc, rst, clk);
 
-    assign pc_plus_4 = pc + 4;
-    assign pc_plus_off = pc + ext_imm;
-    assign pc_next = pc_src == 2'b1 ? pc_plus_off : pc_plus_4;
+
+    logic [31:0] pc_next;
+    always_comb begin
+        case (pc_src)
+        pc_src_plus_4: pc_next = pc + 4;
+        pc_src_plus_off: pc_next = pc + ext_imm;
+        pc_src_reg_plus_off: pc_next =  srca + ext_imm;
+        default: pc_next = 2'bx;
+        endcase
+    end
 
 
     wire [31:0] srca;
@@ -135,7 +142,7 @@ module datapath(
         case (result_src)
         res_src_alu_out: reg_wr_data = alu_out;
         res_src_read_data: reg_wr_data = read_data;
-        res_src_pc_plus_4: reg_wr_data = pc_plus_4;
+        res_src_pc_plus_4: reg_wr_data = pc + 4;
         default: reg_wr_data = 32'hx;
         endcase
     end

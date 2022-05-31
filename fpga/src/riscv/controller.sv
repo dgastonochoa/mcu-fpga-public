@@ -6,6 +6,7 @@ localparam op_s_type = 7'b0100011;
 localparam op_r_type = 7'b0110011;
 localparam op_b_type = 7'b1100011;
 localparam op_j_type = 7'b1101111;
+localparam op_jalr = 7'b1100111;
 
 /**
  * Decodes the ALU control (op. to perform) based on the inputs
@@ -113,13 +114,14 @@ module controller(
 
     always_comb begin
         case (op)
-        //                       reg_we  mem_we  alu_src            result_src        pc_src            imm_src
-        op_i_type_l:    ctrls = {1'b1,  1'b0,    alu_src_ext_imm, res_src_read_data, pc_src_plus_4,     imm_src_itype};
-        op_i_type:      ctrls = {1'b1,  1'b0,    alu_src_ext_imm, res_src_alu_out,   pc_src_plus_4,     imm_src_itype};
-        op_s_type:      ctrls = {1'b0,  1'b1,    alu_src_ext_imm, res_src_read_data, pc_src_plus_4,     imm_src_stype};
-        op_r_type:      ctrls = {1'b1,  1'b0,    alu_src_reg,     res_src_alu_out,   pc_src_plus_4,     2'bx         };
-        op_b_type:      ctrls = {1'b0,  1'b0,    alu_src_reg,     2'bx,              pc_src_b_type,     imm_src_btype};
-        op_j_type:      ctrls = {1'b1,  1'b0,    1'bx,            res_src_pc_plus_4, pc_src_plus_off,   imm_src_jtype};
+        //                       reg_we  mem_we  alu_src            result_src        pc_src                imm_src
+        op_i_type_l:    ctrls = {1'b1,  1'b0,    alu_src_ext_imm, res_src_read_data, pc_src_plus_4,         imm_src_itype};
+        op_i_type:      ctrls = {1'b1,  1'b0,    alu_src_ext_imm, res_src_alu_out,   pc_src_plus_4,         imm_src_itype};
+        op_s_type:      ctrls = {1'b0,  1'b1,    alu_src_ext_imm, res_src_read_data, pc_src_plus_4,         imm_src_stype};
+        op_r_type:      ctrls = {1'b1,  1'b0,    alu_src_reg,     res_src_alu_out,   pc_src_plus_4,         2'bx         };
+        op_b_type:      ctrls = {1'b0,  1'b0,    alu_src_reg,     2'bx,              pc_src_b_type,         imm_src_btype};
+        op_j_type:      ctrls = {1'b1,  1'b0,    1'bx,            res_src_pc_plus_4, pc_src_plus_off,       imm_src_jtype};
+        op_jalr:        ctrls = {1'b1,  1'b0,    1'bx,            res_src_pc_plus_4, pc_src_reg_plus_off,   imm_src_itype};
         default:        ctrls = 10'bx;
         endcase
     end
