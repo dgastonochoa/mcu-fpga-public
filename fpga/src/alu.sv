@@ -46,7 +46,7 @@ module alu (
         alu_op_slt: begin
             b_op = nb;
             cin = 1'b1;
-            res = {{31{1'b0}}, (s[31] ^ ov)};
+            res = {{31{1'b0}}, (sign ^ ov)};
         end
 
         alu_op_sltu: begin
@@ -66,6 +66,9 @@ module alu (
     end
 
     assign {co, s} = a + b_op + cin;
+
+    wire sign;
+    assign sign = s[31];
 
     //
     // overflows
