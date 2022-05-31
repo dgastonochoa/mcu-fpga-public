@@ -9,7 +9,8 @@
 
 module or_tb;
     wire reg_we, mem_we, alu_src;
-    wire [1:0] imm_src, res_src, pc_src;
+    wire [1:0] res_src, pc_src;
+    wire [2:0] imm_src;
     wire [3:0] alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
@@ -35,22 +36,8 @@ module or_tb;
 
     always #10 clk = ~clk;
 
-    //
-    // Debug signals
-    //
-    wire [31:0] x6, x9;
-    assign x6 = dut.dp.rf._reg[6];
-    assign x9 = dut.dp.rf._reg[9];
-
-    wire [31:0] addr1, addr3;
-    assign addr1 = dut.dp.rf.addr1;
-    assign addr3 = dut.dp.rf.addr3;
-
-    wire [31:0] mem5, mem10, mem11;
-    assign mem5 = dut.data_mem._mem[5];
-    assign mem10 = dut.data_mem._mem[10];
-    assign mem11 = dut.data_mem._mem[11];
-
+    wire [9:0] _ctrls;
+    assign _ctrls = dut.co.ctrls;
 
     initial begin
         $dumpfile(`VCD);

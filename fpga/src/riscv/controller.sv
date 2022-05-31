@@ -72,7 +72,7 @@ module controller(
     output  wire        alu_src,
     output  wire [1:0]  result_src,
     output  wire [1:0]  pc_src,
-    output  wire [1:0]  imm_src,
+    output  wire [2:0]  imm_src,
 
     output  wire [3:0]  alu_ctrl
 );
@@ -85,7 +85,7 @@ module controller(
     assign func7 = instr[31:25];
     alu_dec ad(op, func3, func7, alu_ctrl);
 
-    logic [8:0] ctrls;
+    logic [9:0] ctrls;
     assign {reg_we, mem_we, alu_src, result_src, pc_src, imm_src} = ctrls;
 
 
@@ -118,7 +118,7 @@ module controller(
         op_i_type_l:    ctrls = {1'b1,  1'b0,    alu_src_ext_imm, res_src_read_data, pc_src_plus_4,         imm_src_itype};
         op_i_type:      ctrls = {1'b1,  1'b0,    alu_src_ext_imm, res_src_alu_out,   pc_src_plus_4,         imm_src_itype};
         op_s_type:      ctrls = {1'b0,  1'b1,    alu_src_ext_imm, res_src_read_data, pc_src_plus_4,         imm_src_stype};
-        op_r_type:      ctrls = {1'b1,  1'b0,    alu_src_reg,     res_src_alu_out,   pc_src_plus_4,         2'bx         };
+        op_r_type:      ctrls = {1'b1,  1'b0,    alu_src_reg,     res_src_alu_out,   pc_src_plus_4,         3'bx         };
         op_b_type:      ctrls = {1'b0,  1'b0,    alu_src_reg,     2'bx,              pc_src_b_type,         imm_src_btype};
         op_j_type:      ctrls = {1'b1,  1'b0,    1'bx,            res_src_pc_plus_4, pc_src_plus_off,       imm_src_jtype};
         op_jalr:        ctrls = {1'b1,  1'b0,    1'bx,            res_src_pc_plus_4, pc_src_reg_plus_off,   imm_src_itype};

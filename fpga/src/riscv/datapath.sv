@@ -9,7 +9,7 @@
  */
 module extend(
     input   wire    [31:0] instr,
-    input   wire    [1:0]  imm_src,
+    input   wire    [2:0]  imm_src,
     output  logic   [31:0] ext_imm
 );
     wire [31:0] i_src, s_src, b_src, j_src;
@@ -94,7 +94,7 @@ module datapath(
     input   wire [31:0] read_data,
     input   wire        reg_we,
 
-    input   wire [1:0]  imm_src,
+    input   wire [2:0]  imm_src,
     input   wire [3:0]  alu_ctrl,
     input   wire        alu_src,
     input   wire [1:0]  result_src,

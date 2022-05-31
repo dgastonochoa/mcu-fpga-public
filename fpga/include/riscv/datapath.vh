@@ -7,10 +7,10 @@
  * Immediate source. Indicates the type of instruction
  * as a function of how is the immediate encoded in it.
  */
-localparam imm_src_itype        = 2'b00;
-localparam imm_src_stype        = 2'b01;
-localparam imm_src_btype        = 2'b10;
-localparam imm_src_jtype        = 2'b11;
+localparam imm_src_itype        = 3'b000;
+localparam imm_src_stype        = 3'b001;
+localparam imm_src_btype        = 3'b010;
+localparam imm_src_jtype        = 3'b011;
 
 /**
  * ALU's second operand source (register, immediate...)
