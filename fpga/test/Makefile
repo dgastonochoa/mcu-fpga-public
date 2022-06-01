@@ -76,10 +76,10 @@ $(wavedumps): | dirs
 
 
 $(PREFIX)/%.xv: %.sv $(common_src)
-	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
+	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
 
 $(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src)
-	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
+	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
 
 $(PREFIX)/%.xv.vcd: $(PREFIX)/%.xv
 	$(VVP) $<
