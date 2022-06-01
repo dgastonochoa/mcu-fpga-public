@@ -40,6 +40,14 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/slt_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/sltu_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/jalr_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/slli_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/slti_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/sltiu_tb.xv		\
+		 	   $(RISCV_TEST_DIR)/xori_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/srli_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/srai_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/ori_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/andi_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/auipc_tb.xv		\
 		 	   $(RISCV_TEST_DIR)/datapath_tb.xv		\
 		 	   $(RISCV_TEST_DIR)/controller_tb.xv

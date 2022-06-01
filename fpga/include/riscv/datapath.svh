@@ -11,7 +11,13 @@ typedef enum logic [2:0]
     IMM_SRC_STYPE        = 3'b001,
     IMM_SRC_BTYPE        = 3'b010,
     IMM_SRC_JTYPE        = 3'b011,
-    IMM_SRC_UTYPE        = 3'b100
+    IMM_SRC_UTYPE        = 3'b100,
+
+    // slli, srai and srli immediate is trated differently
+    // from other I-type instructions (its extended must be
+    // unsigned and it's only 5 bits length)
+    IMM_SRC_ITYPE2       = 3'b101
+
 } imm_src_e;
 
 /**

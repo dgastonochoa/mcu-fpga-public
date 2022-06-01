@@ -1,9 +1,7 @@
 `timescale 10ps/1ps
+
 `include "alu.svh"
 `include "riscv/datapath.svh"
-
-
-
 
 `ifndef VCD
     `define VCD "xor_tb.vcd"

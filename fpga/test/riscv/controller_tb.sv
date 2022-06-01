@@ -375,6 +375,110 @@ module controller_tb;
             assert(imm_src === IMM_SRC_UTYPE);
             assert(alu_ctrl === ALU_OP_ADD);
 
+        //
+        // andi
+        //
+        alu_flags = 4'b0;
+        instr = 32'h0ff27013;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === ALU_SRC_EXT_IMM);
+            assert(res_src === RES_SRC_ALU_OUT);
+            assert(pc_src === PC_SRC_PLUS_4);
+            assert(imm_src === IMM_SRC_ITYPE);
+            assert(alu_ctrl === ALU_OP_AND);
+
+        //
+        // srli
+        //
+        alu_flags = 4'b0;
+        instr = 32'h00425013;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === ALU_SRC_EXT_IMM);
+            assert(res_src === RES_SRC_ALU_OUT);
+            assert(pc_src === PC_SRC_PLUS_4);
+            assert(imm_src === IMM_SRC_ITYPE2);
+            assert(alu_ctrl === ALU_OP_SRL);
+
+        //
+        // ori
+        //
+        alu_flags = 4'b0;
+        instr = 32'h0fe26013;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === ALU_SRC_EXT_IMM);
+            assert(res_src === RES_SRC_ALU_OUT);
+            assert(pc_src === PC_SRC_PLUS_4);
+            assert(imm_src === IMM_SRC_ITYPE);
+            assert(alu_ctrl === ALU_OP_OR);
+
+        //
+        // slli
+        //
+        alu_flags = 4'b0;
+        instr = 32'h00421013;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === ALU_SRC_EXT_IMM);
+            assert(res_src === RES_SRC_ALU_OUT);
+            assert(pc_src === PC_SRC_PLUS_4);
+            assert(imm_src === IMM_SRC_ITYPE2);
+            assert(alu_ctrl === ALU_OP_SLL);
+
+        //
+        // slti
+        //
+        alu_flags = 4'b0;
+        instr = 32'h0022a213;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === ALU_SRC_EXT_IMM);
+            assert(res_src === RES_SRC_ALU_OUT);
+            assert(pc_src === PC_SRC_PLUS_4);
+            assert(imm_src === IMM_SRC_ITYPE);
+            assert(alu_ctrl === ALU_OP_SLT);
+
+        //
+        // sltiu
+        //
+        alu_flags = 4'b0;
+        instr = 32'h0022b213;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === ALU_SRC_EXT_IMM);
+            assert(res_src === RES_SRC_ALU_OUT);
+            assert(pc_src === PC_SRC_PLUS_4);
+            assert(imm_src === IMM_SRC_ITYPE);
+            assert(alu_ctrl === ALU_OP_SLTU);
+
+        //
+        // srai
+        //
+        alu_flags = 4'b0;
+        instr = 32'h4022d213;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === ALU_SRC_EXT_IMM);
+            assert(res_src === RES_SRC_ALU_OUT);
+            assert(pc_src === PC_SRC_PLUS_4);
+            assert(imm_src === IMM_SRC_ITYPE2);
+            assert(alu_ctrl === ALU_OP_SRA);
+
+        //
+        // xori
+        //
+        alu_flags = 4'b0;
+        instr = 32'h0152c013;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === ALU_SRC_EXT_IMM);
+            assert(res_src === RES_SRC_ALU_OUT);
+            assert(pc_src === PC_SRC_PLUS_4);
+            assert(imm_src === IMM_SRC_ITYPE);
+            assert(alu_ctrl === ALU_OP_XOR);
+
         $finish;
     end
 

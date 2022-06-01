@@ -24,26 +24,33 @@ module alu_dec(
     input   wire    [6:0] func7,
     output  logic   [3:0] alu_ctrl
 );
-    logic [3:0] r_type_alu_ctr;
+    logic [3:0] ri_type_alu_ctr;
 
     always_comb begin
         case (func3)
-        3'b000: r_type_alu_ctr = func7 == 7'b0 ? ALU_OP_ADD : ALU_OP_SUB;
-        3'b110: r_type_alu_ctr = ALU_OP_OR;
-        3'b111: r_type_alu_ctr = ALU_OP_AND;
-        3'b100: r_type_alu_ctr = ALU_OP_XOR;
-        3'b001: r_type_alu_ctr = ALU_OP_SLL;
-        3'b101: r_type_alu_ctr = func7 == 7'b0 ? ALU_OP_SRL : ALU_OP_SRA;
-        3'b010: r_type_alu_ctr = ALU_OP_SLT;
-        3'b011: r_type_alu_ctr = ALU_OP_SLTU;
-        default: r_type_alu_ctr = 3'bx;
+        3'b000: begin
+            case (op)
+            OP_R_TYPE:  ri_type_alu_ctr = func7 == 7'b0 ? ALU_OP_ADD : ALU_OP_SUB;
+            OP_I_TYPE:  ri_type_alu_ctr = ALU_OP_ADD;
+            default:    ri_type_alu_ctr = 4'bx;
+            endcase
+        end
+
+        3'b110: ri_type_alu_ctr = ALU_OP_OR;
+        3'b111: ri_type_alu_ctr = ALU_OP_AND;
+        3'b100: ri_type_alu_ctr = ALU_OP_XOR;
+        3'b001: ri_type_alu_ctr = ALU_OP_SLL;
+        3'b101: ri_type_alu_ctr = func7 == 7'b0 ? ALU_OP_SRL : ALU_OP_SRA;
+        3'b010: ri_type_alu_ctr = ALU_OP_SLT;
+        3'b011: ri_type_alu_ctr = ALU_OP_SLTU;
+        default: ri_type_alu_ctr = 3'bx;
         endcase
     end
 
     always_comb begin
         case (op)
-        OP_R_TYPE:      alu_ctrl = r_type_alu_ctr;
-        OP_I_TYPE:      alu_ctrl = ALU_OP_ADD;
+        OP_R_TYPE:      alu_ctrl = ri_type_alu_ctr;
+        OP_I_TYPE:      alu_ctrl = ri_type_alu_ctr;
         OP_I_TYPE_L:    alu_ctrl = ALU_OP_ADD;
         OP_S_TYPE:      alu_ctrl = ALU_OP_ADD;
         OP_B_TYPE:      alu_ctrl = ALU_OP_SUB;
@@ -116,14 +123,14 @@ module controller(
     assign {alu_neg, alu_zero, alu_cout, alu_ov} = alu_flags[3:0];
 
 
-
+    imm_src_e imm_src_i_type;
     logic [10:0] ctrls;
 
     always_comb begin
         case (op)
         //                       reg_we  mem_we  alu_src                result_src          pc_src                imm_src
         OP_I_TYPE_L:    ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       RES_SRC_READ_DATA, PC_SRC_PLUS_4,         IMM_SRC_ITYPE};
-        OP_I_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,         IMM_SRC_ITYPE};
+        OP_I_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,         imm_src_i_type};
         OP_S_TYPE:      ctrls = {1'b0,  1'b1,    ALU_SRC_EXT_IMM,       RES_SRC_READ_DATA, PC_SRC_PLUS_4,         IMM_SRC_STYPE};
         OP_R_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_REG,           RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,         3'bx         };
         OP_B_TYPE:      ctrls = {1'b0,  1'b0,    ALU_SRC_REG,           2'bx,              pc_src_b_type,         IMM_SRC_BTYPE};
@@ -135,5 +142,6 @@ module controller(
     end
 
     assign {reg_we, mem_we, alu_src, result_src, pc_src, imm_src} = ctrls;
+    assign imm_src_i_type = (func3[0] & ~func3[1]) ? IMM_SRC_ITYPE2 : IMM_SRC_ITYPE;
 
 endmodule

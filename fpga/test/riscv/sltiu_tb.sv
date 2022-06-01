@@ -4,10 +4,10 @@
 `include "riscv/datapath.svh"
 
 `ifndef VCD
-    `define VCD "sltu_tb.vcd"
+    `define VCD "sltiu_tb.vcd"
 `endif
 
-module sltu_tb;
+module sltiu_tb;
     wire reg_we, mem_we;
     res_src_e res_src;
 	pc_src_e pc_src;
@@ -41,7 +41,7 @@ module sltu_tb;
 
     initial begin
         $dumpfile(`VCD);
-        $dumpvars(1, sltu_tb);
+        $dumpvars(1, sltiu_tb);
 
         dut.dp.rf._reg[4] = 32'b00;
 
@@ -54,9 +54,9 @@ module sltu_tb;
         dut.dp.rf._reg[9] = 32'd2;
         dut.dp.rf._reg[10] = 32'd4;
 
-        dut.instr_mem._mem[0] = 32'h0062b233;   // sltu     x4, x5, x6
-        dut.instr_mem._mem[1] = 32'h0083b233;   // sltu     x4, x7, x8
-        dut.instr_mem._mem[2] = 32'h00a4b233;   // sltu     x4, x9, x10
+        dut.instr_mem._mem[0] = 32'h0022b213;   // sltiu    x4, x5, 2
+        dut.instr_mem._mem[1] = 32'h0023b213;   // sltiu    x4, x7, 2
+        dut.instr_mem._mem[2] = 32'h0044b213;   // sltiu    x4, x9, 4
 
         // Reset and test
         #2  rst = 1;
