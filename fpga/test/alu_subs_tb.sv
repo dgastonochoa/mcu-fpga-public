@@ -1,4 +1,6 @@
 `timescale 10ps/1ps
+`include "alu.svh"
+`include "riscv/datapath.svh"
 
 `define WAIT_DELAY 180
 

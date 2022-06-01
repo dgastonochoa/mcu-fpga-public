@@ -1,4 +1,4 @@
-`include "alu.vh"
+`include "alu.svh"
 
 /**
  * ALU module
@@ -16,7 +16,7 @@
 module alu (
     input   logic   [31:0]  a,
     input   logic   [31:0]  b,
-    input   logic   [3:0]   op,
+    input   alu_op_e        op,
     output  logic   [31:0]  res,
     output  wire    [3:0]   flags
 );
@@ -31,36 +31,36 @@ module alu (
 
     always_comb begin
         case (op)
-        alu_op_add: begin
+        ALU_OP_ADD: begin
             b_op = b;
             cin = 1'b0;
             res = s;
         end
 
-        alu_op_sub: begin
+        ALU_OP_SUB: begin
             b_op = nb;
             cin = 1'b1;
             res = s;
         end
 
-        alu_op_slt: begin
+        ALU_OP_SLT: begin
             b_op = nb;
             cin = 1'b1;
             res = {{31{1'b0}}, (sign ^ ov)};
         end
 
-        alu_op_sltu: begin
+        ALU_OP_SLTU: begin
             b_op = nb;
             cin = 1'b1;
             res = {{31{1'b0}}, ~co};
         end
 
-        alu_op_and: res = a & b;
-        alu_op_or: res = a | b;
-        alu_op_xor: res = a ^ b;
-        alu_op_sll: res = a << b;
-        alu_op_srl: res = a >> b;
-        alu_op_sra: res = a >>> b;
+        ALU_OP_AND: res = a & b;
+        ALU_OP_OR: res = a | b;
+        ALU_OP_XOR: res = a ^ b;
+        ALU_OP_SLL: res = a << b;
+        ALU_OP_SRL: res = a >> b;
+        ALU_OP_SRA: res = a >>> b;
         default: res = 4'bx;
         endcase
     end
@@ -90,8 +90,8 @@ module alu (
 
     always_comb begin
         case (op)
-        alu_op_add: ov = ov0 | ov1;
-        alu_op_sub: ov = ov2 | ov3;
+        ALU_OP_ADD: ov = ov0 | ov1;
+        ALU_OP_SUB: ov = ov2 | ov3;
         default: ov = 0;
         endcase
     end

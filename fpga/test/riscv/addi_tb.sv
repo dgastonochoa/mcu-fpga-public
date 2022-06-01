@@ -1,7 +1,7 @@
 `timescale 10ps/1ps
 
-`include "alu.vh"
-`include "riscv/datapath.vh"
+`include "alu.svh"
+`include "riscv/datapath.svh"
 
 `ifndef VCD
     `define VCD "addi_tb.vcd"
@@ -9,8 +9,11 @@
 
 module addi_tb;
     wire reg_we, mem_we;
-    wire [1:0] res_src, pc_src, alu_src;
-    wire [3:0] alu_ctrl;
+    res_src_e res_src;
+	pc_src_e pc_src;
+	alu_src_e alu_src;
+    imm_src_e imm_src;
+    alu_op_e alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
