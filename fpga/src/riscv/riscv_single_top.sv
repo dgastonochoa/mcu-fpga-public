@@ -8,7 +8,7 @@ module riscv_single_top(
     output  wire        mem_we,
     output  wire [2:0]  imm_src,
     output  wire [3:0]  alu_op,
-    output  wire        alu_src,
+    output  wire [1:0]  alu_src,
     output  wire [1:0]  res_src,
     output  wire [1:0]  pc_src,
     output  wire [31:0] instr,

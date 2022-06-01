@@ -96,7 +96,7 @@ module datapath(
 
     input   wire [2:0]  imm_src,
     input   wire [3:0]  alu_ctrl,
-    input   wire        alu_src,
+    input   wire [1:0]  alu_src,
     input   wire [1:0]  result_src,
     input   wire [1:0]  pc_src,
 
@@ -133,10 +133,16 @@ module datapath(
     extend ext(instr, imm_src, ext_imm);
 
 
-    wire [31:0] srcb;
+    logic [31:0] srcb;
     alu alu0(srca, srcb, alu_ctrl, alu_out, alu_flags);
 
-    assign srcb = alu_src == alu_src_ext_imm ? ext_imm : write_data;
+    always_comb begin
+        case (alu_src)
+        alu_src_ext_imm: srcb = ext_imm;
+        alu_src_reg: srcb = write_data;
+        default: srcb = 2'bx;
+        endcase
+    end
 
     always_comb begin
         case (result_src)

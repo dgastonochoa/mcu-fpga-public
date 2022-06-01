@@ -11,8 +11,8 @@ module controller_tb;
     reg [31:0] instr;
     reg [3:0] alu_flags;
 
-    wire reg_we, mem_we, alu_src;
-    wire [1:0] res_src, pc_src;
+    wire reg_we, mem_we;
+    wire [1:0] res_src, pc_src, alu_src;
     wire [2:0] imm_src;
     wire [3:0] alu_ctrl;
 
@@ -353,7 +353,7 @@ module controller_tb;
         instr = 32'h019080e7;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
-            assert(alu_src === 1'bx);
+            assert(alu_src === 2'bx);
             assert(res_src === res_src_pc_plus_4);
             assert(pc_src === pc_src_reg_plus_off);
             assert(imm_src === imm_src_itype);

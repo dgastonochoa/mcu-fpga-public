@@ -8,8 +8,8 @@
 `endif
 
 module addi_tb;
-    wire reg_we, mem_we, alu_src;
-    wire [1:0] res_src, pc_src;
+    wire reg_we, mem_we;
+    wire [1:0] res_src, pc_src, alu_src;
     wire [3:0] alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;

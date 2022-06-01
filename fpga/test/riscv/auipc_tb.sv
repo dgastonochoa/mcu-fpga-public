@@ -4,10 +4,10 @@
 `include "riscv/datapath.vh"
 
 `ifndef VCD
-    `define VCD "sltu_tb.vcd"
+    `define VCD "auipc_tb.vcd"
 `endif
 
-module sltu_tb;
+module auipc_tb;
     wire reg_we, mem_we;
     wire [1:0] res_src, pc_src, alu_src;
     wire [2:0] imm_src;
@@ -39,29 +39,18 @@ module sltu_tb;
 
     initial begin
         $dumpfile(`VCD);
-        $dumpvars(1, sltu_tb);
+        $dumpvars(1, auipc_tb);
 
-        dut.dp.rf._reg[4] = 32'b00;
+        dut.dp.rf._reg[0] = 32'd00;
+        dut.dp.rf._reg[1] = 32'd12;
 
-        dut.dp.rf._reg[5] = 32'h08;
-        dut.dp.rf._reg[6] = 32'd2;
-
-        dut.dp.rf._reg[7] = 32'hfffffff8;
-        dut.dp.rf._reg[8] = 32'd2;
-
-        dut.dp.rf._reg[9] = 32'd2;
-        dut.dp.rf._reg[10] = 32'd4;
-
-        dut.instr_mem._mem[0] = 32'h0062b233;   // sltu     x4, x5, x6
-        dut.instr_mem._mem[1] = 32'h0083b233;   // sltu     x4, x7, x8
-        dut.instr_mem._mem[2] = 32'h00a4b233;   // sltu     x4, x9, x10
+        dut.instr_mem._mem[0] = 32'h0ffff097;
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #20 assert(dut.dp.rf._reg[4] === 32'd0);
-        #20 assert(dut.dp.rf._reg[4] === 32'd0);
-        #20 assert(dut.dp.rf._reg[4] === 32'd1);
+            assert(pc === 32'd00);
+        #11 assert(pc === (32'hffff << 12) + 12 + 4);
 
         #5;
         $finish;
