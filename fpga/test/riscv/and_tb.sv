@@ -50,9 +50,9 @@ module and_tb;
     assign addr3 = dut.dp.rf.addr3;
 
     wire [31:0] mem5, mem10, mem11;
-    assign mem5 = dut.data_mem._mem[5];
-    assign mem10 = dut.data_mem._mem[10];
-    assign mem11 = dut.data_mem._mem[11];
+    assign mem5 = dut.data_mem._mem._mem[5];
+    assign mem10 = dut.data_mem._mem._mem[10];
+    assign mem11 = dut.data_mem._mem._mem[11];
 
 
     initial begin
@@ -64,9 +64,9 @@ module and_tb;
         dut.dp.rf._reg[5] = 32'h01;
         dut.dp.rf._reg[6] = 32'hff;
 
-        dut.instr_mem._mem[0] = 32'h00627033;           // and x0, x4, x6
-        dut.instr_mem._mem[1] = 32'h0062f233;           // and x4, x5, x6
-        dut.instr_mem._mem[2] = 32'h00637233;           // and x4, x6, x6
+        dut.instr_mem._mem._mem[0] = 32'h00627033;           // and x0, x4, x6
+        dut.instr_mem._mem._mem[1] = 32'h0062f233;           // and x4, x5, x6
+        dut.instr_mem._mem._mem[2] = 32'h00637233;           // and x4, x6, x6
 
         // Reset and test
         #2  rst = 1;

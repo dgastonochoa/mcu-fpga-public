@@ -14,7 +14,10 @@ VV := iverilog
 RANDOM := $(shell bash -c 'echo $$RANDOM')
 
 
-tests := $(PREFIX)/mem_tb.xv				\
+tests := $(PREFIX)/mem_word_ops_tb.xv		\
+		 $(PREFIX)/mem_byte_ops_tb.xv		\
+		 $(PREFIX)/mem_halfw_ops_tb.xv		\
+		 $(PREFIX)/mem_error_tb.xv			\
 		 $(PREFIX)/alu_logic_tb.xv			\
 		 $(PREFIX)/alu_add_tb.xv			\
 		 $(PREFIX)/alu_subs_tb.xv			\

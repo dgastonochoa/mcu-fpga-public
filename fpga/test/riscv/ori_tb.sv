@@ -46,9 +46,9 @@ module ori_tb;
         dut.dp.rf._reg[5] = 32'h01;
         dut.dp.rf._reg[6] = 32'hfe;
 
-        dut.instr_mem._mem[0] = 32'h0fe26013;           // or x0, x4, 0xfe
-        dut.instr_mem._mem[1] = 32'h0002e213;           // or x4, x5, 0x00
-        dut.instr_mem._mem[2] = 32'h0fe26213;           // or x4, x4, 0xfe
+        dut.instr_mem._mem._mem[0] = 32'h0fe26013;           // or x0, x4, 0xfe
+        dut.instr_mem._mem._mem[1] = 32'h0002e213;           // or x4, x5, 0x00
+        dut.instr_mem._mem._mem[2] = 32'h0fe26213;           // or x4, x4, 0xfe
 
         // Reset and test
         #2  rst = 1;

@@ -55,10 +55,10 @@ module blt_tb;
         dut.dp.rf._reg[6] = 32'h80000000;
         dut.dp.rf._reg[7] = 32'h00000002;
 
-        dut.instr_mem._mem[0] = 32'h00404863;   // blt x0, x4, 16
-        dut.instr_mem._mem[4] = 32'h00424a63;   // blt x4, x4, 20
-        dut.instr_mem._mem[5] = 32'h00734863;   // blt x6, x7, 16
-        dut.instr_mem._mem[9] = 32'hfc42cee3;   // blt x5, x4, -36
+        dut.instr_mem._mem._mem[0] = 32'h00404863;   // blt x0, x4, 16
+        dut.instr_mem._mem._mem[4] = 32'h00424a63;   // blt x4, x4, 20
+        dut.instr_mem._mem._mem[5] = 32'h00734863;   // blt x6, x7, 16
+        dut.instr_mem._mem._mem[9] = 32'hfc42cee3;   // blt x5, x4, -36
 
         // Reset and test
         #2  rst = 1;

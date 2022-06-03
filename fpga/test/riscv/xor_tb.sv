@@ -50,9 +50,9 @@ module xor_tb;
     assign addr3 = dut.dp.rf.addr3;
 
     wire [31:0] mem5, mem10, mem11;
-    assign mem5 = dut.data_mem._mem[5];
-    assign mem10 = dut.data_mem._mem[10];
-    assign mem11 = dut.data_mem._mem[11];
+    assign mem5 = dut.data_mem._mem._mem[5];
+    assign mem10 = dut.data_mem._mem._mem[10];
+    assign mem11 = dut.data_mem._mem._mem[11];
 
 
     initial begin
@@ -64,10 +64,10 @@ module xor_tb;
         dut.dp.rf._reg[5] = 32'b101010;
         dut.dp.rf._reg[6] = 32'b010101;
 
-        dut.instr_mem._mem[0] = 32'h0062c033;   // xor     x0, x5, x6
-        dut.instr_mem._mem[1] = 32'h0062c233;   // xor     x4, x5, x6
-        dut.instr_mem._mem[2] = 32'h00624233;   // xor     x4, x4, x6
-        dut.instr_mem._mem[3] = 32'h00424233;   // xor     x4, x4, x4
+        dut.instr_mem._mem._mem[0] = 32'h0062c033;   // xor     x0, x5, x6
+        dut.instr_mem._mem._mem[1] = 32'h0062c233;   // xor     x4, x5, x6
+        dut.instr_mem._mem._mem[2] = 32'h00624233;   // xor     x4, x4, x6
+        dut.instr_mem._mem._mem[3] = 32'h00424233;   // xor     x4, x4, x4
 
         // Reset and test
         #2  rst = 1;

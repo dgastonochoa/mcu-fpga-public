@@ -80,8 +80,8 @@ module srai_tb;
         dut.dp.rf._reg[5] = 32'h08;
         dut.dp.rf._reg[7] = 32'hfffffff8;
 
-        dut.instr_mem._mem[0] = 32'h4022d213;   // srai     x4, x5, 2
-        dut.instr_mem._mem[1] = 32'h4023d213;   // srai     x4, x7, 2
+        dut.instr_mem._mem._mem[0] = 32'h4022d213;   // srai     x4, x5, 2
+        dut.instr_mem._mem._mem[1] = 32'h4023d213;   // srai     x4, x7, 2
 
         // Reset and test
         #2  rst = 1;

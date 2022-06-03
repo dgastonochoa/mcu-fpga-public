@@ -75,8 +75,8 @@ module auipc_tb;
         dut.dp.rf._reg[0] = 32'd00;
         dut.dp.rf._reg[1] = 32'd12;
 
-        dut.instr_mem._mem[0] = 32'h00014097;   // auipc   x1, 20
-        dut.instr_mem._mem[1] = 32'h00014097;   // auipc   x1, 20
+        dut.instr_mem._mem._mem[0] = 32'h00014097;   // auipc   x1, 20
+        dut.instr_mem._mem._mem[1] = 32'h00014097;   // auipc   x1, 20
 
         // Reset and test
         #2  rst = 1;

@@ -52,9 +52,9 @@ module bne_tb;
     assign addr3 = dut.dp.rf.addr3;
 
     wire [31:0] mem5, mem10, mem11;
-    assign mem5 = dut.data_mem._mem[5];
-    assign mem10 = dut.data_mem._mem[10];
-    assign mem11 = dut.data_mem._mem[11];
+    assign mem5 = dut.data_mem._mem._mem[5];
+    assign mem10 = dut.data_mem._mem._mem[10];
+    assign mem11 = dut.data_mem._mem._mem[11];
 
 
     initial begin
@@ -65,9 +65,9 @@ module bne_tb;
         dut.dp.rf._reg[4] = 32'd04;
         dut.dp.rf._reg[5] = 32'd00;
 
-        dut.instr_mem._mem[0] = 32'h00401863;       // bne x0, x4, 16
-        dut.instr_mem._mem[4] = 32'h00421463;       // bne x4, x4, 24
-        dut.instr_mem._mem[5] = 32'hfe5216e3;       // bne x4, x5, 0
+        dut.instr_mem._mem._mem[0] = 32'h00401863;       // bne x0, x4, 16
+        dut.instr_mem._mem._mem[4] = 32'h00421463;       // bne x4, x4, 24
+        dut.instr_mem._mem._mem[5] = 32'hfe5216e3;       // bne x4, x5, 0
 
         // Reset and test
         #2  rst = 1;

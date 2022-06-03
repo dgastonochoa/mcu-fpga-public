@@ -44,14 +44,14 @@ module jal_tb;
         $dumpfile(`VCD);
         $dumpvars(1, jal_tb);
 
-        dut.instr_mem._mem[0] = 32'h00c000ef;   // jal ra, +12
-        dut.instr_mem._mem[1] = 32'h00000013;
-        dut.instr_mem._mem[2] = 32'h00000013;
-        dut.instr_mem._mem[3] = 32'h00000013;
-        dut.instr_mem._mem[4] = 32'h00000013;
-        dut.instr_mem._mem[5] = 32'h00000013;
-        dut.instr_mem._mem[6] = 32'h00000013;
-        dut.instr_mem._mem[7] = 32'hff9ff0ef;   // jal ra, -8
+        dut.instr_mem._mem._mem[0] = 32'h00c000ef;   // jal ra, +12
+        dut.instr_mem._mem._mem[1] = 32'h00000013;
+        dut.instr_mem._mem._mem[2] = 32'h00000013;
+        dut.instr_mem._mem._mem[3] = 32'h00000013;
+        dut.instr_mem._mem._mem[4] = 32'h00000013;
+        dut.instr_mem._mem._mem[5] = 32'h00000013;
+        dut.instr_mem._mem._mem[6] = 32'h00000013;
+        dut.instr_mem._mem._mem[7] = 32'hff9ff0ef;   // jal ra, -8
 
         // Reset and test
         #2  rst = 1;
@@ -64,7 +64,7 @@ module jal_tb;
         #20 assert(pc === 20);
 
         // Modify first instr. to jump to itself
-        dut.instr_mem._mem[0] = 32'h000000ef;
+        dut.instr_mem._mem._mem[0] = 32'h000000ef;
         #2  rst = 1;
         #2  rst = 0;
         #11 assert(pc === 0);

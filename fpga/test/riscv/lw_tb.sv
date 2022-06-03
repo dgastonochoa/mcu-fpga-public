@@ -56,16 +56,16 @@ module lw_tb;
         dut.dp.rf._reg[9] = 32'd8;
 
         // Set mem. init. vals
-        dut.data_mem._mem[1] = 32'hdeadc0de;
-        dut.data_mem._mem[2] = 32'hdeadbeef;
-        dut.data_mem._mem[3] = 32'hc001c0de;
+        dut.data_mem._mem._mem[1] = 32'hdeadc0de;
+        dut.data_mem._mem._mem[2] = 32'hdeadbeef;
+        dut.data_mem._mem._mem[3] = 32'hc001c0de;
 
         // Load words with different addresses
         // Last instr. is to try to load word into x0
-        dut.instr_mem._mem[0] = 32'hffc4a303;           // lw x6, -4(x9)
-        dut.instr_mem._mem[1] = 32'h0004a303;           // lw x6, 0(x9)
-        dut.instr_mem._mem[2] = 32'h0044a303;           // lw x6, 4(x9)
-        dut.instr_mem._mem[3] = 32'h0044a003;           // lw x0, 4(x9)
+        dut.instr_mem._mem._mem[0] = 32'hffc4a303;           // lw x6, -4(x9)
+        dut.instr_mem._mem._mem[1] = 32'h0004a303;           // lw x6, 0(x9)
+        dut.instr_mem._mem._mem[2] = 32'h0044a303;           // lw x6, 4(x9)
+        dut.instr_mem._mem._mem[3] = 32'h0044a003;           // lw x0, 4(x9)
 
         // Reset and test
         #2  rst = 1;

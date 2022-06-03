@@ -52,9 +52,9 @@ module or_tb;
         dut.dp.rf._reg[5] = 32'h01;
         dut.dp.rf._reg[6] = 32'hfe;
 
-        dut.instr_mem._mem[0] = 32'h00626033;           // or x0, x4, x6
-        dut.instr_mem._mem[1] = 32'h0002e233;           // or x4, x5, x0
-        dut.instr_mem._mem[2] = 32'h00626233;           // or x4, x4, x6
+        dut.instr_mem._mem._mem[0] = 32'h00626033;           // or x0, x4, x6
+        dut.instr_mem._mem._mem[1] = 32'h0002e233;           // or x4, x5, x0
+        dut.instr_mem._mem._mem[2] = 32'h00626233;           // or x4, x4, x6
 
         // Reset and test
         #2  rst = 1;

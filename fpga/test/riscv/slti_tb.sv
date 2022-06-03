@@ -54,9 +54,9 @@ module slti_tb;
         dut.dp.rf._reg[9] = 32'd2;
         dut.dp.rf._reg[10] = 32'd4;
 
-        dut.instr_mem._mem[0] = 32'h0022a213;   // slti    x4, x5, x6
-        dut.instr_mem._mem[1] = 32'h0023a213;   // slti    x4, x7, x8
-        dut.instr_mem._mem[2] = 32'h0044a213;   // slti    x4, x9, x10
+        dut.instr_mem._mem._mem[0] = 32'h0022a213;   // slti    x4, x5, x6
+        dut.instr_mem._mem._mem[1] = 32'h0023a213;   // slti    x4, x7, x8
+        dut.instr_mem._mem._mem[2] = 32'h0044a213;   // slti    x4, x9, x10
 
         // Reset and test
         #2  rst = 1;

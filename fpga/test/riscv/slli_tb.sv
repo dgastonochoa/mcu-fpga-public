@@ -73,9 +73,9 @@ module slli_tb;
         dut.dp.rf._reg[5] = 32'h0f000000;
         dut.dp.rf._reg[6] = 32'd4;
 
-        dut.instr_mem._mem[0] = 32'h00421013;   // slli    x0, x4, 4
-        dut.instr_mem._mem[1] = 32'h00429213;   // slli    x4, x5, 4
-        dut.instr_mem._mem[2] = 32'h00421213;   // slli    x4, x4, 4
+        dut.instr_mem._mem._mem[0] = 32'h00421013;   // slli    x0, x4, 4
+        dut.instr_mem._mem._mem[1] = 32'h00429213;   // slli    x4, x5, 4
+        dut.instr_mem._mem._mem[2] = 32'h00421213;   // slli    x4, x4, 4
 
         // Reset and test
         #2  rst = 1;

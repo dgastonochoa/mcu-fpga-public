@@ -48,9 +48,9 @@ module xori_tb;
         dut.dp.rf._reg[5] = 32'b101010;
         dut.dp.rf._reg[6] = 32'b010101;
 
-        dut.instr_mem._mem[0] = 32'h0152c013;   // xor    x0, x5, 0x15
-        dut.instr_mem._mem[1] = 32'h0152c213;   // xor    x4, x5, 0x15
-        dut.instr_mem._mem[2] = 32'h01524213;   // xor    x4, x4, 0x15
+        dut.instr_mem._mem._mem[0] = 32'h0152c013;   // xor    x0, x5, 0x15
+        dut.instr_mem._mem._mem[1] = 32'h0152c213;   // xor    x4, x5, 0x15
+        dut.instr_mem._mem._mem[2] = 32'h01524213;   // xor    x4, x4, 0x15
 
         // Reset and test
         #2  rst = 1;

@@ -49,8 +49,8 @@ module sra_tb;
         dut.dp.rf._reg[7] = 32'hfffffff8;
         dut.dp.rf._reg[8] = 32'd2;
 
-        dut.instr_mem._mem[0] = 32'h4062d233;   // sra     x4, x5, x6
-        dut.instr_mem._mem[1] = 32'h4083d233;   // sra     x4, x7, x8
+        dut.instr_mem._mem._mem[0] = 32'h4062d233;   // sra     x4, x5, x6
+        dut.instr_mem._mem._mem[1] = 32'h4083d233;   // sra     x4, x7, x8
 
         // Reset and test
         #2  rst = 1;

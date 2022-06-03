@@ -61,13 +61,13 @@ module datapath_tb;
         dut.dp.rf._reg[5] = 32'hfffffffe;
         dut.dp.rf._reg[6] = 32'd0;
 
-        dut.data_mem._mem[1] = 32'hdeadc0de;
-        dut.data_mem._mem[4] = 32'h00;
+        dut.data_mem._mem._mem[1] = 32'hdeadc0de;
+        dut.data_mem._mem._mem[4] = 32'h00;
 
-        dut.instr_mem._mem[0] = 32'hffc4a303;           // lw x6, -4(x9)
-        dut.instr_mem._mem[1] = 32'h0064a423;           // sw x6, 8(x9)
-        dut.instr_mem._mem[2] = 32'h0062e233;           // or x4, x5, x6
-        dut.instr_mem._mem[3] = 32'hfe420ae3;           // beq x4, x4, L7
+        dut.instr_mem._mem._mem[0] = 32'hffc4a303;           // lw x6, -4(x9)
+        dut.instr_mem._mem._mem[1] = 32'h0064a423;           // sw x6, 8(x9)
+        dut.instr_mem._mem._mem[2] = 32'h0062e233;           // or x4, x5, x6
+        dut.instr_mem._mem._mem[3] = 32'hfe420ae3;           // beq x4, x4, L7
 
         // Reset
         #5  rst = 1;
@@ -81,7 +81,7 @@ module datapath_tb;
 
         // Second instr. executed
         #20 assert(pc === 8);
-            assert(dut.data_mem._mem[4] === 32'hdeadc0de);
+            assert(dut.data_mem._mem._mem[4] === 32'hdeadc0de);
 
         // Third instr. executed
         #20 assert(pc === 12);
@@ -97,7 +97,7 @@ module datapath_tb;
 
         // Second instr. executed again.
         #20 assert(pc === 8);
-            assert(dut.data_mem._mem[4] === 32'hdeadc0de);
+            assert(dut.data_mem._mem._mem[4] === 32'hdeadc0de);
 
         // Third instr. executed again
         #20 assert(pc === 12);

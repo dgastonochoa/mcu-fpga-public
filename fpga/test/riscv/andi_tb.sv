@@ -47,9 +47,9 @@ module andi_tb;
         dut.dp.rf._reg[5] = 32'h01;
         dut.dp.rf._reg[6] = 32'hff;
 
-        dut.instr_mem._mem[0] = 32'h0ff27013;           // and x0, x4, 0xff
-        dut.instr_mem._mem[1] = 32'h0ff2f213;           // and x4, x5, 0xff
-        dut.instr_mem._mem[2] = 32'h0ff37213;           // and x4, x6, 0xff
+        dut.instr_mem._mem._mem[0] = 32'h0ff27013;           // and x0, x4, 0xff
+        dut.instr_mem._mem._mem[1] = 32'h0ff2f213;           // and x4, x5, 0xff
+        dut.instr_mem._mem._mem[2] = 32'h0ff37213;           // and x4, x6, 0xff
 
         // Reset and test
         #2  rst = 1;

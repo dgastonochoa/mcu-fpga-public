@@ -55,8 +55,8 @@ module jalr_tb;
         dut.dp.rf._reg[3] = 32'd8;
         dut.dp.rf._reg[4] = 32'd4;
 
-        dut.instr_mem._mem[0] = 32'h004180e7;   // jalr    ra, x3, 4
-        dut.instr_mem._mem[3] = 32'hffc200e7;   // jalr    ra, x4, -4
+        dut.instr_mem._mem._mem[0] = 32'h004180e7;   // jalr    ra, x3, 4
+        dut.instr_mem._mem._mem[3] = 32'hffc200e7;   // jalr    ra, x4, -4
 
         // Reset and test
         #2  rst = 1;

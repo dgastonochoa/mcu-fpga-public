@@ -49,10 +49,10 @@ module bltu_tb;
         dut.dp.rf._reg[5] = 32'hffff0000;
         dut.dp.rf._reg[6] = 32'd20;
 
-        dut.instr_mem._mem[0] = 32'h00526863;   // bltu    x4, x5, 16
-        dut.instr_mem._mem[4] = 32'h00626263;   // bltu    x4, x6, 4
-        dut.instr_mem._mem[5] = 32'h00436863;   // bltu    x6, x4, 16
-        dut.instr_mem._mem[6] = 32'hfe4064e3;   // bltu    x0, x4, -24
+        dut.instr_mem._mem._mem[0] = 32'h00526863;   // bltu    x4, x5, 16
+        dut.instr_mem._mem._mem[4] = 32'h00626263;   // bltu    x4, x6, 4
+        dut.instr_mem._mem._mem[5] = 32'h00436863;   // bltu    x6, x4, 16
+        dut.instr_mem._mem._mem[6] = 32'hfe4064e3;   // bltu    x0, x4, -24
 
         // Reset and test
         #2  rst = 1;

@@ -52,9 +52,9 @@ module beq_tb;
     assign addr3 = dut.dp.rf.addr3;
 
     wire [31:0] mem5, mem10, mem11;
-    assign mem5 = dut.data_mem._mem[5];
-    assign mem10 = dut.data_mem._mem[10];
-    assign mem11 = dut.data_mem._mem[11];
+    assign mem5 = dut.data_mem._mem._mem[5];
+    assign mem10 = dut.data_mem._mem._mem[10];
+    assign mem11 = dut.data_mem._mem._mem[11];
 
 
     initial begin
@@ -64,9 +64,9 @@ module beq_tb;
         dut.dp.rf._reg[0] = 32'd00;
         dut.dp.rf._reg[4] = 32'd00;
 
-        dut.instr_mem._mem[0] = 32'h00400a63;       // beq x0, x4, 20
-        dut.instr_mem._mem[5] = 32'h00400263;       // beq x0, x4, 4
-        dut.instr_mem._mem[6] = 32'hfe4004e3;       // beq x0, x4, -6
+        dut.instr_mem._mem._mem[0] = 32'h00400a63;       // beq x0, x4, 20
+        dut.instr_mem._mem._mem[5] = 32'h00400263;       // beq x0, x4, 4
+        dut.instr_mem._mem._mem[6] = 32'hfe4004e3;       // beq x0, x4, -6
 
         // Reset and test
         #2  rst = 1;

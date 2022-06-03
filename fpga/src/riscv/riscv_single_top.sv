@@ -1,3 +1,6 @@
+`include "errno.svh"
+`include "mem.svh"
+
 /**
  * RISC-V top module. Connects the RISC-V CPU with external
  * memories.
@@ -51,7 +54,12 @@ module riscv_single_top(
         alu_op
     );
 
-    mem data_mem(alu_out, mem_wd_data, mem_we, mem_rd_data, clk);
+    errno_e err_data, err_instr;
+    mem_dt_e dt;
 
-    mem instr_mem(pc, 32'b00, 1'b0, instr, clk);
+    assign dt = MEM_DT_WORD;
+
+    mem data_mem(alu_out, mem_wd_data, mem_we, dt, mem_rd_data, err_data, clk);
+
+    mem instr_mem(pc, 32'b00, 1'b0, dt, instr, err_instr, clk);
 endmodule

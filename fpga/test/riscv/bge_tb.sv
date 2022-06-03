@@ -55,11 +55,11 @@ module bge_tb;
         dut.dp.rf._reg[6] = 32'd02;
         dut.dp.rf._reg[7] = 32'h80000000;
 
-        dut.instr_mem._mem[0] = 32'h00025863;   // bge x4, x0, 16
-        dut.instr_mem._mem[4] = 32'h00425263;   // bge x4, x4, 4
-        dut.instr_mem._mem[5] = 32'h00735863;   // bge x6, x7, 4
-        dut.instr_mem._mem[9] = 32'hfc525ee3;   // blt x4, x5, -36
-        dut.instr_mem._mem[10] = 32'hfc42dce3;   // blt x5, x4, -40
+        dut.instr_mem._mem._mem[0] = 32'h00025863;   // bge x4, x0, 16
+        dut.instr_mem._mem._mem[4] = 32'h00425263;   // bge x4, x4, 4
+        dut.instr_mem._mem._mem[5] = 32'h00735863;   // bge x6, x7, 4
+        dut.instr_mem._mem._mem[9] = 32'hfc525ee3;   // blt x4, x5, -36
+        dut.instr_mem._mem._mem[10] = 32'hfc42dce3;   // blt x5, x4, -40
 
         // Reset and test
         #2  rst = 1;

@@ -54,9 +54,9 @@ module sltu_tb;
         dut.dp.rf._reg[9] = 32'd2;
         dut.dp.rf._reg[10] = 32'd4;
 
-        dut.instr_mem._mem[0] = 32'h0062b233;   // sltu     x4, x5, x6
-        dut.instr_mem._mem[1] = 32'h0083b233;   // sltu     x4, x7, x8
-        dut.instr_mem._mem[2] = 32'h00a4b233;   // sltu     x4, x9, x10
+        dut.instr_mem._mem._mem[0] = 32'h0062b233;   // sltu     x4, x5, x6
+        dut.instr_mem._mem._mem[1] = 32'h0083b233;   // sltu     x4, x7, x8
+        dut.instr_mem._mem._mem[2] = 32'h00a4b233;   // sltu     x4, x9, x10
 
         // Reset and test
         #2  rst = 1;
