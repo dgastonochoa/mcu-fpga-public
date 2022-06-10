@@ -37,9 +37,11 @@ typedef enum logic [3:0]
 {
     RES_SRC_ALU_OUT      = 4'b0000,
     RES_SRC_PC_PLUS_4    = 4'b0010,
-    RES_SRC_MEM_BYTE     = 4'b00_01,
-    RES_SRC_MEM_HALF     = 4'b01_01,
-    RES_SRC_MEM_WORD     = 4'b10_01,
+    RES_SRC_MEM_BYTE     = 4'b000_1,
+    RES_SRC_MEM_HALF     = 4'b001_1,
+    RES_SRC_MEM_WORD     = 4'b010_1,
+    RES_SRC_MEM_UBYTE    = 4'b011_1,
+    RES_SRC_MEM_UHALF    = 4'b100_1,
     RES_SRC_X            = 4'bx
 } res_src_e;
 

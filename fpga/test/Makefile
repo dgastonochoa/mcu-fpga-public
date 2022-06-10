@@ -26,6 +26,7 @@ tests := $(PREFIX)/mem_word_ops_tb.xv		\
 riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv			\
 			   $(RISCV_TEST_DIR)/lb_tb.xv			\
 			   $(RISCV_TEST_DIR)/lh_tb.xv			\
+			   $(RISCV_TEST_DIR)/lbu_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/sw_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/or_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/and_tb.xv			\

@@ -57,7 +57,7 @@ module riscv_single_top(
     mem_dt_e dt_data;
     errno_e err_data;
 
-    assign dt_data = res_src[3:2];
+    assign dt_data = res_src[3:1];
 
     mem data_mem(alu_out, mem_wd_data, mem_we, dt_data, mem_rd_data, err_data, clk);
 

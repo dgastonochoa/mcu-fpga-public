@@ -505,6 +505,32 @@ module controller_tb;
             assert(imm_src === IMM_SRC_ITYPE);
             assert(alu_ctrl === ALU_OP_ADD);
 
+        //
+        // lbu
+        //
+        alu_flags = 4'b0;
+        instr = 32'hffc4c303;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === ALU_SRC_EXT_IMM);
+            assert(res_src === RES_SRC_MEM_UBYTE);
+            assert(pc_src === PC_SRC_PLUS_4);
+            assert(imm_src === IMM_SRC_ITYPE);
+            assert(alu_ctrl === ALU_OP_ADD);
+
+        //
+        // lhu
+        //
+        alu_flags = 4'b0;
+        instr = 32'hffc4d303;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === ALU_SRC_EXT_IMM);
+            assert(res_src === RES_SRC_MEM_UHALF);
+            assert(pc_src === PC_SRC_PLUS_4);
+            assert(imm_src === IMM_SRC_ITYPE);
+            assert(alu_ctrl === ALU_OP_ADD);
+
         $finish;
     end
 

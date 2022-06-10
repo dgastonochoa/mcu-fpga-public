@@ -136,6 +136,8 @@ module controller(
         3'b000: res_src_load_type = RES_SRC_MEM_BYTE;
         3'b001: res_src_load_type = RES_SRC_MEM_HALF;
         3'b010: res_src_load_type = RES_SRC_MEM_WORD;
+        3'b100: res_src_load_type = RES_SRC_MEM_UBYTE;
+        3'b101: res_src_load_type = RES_SRC_MEM_UHALF;
         default: res_src_load_type = RES_SRC_X;
         endcase
     end
