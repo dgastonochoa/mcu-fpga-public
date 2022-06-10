@@ -34,7 +34,7 @@ module mem_halfw_ops_tb;
         #40 assert(m._mem._mem[12] === 32'h1234dead);
 
 
-        // check write half word works 1
+        // check write half word unsigned works 1
         m._mem._mem[12] = 32'h12345678;
         dt = MEM_DT_HALF;
         addr = 50;
@@ -44,19 +44,35 @@ module mem_halfw_ops_tb;
 
 
         // check read half word works 1
-        m._mem._mem[12] = 32'h12345678;
+        m._mem._mem[12] = 32'h82848688;
+        dt = MEM_DT_UHALF;
+        addr = 48;
+        we = 0;
+        #40 assert(rd === 32'h00008688);
+
+
+        // check read half word unsigned works 2
+        m._mem._mem[12] = 32'h82848688;
+        dt = MEM_DT_UHALF;
+        addr = 50;
+        we = 0;
+        #40 assert(rd === 32'h00008284);
+
+
+        // check read half word signed works 1
+        m._mem._mem[12] = 32'h82848688;
         dt = MEM_DT_HALF;
         addr = 48;
         we = 0;
-        #40 assert(rd === 32'h5678);
+        #40 assert(rd === 32'hffff8688);
 
 
-        // check read half word works 2
-        m._mem._mem[12] = 32'h12345678;
+        // check read half word signed works 2
+        m._mem._mem[12] = 32'h82848688;
         dt = MEM_DT_HALF;
         addr = 50;
         we = 0;
-        #40 assert(rd === 32'h1234);
+        #40 assert(rd === 32'hffff8284);
 
         $finish;
     end

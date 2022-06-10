@@ -62,36 +62,68 @@ module mem_byte_ops_tb;
         #40 assert(m._mem._mem[12] === 32'hab345678);
 
 
-        // check write read byte works 1
-        m._mem._mem[12] = 32'h12345678;
+        // check read byte unsigned works 1
+        m._mem._mem[12] = 32'h82848688;
+        dt = MEM_DT_UBYTE;
+        addr = 48;
+        we = 0;
+        #40 assert(rd === 32'h00000088);
+
+
+        // check read byte unsigned works 2
+        m._mem._mem[12] = 32'h82848688;
+        dt = MEM_DT_UBYTE;
+        addr = 49;
+        we = 0;
+        #40 assert(rd === 32'h00000086);
+
+
+        // check read byte unsigned works 3
+        m._mem._mem[12] = 32'h82848688;
+        dt = MEM_DT_UBYTE;
+        addr = 50;
+        we = 0;
+        #40 assert(rd === 32'h00000084);
+
+
+        // check read byte unsigned works 4
+        m._mem._mem[12] = 32'h82848688;
+        dt = MEM_DT_UBYTE;
+        addr = 51;
+        we = 0;
+        #40 assert(rd === 32'h00000082);
+
+
+        // check read byte signed works 1
+        m._mem._mem[12] = 32'h82848688;
         dt = MEM_DT_BYTE;
         addr = 48;
         we = 0;
-        #40 assert(rd === 32'h78);
+        #40 assert(rd === 32'hffffff88);
 
 
-        // check write read byte works 2
-        m._mem._mem[12] = 32'h12345678;
+        // check read byte signed works 2
+        m._mem._mem[12] = 32'h82848688;
         dt = MEM_DT_BYTE;
         addr = 49;
         we = 0;
-        #40 assert(rd === 32'h56);
+        #40 assert(rd === 32'hffffff86);
 
 
-        // check write read byte works 3
-        m._mem._mem[12] = 32'h12345678;
+        // check read byte signed works 3
+        m._mem._mem[12] = 32'h82848688;
         dt = MEM_DT_BYTE;
         addr = 50;
         we = 0;
-        #40 assert(rd === 32'h34);
+        #40 assert(rd === 32'hffffff84);
 
 
-        // check write read byte works 4
-        m._mem._mem[12] = 32'h12345678;
+        // check read byte signed works 4
+        m._mem._mem[12] = 32'h82848688;
         dt = MEM_DT_BYTE;
         addr = 51;
         we = 0;
-        #40 assert(rd === 32'h12);
+        #40 assert(rd === 32'hffffff82);
 
         $finish;
     end

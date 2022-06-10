@@ -21,6 +21,10 @@
  * @param we Write enable. Enable to write, disable to read. In combination
  *           with @param{be} allows to read/write subsets of the word.
  *
+ * @param se Sign extend. On read, if enabled and not all bytes are selected, the
+ *           upper bits will be filled with 0 or 1 depending on the selected bytes'
+ *           MSB.
+ *
  * @param rd Read value.
  * @param clk Clock signal.
  *
@@ -35,6 +39,7 @@ module mem_be #(parameter N = 64)(
     input   wire        [31:0]  wd,
     input   wire        [3:0]   be,
     input   wire                we,
+    input   wire                se,
     output  logic       [31:0]  rd,
     input   wire                clk
 );
@@ -67,6 +72,7 @@ module mem_be #(parameter N = 64)(
     //
     wire [31:0] word;
     wire [7:0] b0, b1, b2, b3;
+    wire s0, s1, s2, s3;
 
     assign word = _mem[addr[31:2]];
 
@@ -75,15 +81,20 @@ module mem_be #(parameter N = 64)(
     assign b2 = word[23:16];
     assign b3 = word[31:24];
 
+    assign s0 = se ? b0[7] : 1'b0;
+    assign s1 = se ? b1[7] : 1'b0;
+    assign s2 = se ? b2[7] : 1'b0;
+    assign s3 = se ? b3[7] : 1'b0;
+
     always_comb begin
         case (be)
-        4'b0001: rd = {{24{1'b0}}, b0};
-        4'b0010: rd = {{24{1'b0}}, b1};
-        4'b0100: rd = {{24{1'b0}}, b2};
-        4'b1000: rd = {{24{1'b0}}, b3};
+        4'b0001: rd = {{24{s0}}, b0};
+        4'b0010: rd = {{24{s1}}, b1};
+        4'b0100: rd = {{24{s2}}, b2};
+        4'b1000: rd = {{24{s3}}, b3};
 
-        4'b0011: rd = {{16{1'b0}}, b1, b0};
-        4'b1100: rd = {{16{1'b0}}, b3, b2};
+        4'b0011: rd = {{16{s1}}, b1, b0};
+        4'b1100: rd = {{16{s3}}, b3, b2};
 
         4'b1111: rd = word;
 
@@ -122,6 +133,7 @@ module mem #(parameter N = 64)(
 );
     wire [3:0] b_be, h_be, w_be;
     logic [3:0] be;
+    logic se;
 
     dec d(addr[1:0], b_be);
 
@@ -131,14 +143,16 @@ module mem #(parameter N = 64)(
 
     always_comb begin
         case (dt)
-        MEM_DT_BYTE: be = b_be;
-        MEM_DT_HALF: be = h_be;
-        MEM_DT_WORD: be = w_be;
-        default: be = 32'bx;
+        MEM_DT_BYTE:    {be, se} = {b_be, 1'b1};
+        MEM_DT_HALF:    {be, se} = {h_be, 1'b1};
+        MEM_DT_WORD:    {be, se} = {w_be, 1'b0};
+        MEM_DT_UBYTE:   {be, se} = {b_be, 1'b0};
+        MEM_DT_UHALF:   {be, se} = {h_be, 1'b0};
+        default:        be = 32'bx;
         endcase
     end
 
-    mem_be _mem(addr, wd, be, we, rd, clk);
+    mem_be _mem(addr, wd, be, we, se, rd, clk);
 
 
     //
