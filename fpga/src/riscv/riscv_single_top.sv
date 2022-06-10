@@ -54,12 +54,18 @@ module riscv_single_top(
         alu_op
     );
 
-    errno_e err_data, err_instr;
-    mem_dt_e dt;
+    mem_dt_e dt_data;
+    errno_e err_data;
 
-    assign dt = MEM_DT_WORD;
+    assign dt_data = res_src[3:2];
 
-    mem data_mem(alu_out, mem_wd_data, mem_we, dt, mem_rd_data, err_data, clk);
+    mem data_mem(alu_out, mem_wd_data, mem_we, dt_data, mem_rd_data, err_data, clk);
 
-    mem instr_mem(pc, 32'b00, 1'b0, dt, instr, err_instr, clk);
+
+    mem_dt_e dt_instr;
+    errno_e err_instr;
+
+    assign dt_instr = MEM_DT_WORD;
+
+    mem instr_mem(pc, 32'b00, 1'b0, dt_instr, instr, err_instr, clk);
 endmodule

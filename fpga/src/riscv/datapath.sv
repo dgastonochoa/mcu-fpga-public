@@ -147,6 +147,8 @@ module datapath(
     always_comb begin
         case (result_src)
         RES_SRC_ALU_OUT:    reg_wr_data = alu_out;
+        RES_SRC_READ_BYTE:  reg_wr_data = read_data;
+        RES_SRC_READ_HALF:  reg_wr_data = read_data;
         RES_SRC_READ_DATA:  reg_wr_data = read_data;
         RES_SRC_PC_PLUS_4:  reg_wr_data = pc_plus_4;
         default:            reg_wr_data = 32'hx;
