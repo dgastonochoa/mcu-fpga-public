@@ -67,18 +67,19 @@ module sw_tb;
         dut.data_mem._mem._mem[10] = 32'h00;
         dut.data_mem._mem._mem[11] = 32'h00;
 
-        dut.instr_mem._mem._mem[0] = 32'hfe64aa23;           // sw x6, -12(x9)
-        dut.instr_mem._mem._mem[1] = 32'h0074a423;           // sw x7, 8(x9)
-        dut.instr_mem._mem._mem[2] = 32'h0084a6a3;           // sw x8, 12(x9)
-        dut.instr_mem._mem._mem[3] = 32'h0004a6a3;           // sw x0, 12(x9)
+        dut.instr_mem._mem._mem[0] = 32'hfe648a23;           // sb x6, -12(x9)
+        dut.instr_mem._mem._mem[1] = 32'h00748423;           // sb x7, 8(x9)
+        dut.instr_mem._mem._mem[2] = 32'h00848623;           // sb x8, 12(x9)
+        dut.instr_mem._mem._mem[3] = 32'h00048623;           // sb x0, 12(x9)
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.data_mem._mem._mem[5] === 32'hdeadc0de);
-        #20 assert(dut.data_mem._mem._mem[10] === 32'hdeadbeef);
-        #20 assert(dut.data_mem._mem._mem[11] === 32'hc001c0de);
-        #20 assert(dut.data_mem._mem._mem[11] === 32'h00);
+
+        #11 assert(dut.data_mem._mem._mem[5] === 32'h000000de);
+        #20 assert(dut.data_mem._mem._mem[10] === 32'h000000ef);
+        #20 assert(dut.data_mem._mem._mem[11] === 32'h000000de);
+        #20 assert(dut.data_mem._mem._mem[11] === 32'h00000000);
 
         #5;
         $finish;

@@ -28,6 +28,8 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv			\
 			   $(RISCV_TEST_DIR)/lh_tb.xv			\
 			   $(RISCV_TEST_DIR)/lbu_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/sw_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/sb_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/sh_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/or_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/and_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/sub_tb.xv			\

@@ -4,10 +4,10 @@
 `include "riscv/datapath.svh"
 
 `ifndef VCD
-    `define VCD "sw_tb.vcd"
+    `define VCD "sh_tb.vcd"
 `endif
 
-module sw_tb;
+module sh_tb;
     wire reg_we, mem_we;
     res_src_e res_src;
 	pc_src_e pc_src;
@@ -56,7 +56,7 @@ module sw_tb;
 
     initial begin
         $dumpfile(`VCD);
-        $dumpvars(1, sw_tb);
+        $dumpvars(1, sh_tb);
 
         dut.dp.rf._reg[9] = 32'd32;
         dut.dp.rf._reg[6] = 32'hdeadc0de;
@@ -67,18 +67,19 @@ module sw_tb;
         dut.data_mem._mem._mem[10] = 32'h00;
         dut.data_mem._mem._mem[11] = 32'h00;
 
-        dut.instr_mem._mem._mem[0] = 32'hfe64aa23;           // sw x6, -12(x9)
-        dut.instr_mem._mem._mem[1] = 32'h0074a423;           // sw x7, 8(x9)
-        dut.instr_mem._mem._mem[2] = 32'h0084a6a3;           // sw x8, 12(x9)
-        dut.instr_mem._mem._mem[3] = 32'h0004a6a3;           // sw x0, 12(x9)
+        dut.instr_mem._mem._mem[0] = 32'hfe649a23;           // sh x6, -12(x9)
+        dut.instr_mem._mem._mem[1] = 32'h00749423;           // sh x7, 8(x9)
+        dut.instr_mem._mem._mem[2] = 32'h00849623;           // sh x8, 12(x9)
+        dut.instr_mem._mem._mem[3] = 32'h00049623;           // sh x0, 12(x9)
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.data_mem._mem._mem[5] === 32'hdeadc0de);
-        #20 assert(dut.data_mem._mem._mem[10] === 32'hdeadbeef);
-        #20 assert(dut.data_mem._mem._mem[11] === 32'hc001c0de);
-        #20 assert(dut.data_mem._mem._mem[11] === 32'h00);
+
+        #11 assert(dut.data_mem._mem._mem[5] === 32'h0000c0de);
+        #20 assert(dut.data_mem._mem._mem[10] === 32'h0000beef);
+        #20 assert(dut.data_mem._mem._mem[11] === 32'h0000c0de);
+        #20 assert(dut.data_mem._mem._mem[11] === 32'h00000000);
 
         #5;
         $finish;

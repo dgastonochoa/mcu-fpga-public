@@ -69,7 +69,13 @@ endmodule
  * @param reg_we Register file write enable
  * @param mem_we Memory write enable
  * @param alu_src ALU's second operand source (register, immediate...)
+ *
  * @param result_src Source of the result to be written in the register file.
+ *                   (alu's output, memory etc.). When it states that the result source
+ *                   is memory, this param. will contain expected data type as well (byte
+ *                   word etc.). Thus, this field must be properly set both when reading
+ *                   and when writing to memory.
+ *
  * @param pc_src Source of the next program counter (+4, +offset...)
  * @param imm_src Indicates the type of instr. with regards to how
  *                its immediate is stored
@@ -142,17 +148,28 @@ module controller(
         endcase
     end
 
+    res_src_e res_src_store_type;
+
+    always_comb begin
+        case (func3)
+        3'b000: res_src_store_type  = RES_SRC_MEM_BYTE;
+        3'b001: res_src_store_type  = RES_SRC_MEM_HALF;
+        3'b010: res_src_store_type  = RES_SRC_MEM_WORD;
+        default: res_src_store_type = RES_SRC_X;
+        endcase
+    end
+
     always_comb begin
         case (op)
         //                       reg_we  mem_we  alu_src                result_src          pc_src                imm_src
-        OP_I_TYPE_L:    ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       res_src_load_type, PC_SRC_PLUS_4,         IMM_SRC_ITYPE};
-        OP_I_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,         imm_src_i_type};
-        OP_S_TYPE:      ctrls = {1'b0,  1'b1,    ALU_SRC_EXT_IMM,       RES_SRC_MEM_WORD,  PC_SRC_PLUS_4,         IMM_SRC_STYPE};
-        OP_R_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_REG,           RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,         3'bx         };
-        OP_B_TYPE:      ctrls = {1'b0,  1'b0,    ALU_SRC_REG,           RES_SRC_X,         pc_src_b_type,         IMM_SRC_BTYPE};
-        OP_J_TYPE:      ctrls = {1'b1,  1'b0,    2'bx,                  RES_SRC_PC_PLUS_4, PC_SRC_PLUS_OFF,       IMM_SRC_JTYPE};
-        OP_JALR:        ctrls = {1'b1,  1'b0,    2'bx,                  RES_SRC_PC_PLUS_4, PC_SRC_REG_PLUS_OFF,   IMM_SRC_ITYPE};
-        OP_AUIPC:       ctrls = {1'b1,  1'b0,    ALU_SRC_PC_EXT_IMM,    RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,         IMM_SRC_UTYPE};
+        OP_I_TYPE_L:    ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       res_src_load_type,  PC_SRC_PLUS_4,         IMM_SRC_ITYPE};
+        OP_I_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       RES_SRC_ALU_OUT,    PC_SRC_PLUS_4,         imm_src_i_type};
+        OP_S_TYPE:      ctrls = {1'b0,  1'b1,    ALU_SRC_EXT_IMM,       res_src_store_type, PC_SRC_PLUS_4,         IMM_SRC_STYPE};
+        OP_R_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_REG,           RES_SRC_ALU_OUT,    PC_SRC_PLUS_4,         3'bx         };
+        OP_B_TYPE:      ctrls = {1'b0,  1'b0,    ALU_SRC_REG,           RES_SRC_X,          pc_src_b_type,         IMM_SRC_BTYPE};
+        OP_J_TYPE:      ctrls = {1'b1,  1'b0,    2'bx,                  RES_SRC_PC_PLUS_4,  PC_SRC_PLUS_OFF,       IMM_SRC_JTYPE};
+        OP_JALR:        ctrls = {1'b1,  1'b0,    2'bx,                  RES_SRC_PC_PLUS_4,  PC_SRC_REG_PLUS_OFF,   IMM_SRC_ITYPE};
+        OP_AUIPC:       ctrls = {1'b1,  1'b0,    ALU_SRC_PC_EXT_IMM,    RES_SRC_ALU_OUT,    PC_SRC_PLUS_4,         IMM_SRC_UTYPE};
         default:        ctrls = 11'bx;
         endcase
     end
