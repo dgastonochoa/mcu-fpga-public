@@ -83,12 +83,12 @@ module controller(
     output  wire        reg_we,
     output  wire        mem_we,
 
-    output  wire [1:0]  alu_src,
-    output  wire [1:0]  result_src,
-    output  wire [1:0]  pc_src,
-    output  wire [2:0]  imm_src,
+    output  alu_src_e   alu_src,
+    output  res_src_e   result_src,
+    output  pc_src_e    pc_src,
+    output  imm_src_e   imm_src,
 
-    output  wire [3:0]  alu_ctrl
+    output  alu_op_e    alu_ctrl
 );
     wire [6:0] op;
     wire [2:0] func3;
@@ -133,7 +133,7 @@ module controller(
         OP_I_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,         imm_src_i_type};
         OP_S_TYPE:      ctrls = {1'b0,  1'b1,    ALU_SRC_EXT_IMM,       RES_SRC_READ_DATA, PC_SRC_PLUS_4,         IMM_SRC_STYPE};
         OP_R_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_REG,           RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,         3'bx         };
-        OP_B_TYPE:      ctrls = {1'b0,  1'b0,    ALU_SRC_REG,           2'bx,              pc_src_b_type,         IMM_SRC_BTYPE};
+        OP_B_TYPE:      ctrls = {1'b0,  1'b0,    ALU_SRC_REG,           RES_SRC_X,         pc_src_b_type,         IMM_SRC_BTYPE};
         OP_J_TYPE:      ctrls = {1'b1,  1'b0,    2'bx,                  RES_SRC_PC_PLUS_4, PC_SRC_PLUS_OFF,       IMM_SRC_JTYPE};
         OP_JALR:        ctrls = {1'b1,  1'b0,    2'bx,                  RES_SRC_PC_PLUS_4, PC_SRC_REG_PLUS_OFF,   IMM_SRC_ITYPE};
         OP_AUIPC:       ctrls = {1'b1,  1'b0,    ALU_SRC_PC_EXT_IMM,    RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,         IMM_SRC_UTYPE};

@@ -37,7 +37,8 @@ typedef enum logic [1:0]
 {
     RES_SRC_ALU_OUT      = 2'b00,
     RES_SRC_READ_DATA    = 2'b01,
-    RES_SRC_PC_PLUS_4    = 2'b10
+    RES_SRC_PC_PLUS_4    = 2'b10,
+    RES_SRC_X            = 2'bx
 } res_src_e;
 
 /**
