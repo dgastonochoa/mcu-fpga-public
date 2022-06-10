@@ -27,7 +27,8 @@ typedef enum logic [1:0]
 {
     ALU_SRC_REG          = 2'b00,
     ALU_SRC_EXT_IMM      = 2'b01,
-    ALU_SRC_PC_EXT_IMM   = 2'b10
+    ALU_SRC_PC_EXT_IMM   = 2'b10,
+    ALU_SRC_X            = 2'bxx
 } alu_src_e;
 
 /**
@@ -37,6 +38,7 @@ typedef enum logic [3:0]
 {
     RES_SRC_ALU_OUT      = 4'b0000,
     RES_SRC_PC_PLUS_4    = 4'b0010,
+    RES_SRC_EXT_IMM      = 4'b0100,
     RES_SRC_MEM_BYTE     = 4'b000_1,
     RES_SRC_MEM_HALF     = 4'b001_1,
     RES_SRC_MEM_WORD     = 4'b010_1,

@@ -153,6 +153,7 @@ module datapath(
         RES_SRC_MEM_UBYTE:  reg_wr_data = read_data;
         RES_SRC_MEM_UHALF:  reg_wr_data = read_data;
         RES_SRC_PC_PLUS_4:  reg_wr_data = pc_plus_4;
+        RES_SRC_EXT_IMM:    reg_wr_data = ext_imm;
         default:            reg_wr_data = 32'hx;
         endcase
     end

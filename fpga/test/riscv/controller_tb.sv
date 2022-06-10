@@ -557,6 +557,19 @@ module controller_tb;
             assert(imm_src === IMM_SRC_STYPE);
             assert(alu_ctrl === ALU_OP_ADD);
 
+        //
+        // lui
+        //
+        alu_flags = 4'b0;
+        instr = 32'h000ff3b7;
+        #5  assert(reg_we === 1'b1);
+            assert(mem_we === 1'b0);
+            assert(alu_src === ALU_SRC_X);
+            assert(res_src === RES_SRC_EXT_IMM);
+            assert(pc_src === PC_SRC_PLUS_4);
+            assert(imm_src === IMM_SRC_UTYPE);
+            assert(alu_ctrl === ALU_OP_X);
+
         $finish;
     end
 

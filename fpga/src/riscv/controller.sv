@@ -10,7 +10,8 @@ typedef enum logic [6:0]
     OP_B_TYPE = 7'b1100011,
     OP_J_TYPE = 7'b1101111,
     OP_JALR = 7'b1100111,
-    OP_AUIPC = 7'b0010111
+    OP_AUIPC = 7'b0010111,
+    OP_LUI = 7'b0110111
 } op_e;
 
 
@@ -55,6 +56,7 @@ module alu_dec(
         OP_S_TYPE:      alu_ctrl = ALU_OP_ADD;
         OP_B_TYPE:      alu_ctrl = ALU_OP_SUB;
         OP_AUIPC:       alu_ctrl = ALU_OP_ADD;
+        OP_LUI:         alu_ctrl = ALU_OP_X;
         default:        alu_ctrl = 3'bx;
         endcase
     end
@@ -161,15 +163,16 @@ module controller(
 
     always_comb begin
         case (op)
-        //                       reg_we  mem_we  alu_src                result_src          pc_src                imm_src
+        //                       reg_we  mem_we  alu_src                result_src          pc_src                  imm_src
         OP_I_TYPE_L:    ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       res_src_load_type,  PC_SRC_PLUS_4,         IMM_SRC_ITYPE};
         OP_I_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       RES_SRC_ALU_OUT,    PC_SRC_PLUS_4,         imm_src_i_type};
         OP_S_TYPE:      ctrls = {1'b0,  1'b1,    ALU_SRC_EXT_IMM,       res_src_store_type, PC_SRC_PLUS_4,         IMM_SRC_STYPE};
         OP_R_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_REG,           RES_SRC_ALU_OUT,    PC_SRC_PLUS_4,         3'bx         };
         OP_B_TYPE:      ctrls = {1'b0,  1'b0,    ALU_SRC_REG,           RES_SRC_X,          pc_src_b_type,         IMM_SRC_BTYPE};
-        OP_J_TYPE:      ctrls = {1'b1,  1'b0,    2'bx,                  RES_SRC_PC_PLUS_4,  PC_SRC_PLUS_OFF,       IMM_SRC_JTYPE};
-        OP_JALR:        ctrls = {1'b1,  1'b0,    2'bx,                  RES_SRC_PC_PLUS_4,  PC_SRC_REG_PLUS_OFF,   IMM_SRC_ITYPE};
+        OP_J_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_X,             RES_SRC_PC_PLUS_4,  PC_SRC_PLUS_OFF,       IMM_SRC_JTYPE};
+        OP_JALR:        ctrls = {1'b1,  1'b0,    ALU_SRC_X,             RES_SRC_PC_PLUS_4,  PC_SRC_REG_PLUS_OFF,   IMM_SRC_ITYPE};
         OP_AUIPC:       ctrls = {1'b1,  1'b0,    ALU_SRC_PC_EXT_IMM,    RES_SRC_ALU_OUT,    PC_SRC_PLUS_4,         IMM_SRC_UTYPE};
+        OP_LUI:         ctrls = {1'b1,  1'b0,    ALU_SRC_X,             RES_SRC_EXT_IMM,    PC_SRC_PLUS_4,         IMM_SRC_UTYPE};
         default:        ctrls = 11'bx;
         endcase
     end

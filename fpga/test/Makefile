@@ -57,6 +57,7 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/ori_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/andi_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/auipc_tb.xv		\
+		 	   $(RISCV_TEST_DIR)/lui_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/datapath_tb.xv		\
 		 	   $(RISCV_TEST_DIR)/controller_tb.xv
 
