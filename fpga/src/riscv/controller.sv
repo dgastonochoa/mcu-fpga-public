@@ -133,9 +133,9 @@ module controller(
 
     always_comb begin
         case (func3)
-        3'b000: res_src_load_type = RES_SRC_READ_BYTE;
-        3'b001: res_src_load_type = RES_SRC_READ_HALF;
-        3'b010: res_src_load_type = RES_SRC_READ_DATA;
+        3'b000: res_src_load_type = RES_SRC_MEM_BYTE;
+        3'b001: res_src_load_type = RES_SRC_MEM_HALF;
+        3'b010: res_src_load_type = RES_SRC_MEM_WORD;
         default: res_src_load_type = RES_SRC_X;
         endcase
     end
@@ -145,7 +145,7 @@ module controller(
         //                       reg_we  mem_we  alu_src                result_src          pc_src                imm_src
         OP_I_TYPE_L:    ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       res_src_load_type, PC_SRC_PLUS_4,         IMM_SRC_ITYPE};
         OP_I_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,         imm_src_i_type};
-        OP_S_TYPE:      ctrls = {1'b0,  1'b1,    ALU_SRC_EXT_IMM,       RES_SRC_READ_DATA, PC_SRC_PLUS_4,         IMM_SRC_STYPE};
+        OP_S_TYPE:      ctrls = {1'b0,  1'b1,    ALU_SRC_EXT_IMM,       RES_SRC_MEM_WORD,  PC_SRC_PLUS_4,         IMM_SRC_STYPE};
         OP_R_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_REG,           RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,         3'bx         };
         OP_B_TYPE:      ctrls = {1'b0,  1'b0,    ALU_SRC_REG,           RES_SRC_X,         pc_src_b_type,         IMM_SRC_BTYPE};
         OP_J_TYPE:      ctrls = {1'b1,  1'b0,    2'bx,                  RES_SRC_PC_PLUS_4, PC_SRC_PLUS_OFF,       IMM_SRC_JTYPE};
