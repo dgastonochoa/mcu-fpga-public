@@ -1,8 +1,14 @@
 BUILDIR=./build
+TESTUTILS=./test-utils
 SRC=../src
 SRCRV=$(SRC)/riscv
 TSRCRV=./riscv
 INC=../include
+
+CC=gcc
+VV=iverilog
+RV_AS=riscv64-unknown-elf-as
+RV_OBJCOPY=riscv64-unknown-elf-objcopy
 
 RANDOM := $(shell bash -c 'echo $$RANDOM')
 
@@ -18,6 +24,8 @@ tests := $(BUILDIR)/alu_logic_tb.xv 	\
 all: $(tests)
 	$(foreach test,$^,vvp $(test);)
 
+gen_as: $(BUILDIR)/as_instr.bin
+
 $(BUILDIR)/alu_logic_tb.xv: alu_logic_tb.sv $(SRC)/alu.sv
 $(BUILDIR)/alu_add_tb.xv: alu_add_tb.sv $(SRC)/alu.sv
 $(BUILDIR)/alu_subs_tb.xv: alu_subs_tb.sv $(SRC)/alu.sv
@@ -31,10 +39,15 @@ $(BUILDIR)/datapath_tb.xv: $(TSRCRV)/datapath/datapath_tb.sv $(SRC)/alu.sv $(SRC
 $(BUILDIR)/%_tb.xv:
 	@if [ ! -d "$(BUILDIR)" ]; then mkdir $(BUILDIR); fi
 	@echo "Building $@"
-	@iverilog -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
+	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -DVCD="\"$@.vcd\"" $^
 
-$(BUILDIR)/2scomp: ./utils/2scomp.c
-	gcc -o $@ -std=c11 $<
+$(BUILDIR)/2scomp: $(TESTUTILS)/2scomp.c dirs
+	$(CC) -o $@ -std=c11 $<
+
+$(BUILDIR)/as_instr.bin: $(TESTUTILS)/as_instr.s dirs
+	@$(RV_AS) -o $@.elf $<
+	@$(RV_OBJCOPY) -O binary $@.elf $@.bin
+	@xxd -e -c 4 $@.bin
 
 .PHONY: clean
 clean:
@@ -42,4 +55,4 @@ clean:
 
 .PHONY: dirs
 dirs:
-	@mkdir -p $(BUILDIR)
+	@if [ ! -d "$(BUILDIR)" ]; then mkdir -p $(BUILDIR); fi
