@@ -11,6 +11,8 @@ RISCV_TEST_DIR := $(PREFIX)/riscv
 CC := gcc
 VV := iverilog
 
+IFLAGS := -DIVERILOG
+
 RANDOM := $(shell bash -c 'echo $$RANDOM')
 
 
@@ -94,10 +96,10 @@ $(wavedumps): | dirs
 
 
 $(PREFIX)/%.xv: %.sv $(common_src)
-	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
+	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) -I$(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
 
 $(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src)
-	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) -I$(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
+	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) -I$(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
 
 $(PREFIX)/%.xv.vcd: $(PREFIX)/%.xv
 	$(VVP) $<

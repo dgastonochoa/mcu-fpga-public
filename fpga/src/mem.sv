@@ -1,5 +1,6 @@
 `include "errno.svh"
 `include "mem.svh"
+`include "synth.svh"
 
 /**
  * Byte-enableable word-length memory. Allows to perform read/write
@@ -160,14 +161,14 @@ module mem #(parameter N = 64)(
     //
     errno_e err_half, err_word;
 
-    assign err_half = addr[0];
-    assign err_word = addr[1] | addr[0];
+    assign err_half = `CAST(errno_e, addr[0]);
+    assign err_word = `CAST(errno_e, (addr[1] | addr[0]));
 
     always_comb begin
         case (dt)
         MEM_DT_HALF: err = err_half;
         MEM_DT_WORD: err = err_word;
-        default: err = 0;
+        default: err = `CAST(errno_e, 1'b0);
         endcase
     end
 endmodule

@@ -1,5 +1,6 @@
 `include "errno.svh"
 `include "mem.svh"
+`include "synth.svh"
 
 /**
  * RISC-V top module. Connects the RISC-V CPU with external
@@ -57,7 +58,7 @@ module riscv(
     mem_dt_e dt_data;
     errno_e err_data;
 
-    assign dt_data = res_src[3:1];
+    assign dt_data = `CAST(mem_dt_e, res_src[3:1]);
 
     mem data_mem(alu_out, mem_wd_data, mem_we, dt_data, mem_rd_data, err_data, clk);
 
