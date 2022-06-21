@@ -20,7 +20,7 @@ module xori_tb;
 
     reg clk = 0, rst;
 
-    riscv_single_top dut(
+    riscv dut(
         reg_we,
         mem_we,
         imm_src,

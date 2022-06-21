@@ -5,7 +5,7 @@
  * RISC-V top module. Connects the RISC-V CPU with external
  * memories.
  */
-module riscv_single_top(
+module riscv(
     // Signals exposed for debugging purposes
     output  wire        reg_we,
     output  wire        mem_we,

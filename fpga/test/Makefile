@@ -72,7 +72,7 @@ common_src := $(SRC)/alu.sv 	\
 			  $(SRC)/utils.sv
 
 riscv_src :=  $(SRCRV)/datapath.sv 			\
-			  $(SRCRV)/riscv_single_top.sv 	\
+			  $(SRCRV)/riscv.sv 			\
 			  $(SRCRV)/controller.sv
 
 
