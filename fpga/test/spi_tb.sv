@@ -66,7 +66,8 @@ module spi_tb;
         #1  assert(m_rd === 8'h55);
             assert(s_rd === 8'haa);
             assert(sck === 1'b1);
-            assert(ss === 1'b1);
+
+        @(posedge ss);
 
         for (i = 0; i < 10; i = i + 1) begin
             #`CLK_P assert(sck === 1'b1);
@@ -84,7 +85,7 @@ module spi_tb;
                 #1  assert(m_rd === 8'h55);
                     assert(s_rd === 8'haa);
                     assert(sck === 1'b1);
-                    assert(ss === 1'b1);
+                    @(posedge ss);
             end
         end
         en = 1'b0;

@@ -11,40 +11,12 @@ module spi_slave(
     input   wire        sck,
     input   wire        clk
 );
-    //
-    // Receiver
-    //
-    wire [7:0] rdb;
-    wire s_rdy;
+    // TODO This implementation ignores ss. This slave will still read
+    // even if ss is not enabled.
+    // One possibility is to always read, but never go `rdy` if ss is high.
 
-    sipo_reg sr0(mosi, rdb, s_rdy, rst | ss, sck);
-
-
-    //
-    // Sync. signals
-    //
-    wire s_rdy_sync;
-    wire [7:0] rdb_sync;
-
-    cell_sync_n #(.N(9)) csn(clk, rst, {rdb, s_rdy}, {rdb_sync, s_rdy_sync});
-
-    //
-    // Buffer logic
-    //
-    always @(posedge clk, posedge rst) begin
-        if (s_rdy_sync) begin
-            rdy <= 1'b1;
-            rd <= rdb_sync;
-        end else if (~ss | rst) begin
-            rdy <= 1'b0;
-            rd <= 8'b0;
-        end
-    end
-
-    //
-    // Sender
-    //
-    piso_reg pr0(wd, miso, busy, rst | ss, sck);
+    sipo_reg sr0(mosi, rd, rdy, rst, sck);
+    piso_reg pr0(wd, miso, busy, rst, sck);
 endmodule
 
 module spi_master_ctrl(
@@ -108,8 +80,8 @@ module spi_master #(parameter SCK_WIDTH_CLKS = 8'd4) (
     input   wire [7:0]  wd,
     output  wire        mosi,
     output  wire        ss,
-    output  reg  [7:0]  rd,
-    output  reg         rdy,
+    output  wire [7:0]  rd,
+    output  wire        rdy,
     output  wire        busy,
     output  wire        sck,
     input   wire        en,
@@ -127,44 +99,19 @@ module spi_master #(parameter SCK_WIDTH_CLKS = 8'd4) (
         sck, clk, rst | ~en_sck);
 
 
+    // TODO should busy and rdy be directly those in sipo and piso, or should
+    // they be high/low as a function of ss. Possibly ss. In case of multi-slave,
+    // there is no problem in not wiring it, master is still busy generating the
+    // sck signal.
+
     //
     // Receiver
     //
-    wire [7:0] rdb;
-    wire s_rdy;
-
-    sipo_reg sr0(miso, rdb, s_rdy, rst | ss, sck);
-
-
-    //
-    // Sync. signals
-    //
-    wire s_rdy_sync;
-    wire [7:0] rdb_sync;
-
-    cell_sync_n #(.N(9)) csn(clk, rst, {rdb, s_rdy}, {rdb_sync, s_rdy_sync});
-
-
-    //
-    // Buffer logic
-    //
-    always @(posedge clk, posedge rst) begin
-        if (s_rdy_sync) begin
-            rdy <= 1'b1;
-            rd <= rdb_sync;
-        end else if (~ss | rst) begin
-            rdy <= 1'b0;
-            rd <= 8'b0;
-        end
-    end
+    sipo_reg sr0(miso, rd, rdy, rst, sck);
 
 
     //
     // Sender
     //
-    wire piso_busy;
-
-    piso_reg pr0(wd, mosi, piso_busy, rst | ss, sck);
-
-    assign busy = ~ss | en_sck;
+    piso_reg pr0(wd, mosi, busy, rst, sck);
 endmodule

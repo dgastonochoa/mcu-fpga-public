@@ -50,12 +50,14 @@ module spi_tests_top(
     //
     // Debug signals
     //
-    assign JA[0] = m_rdy;
-    assign JA[1] = m_busy;
-    assign JA[2] = s_rdy;
-    assign JA[3] = s_busy;
+    assign JA[0] = ss;
+    assign JA[1] = sck;
+    assign JA[2] = m_rdy;
+    assign JA[3] = m_busy;
 
-    // assign JA[4] = ss;
-    // assign JA[5] = sck;
+    // WARNING: for some reason, trying to output ss and sck through these two
+    // pins makes the master spi to never read.
+    assign JA[4] = s_rdy;
+    assign JA[5] = s_busy;
 
 endmodule
