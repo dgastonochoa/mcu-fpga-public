@@ -123,15 +123,20 @@ module piso_reg(
     input   wire        clk
 );
     //
-    // Counter logic
+    // Buff and counter logic
     //
     reg [3:0] i;
 
     always @(negedge clk, posedge rst) begin
-        if (rst)
+        if (rst) begin
             i <= 0;
-        else
-            i <= (i == 0) ? 7 : i - 1;
+            buff <= 0;
+        end else begin
+            if (i == 8'd0)
+                buff <= in_data;
+
+            i <= (i == 8'd0) ? 8'd7 : i - 1;
+        end
     end
 
 
@@ -164,17 +169,14 @@ module piso_reg(
     assign msb = in_data[7];
     assign cb = buff[i];
 
-    // TODO always_comb must assign all variables all the time
-    // or latches are generated.
     always_comb begin
         case (cs)
-        IDLE:   {buff, busy, out_data} = 10'b0;
-        START:  {buff, busy, out_data} = {in_data, 1'b1, msb};
+        IDLE:   {busy, out_data} = 2'b0;
+        START:  {busy, out_data} = {1'b1, msb};
         SEND:   {busy, out_data} = {1'b1, cb};
-        FINISH: {out_data, busy} = {cb, 1'b0};
+        FINISH: {busy, out_data} = {1'b0, cb};
         endcase
     end
-
 endmodule
 
 module cnt16(
