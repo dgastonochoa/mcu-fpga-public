@@ -27,7 +27,10 @@ tests := $(PREFIX)/mem_word_ops_tb.xv				\
 		 $(PREFIX)/alu_cmp_tb.xv					\
 		 $(PREFIX)/utils_clk_div_tb.xv				\
 		 $(PREFIX)/utils_piso_reg_tb.xv				\
-		 $(PREFIX)/utils_sipo_reg_tb.xv
+		 $(PREFIX)/utils_sipo_reg_tb.xv				\
+		 $(PREFIX)/spi_master_ctrl_tb.xv			\
+		 $(PREFIX)/spi_tb.xv						\
+		 $(PREFIX)/spi_several_slaves_tb.xv
 
 riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv			\
 			   $(RISCV_TEST_DIR)/lb_tb.xv			\
@@ -75,7 +78,8 @@ riscv_tests_waves := $(addsuffix .vcd,$(riscv_tests))
 
 common_src := $(SRC)/alu.sv 	\
 			  $(SRC)/mem.sv 	\
-			  $(SRC)/utils.sv
+			  $(SRC)/utils.sv	\
+			  $(SRC)/spi.sv
 
 riscv_src :=  $(SRCRV)/datapath.sv 			\
 			  $(SRCRV)/riscv.sv 			\
