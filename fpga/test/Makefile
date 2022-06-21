@@ -10,20 +10,24 @@ RISCV_TEST_DIR := $(PREFIX)/riscv
 
 CC := gcc
 VV := iverilog
+VVP := vvp
 
 IFLAGS := -DIVERILOG
 
 RANDOM := $(shell bash -c 'echo $$RANDOM')
 
 
-tests := $(PREFIX)/mem_word_ops_tb.xv		\
-		 $(PREFIX)/mem_byte_ops_tb.xv		\
-		 $(PREFIX)/mem_halfw_ops_tb.xv		\
-		 $(PREFIX)/mem_error_tb.xv			\
-		 $(PREFIX)/alu_logic_tb.xv			\
-		 $(PREFIX)/alu_add_tb.xv			\
-		 $(PREFIX)/alu_subs_tb.xv			\
-		 $(PREFIX)/alu_cmp_tb.xv
+tests := $(PREFIX)/mem_word_ops_tb.xv				\
+		 $(PREFIX)/mem_byte_ops_tb.xv				\
+		 $(PREFIX)/mem_halfw_ops_tb.xv				\
+		 $(PREFIX)/mem_error_tb.xv					\
+		 $(PREFIX)/alu_logic_tb.xv					\
+		 $(PREFIX)/alu_add_tb.xv					\
+		 $(PREFIX)/alu_subs_tb.xv					\
+		 $(PREFIX)/alu_cmp_tb.xv					\
+		 $(PREFIX)/utils_clk_div_tb.xv				\
+		 $(PREFIX)/utils_piso_reg_tb.xv				\
+		 $(PREFIX)/utils_sipo_reg_tb.xv
 
 riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv			\
 			   $(RISCV_TEST_DIR)/lb_tb.xv			\
@@ -82,7 +86,7 @@ riscv_src :=  $(SRCRV)/datapath.sv 			\
 # Build al tests and execute them without generating wave dumps
 #
 test: $(tests) $(riscv_tests)
-	$(foreach test,$^,vvp $(test) -none;)
+	$(foreach test,$^,$(VVP) -n $(test) -none;)
 
 wavedumps: $(tests_waves) $(riscv_tests_waves)
 
@@ -102,10 +106,10 @@ $(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src)
 	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) -I$(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
 
 $(PREFIX)/%.xv.vcd: $(PREFIX)/%.xv
-	$(VVP) $<
+	$(VVP) -n $<
 
 $(RISCV_TEST_DIR)/%.xv.vcd: $(RISCV_TEST_DIR)/%.xv
-	$(VVP) $<
+	$(VVP) -n $<
 
 $(PREFIX)/2scomp: $(TESTUTILS)/2scomp.c dirs
 	$(CC) -o $@ -std=c11 $<
