@@ -104,6 +104,10 @@ module spi_master #(parameter SCK_WIDTH_CLKS = 8'd4) (
     // there is no problem in not wiring it, master is still busy generating the
     // sck signal.
 
+    // TODO data lines are left in the level of the last bit sent. To fix it,
+    // (if required) do `mosi & en_sck` or `mosi | ss`.
+    //
+
     //
     // Receiver
     //

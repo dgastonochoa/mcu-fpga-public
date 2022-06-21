@@ -14,15 +14,20 @@ module spi_tests_top(
     // Signal filtering
     //
     wire rst, en;
+    wire [3:0] _sw;
 
     debounce_filter df(btnC, CLK100MHZ, rst);
     debounce_filter df2(btnR, CLK100MHZ, en);
+    debounce_filter df3(sw[0], CLK100MHZ, _sw[0]);
+    debounce_filter df4(sw[1], CLK100MHZ, _sw[1]);
+    debounce_filter df5(sw[2], CLK100MHZ, _sw[2]);
+    debounce_filter df6(sw[3], CLK100MHZ, _sw[3]);
 
 
     //
     // Clock generation
     //
-    // 100e6 / 1e5 = 1 kHz
+    // 100e6 / 1e5 = 1 kHz; 1e5 / 2 = 5e4 -> pulse width = 5e4
     localparam CLK_PWIDTH = 32'd50000;
 
     wire clk_1khz;
@@ -33,31 +38,30 @@ module spi_tests_top(
     //
     // SPI test
     //
-    // pulse_width = 5 -> period = 10 -> 1 kHz / 10 = 160 Hz.
-    localparam SCK_PULSE_WIDTH = 5;
+    // pulse_width = 10 -> period = 20 -> 1 kHz / 20 = 50 Hz.
+    localparam SCK_PULSE_WIDTH = 10;
 
-    wire mosi, miso, ss, sck, en_sync;
-    wire m_rdy, m_busy, s_rdy, s_busy;
+    wire [7:0] m_wd, s_wd;
+    wire mosi, mosi, ss, sck;
 
     cell_sync_n #(.N(1)) cs0(clk_1khz, rst, en, en_sync);
 
     spi_tests #(.SCK_PWIDTH(SCK_PULSE_WIDTH)) dut(
-        mosi, miso, ss, sck,
-        m_rdy, m_busy, s_rdy, s_busy,
-        en_sync, sw[3:0], LED[7:0], clk_1khz, rst);
+        en_sync,
+        _sw,
+        LED[7:0],
+        m_wd,
+        s_wd,
+        mosi,
+        miso,
+        ss,
+        sck,
+        clk_1khz,
+        rst
+    );
 
-
-    //
-    // Debug signals
-    //
-    assign JA[0] = ss;
-    assign JA[1] = sck;
-    assign JA[2] = m_rdy;
-    assign JA[3] = m_busy;
-
-    // WARNING: for some reason, trying to output ss and sck through these two
-    // pins makes the master spi to never read.
-    assign JA[4] = s_rdy;
-    assign JA[5] = s_busy;
-
+    assign JA[0] = mosi;
+    assign JA[1] = miso;
+    assign JA[2] = ss;
+    assign JA[3] = sck;
 endmodule
