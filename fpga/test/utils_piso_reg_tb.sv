@@ -13,7 +13,7 @@ module utils_piso_reg_tb;
     reg clk = 0, rst_clk = 1;
     wire sck;
 
-    clk_div #(.POL(POL)) cd0(sck, WAIT_CLKS, clk, rst_clk);
+    clk_div #(.POL(POL), .WAIT_CLKS(PWIDTH)) cd0(sck, clk, rst_clk);
 
     always #(`CLK_P / 2) clk = ~clk;
 

@@ -30,9 +30,8 @@ module dff #(parameter N = 32) (
     end
 endmodule
 
-module clk_div #(parameter POL = 1'd0) (
+module clk_div #(parameter POL = 1'd0, parameter PWIDTH = 8'd4) (
     output  reg         div_clk,
-    input   wire [7:0]  wait_clks,
     input   wire        clk,
     input   wire        rst
 );
@@ -43,7 +42,7 @@ module clk_div #(parameter POL = 1'd0) (
             div_clk <= POL;
             timer <= 0;
         end else begin
-            if (timer < (wait_clks - 1)) begin
+            if (timer < (PWIDTH - 1)) begin
                 timer <= timer + 1;
             end else begin
                 timer <= 0;

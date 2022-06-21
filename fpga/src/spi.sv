@@ -103,7 +103,7 @@ module spi_master_ctrl(
     end
 endmodule
 
-module spi_master(
+module spi_master #(parameter SCK_WIDTH_CLKS = 8'd4) (
     input   wire        miso,
     input   wire [7:0]  wd,
     output  wire        mosi,
@@ -123,7 +123,8 @@ module spi_master(
 
     spi_master_ctrl smc(en, sck, ss, en_sck, rst, clk);
 
-    clk_div #(.POL(1'd1)) cd(sck, 8'd4, clk, rst | ~en_sck);
+    clk_div #(.POL(1'd1), .PWIDTH(SCK_WIDTH_CLKS)) cd(
+        sck, clk, rst | ~en_sck);
 
 
     //
