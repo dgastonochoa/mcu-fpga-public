@@ -46,6 +46,17 @@ module mem_be #(parameter N = 64)(
 );
     reg [31:0] _mem [N-1:0];
 
+    // TODO remove this when possible
+    initial begin
+        _mem[0] = 32'h00000093; // start:   addi    x1, zero, 0
+        _mem[1] = 32'h00100113; //          addi    x2, zero, 1
+        _mem[2] = 32'h002080b3; //          add     x1, x1, x2
+        _mem[3] = 32'h002080b3; //          add     x1, x1, x2
+        _mem[4] = 32'h002080b3; //          add     x1, x1, x2
+        _mem[5] = 32'h002080b3; //          add     x1, x1, x2
+        _mem[6] = 32'hfe1084e3; //          beq     x1, x1, start
+    end
+
     //
     // Write logic
     //
