@@ -11,12 +11,12 @@ module spi_slave(
     input   wire        sck,
     input   wire        clk
 );
-    // TODO This implementation ignores ss. This slave will still read
-    // even if ss is not enabled.
-    // One possibility is to always read, but never go `rdy` if ss is high.
+    wire g_sck;
 
-    sipo_reg sr0(mosi, rd, rdy, rst, sck);
-    piso_reg pr0(wd, miso, busy, rst, sck);
+    assign g_sck = ss | sck;
+
+    sipo_reg sr0(mosi, rd, rdy, rst, g_sck);
+    piso_reg pr0(wd, miso, busy, rst, g_sck);
 endmodule
 
 module spi_master_ctrl(
