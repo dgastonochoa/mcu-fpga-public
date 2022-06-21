@@ -35,7 +35,7 @@ module clk_div #(parameter POL = 1'd0, parameter PWIDTH = 8'd4) (
     input   wire        clk,
     input   wire        rst
 );
-    reg [7:0] timer;
+    reg [31:0] timer;
 
     always @(posedge clk or posedge rst) begin
         if (rst) begin
@@ -182,12 +182,12 @@ module cnt16(
 );
     reg [7:0] cnt;
 
-    always @(clk, posedge rst) begin
+    always @(posedge clk, posedge rst) begin
         if (rst)
             cnt <= 8'd0;
         else
-            cnt <= (cnt == 8'd16 ? 8'd1 : cnt + 8'd1);
+            cnt <= (cnt == 8'd8 ? 8'd1 : cnt + 8'd1);
     end
 
-    assign s = cnt == 8'd16;
+    assign s = cnt == 8'd8;
 endmodule
