@@ -2,7 +2,7 @@
  * Top module for the riscv_single_components_test test.
  *
  */
-module risc_single_top(
+module riscv_single_components_test_top(
     input   wire        CLK100MHZ,
     input   wire [15:0] sw,
     output  wire [15:0] LED,
