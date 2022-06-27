@@ -1,3 +1,4 @@
+`include "synth.svh"
 `include "alu.svh"
 
 /**
@@ -5,7 +6,7 @@
  *
  * @param a Operand a
  * @param b Operand b
- * @param op Operation to perform. See riscv_params TODO change this
+ * @param op Operation to perform.
  * @param res Operation result
  * @param flags Bit flags updated after the operation finishes.
  *      bit 0: overflow
@@ -26,8 +27,10 @@ module alu (
     logic [31:0] b_op;
     logic cin;
     wire [31:0] nb;
+    wire signed [31:0] signed_a;
 
     assign nb = ~b;
+    assign signed_a = `CAST(signed, a);
 
     always_comb begin
         case (op)
@@ -60,7 +63,7 @@ module alu (
         ALU_OP_XOR: res = a ^ b;
         ALU_OP_SLL: res = a << b;
         ALU_OP_SRL: res = a >> b;
-        ALU_OP_SRA: res = a >>> b;
+        ALU_OP_SRA: res = signed_a >>> b;
         default: res = 4'bx;
         endcase
     end
