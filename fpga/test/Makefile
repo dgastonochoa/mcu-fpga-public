@@ -74,6 +74,7 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/lui_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/datapath_tb.xv					\
 		 	   $(RISCV_TEST_DIR)/controller_tb.xv				\
+			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv	\
 			   $(RISCV_TEST_DIR)/digital_design_and_computer_arch_test_tb.xv
 
 tests_waves := $(addsuffix .vcd,$(tests))
