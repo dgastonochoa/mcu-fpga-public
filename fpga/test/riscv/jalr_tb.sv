@@ -22,7 +22,7 @@ module jalr_tb;
 
     reg clk = 0, rst;
 
-    riscv dut(
+    riscv_legacy dut(
         reg_we,
         mem_we,
         imm_src,
@@ -42,7 +42,7 @@ module jalr_tb;
 
     wire [31:0] a;
 
-    assign a = dut.dp.rf._reg[1];
+    assign a = dut.rv.dp.rf._reg[1];
 
     initial begin
         $dumpfile(`VCD);
@@ -51,22 +51,22 @@ module jalr_tb;
         //
         // init. x0 as 0
         //
-        dut.dp.rf._reg[1] = 32'd0;
-        dut.dp.rf._reg[3] = 32'd8;
-        dut.dp.rf._reg[4] = 32'd4;
+        dut.rv.dp.rf._reg[1] = 32'd0;
+        dut.rv.dp.rf._reg[3] = 32'd8;
+        dut.rv.dp.rf._reg[4] = 32'd4;
 
-        dut.instr_mem._mem._mem[0] = 32'h004180e7;   // jalr    ra, x3, 4
-        dut.instr_mem._mem._mem[3] = 32'hffc200e7;   // jalr    ra, x4, -4
+        dut.rv.instr_mem._mem._mem[0] = 32'h004180e7;   // jalr    ra, x3, 4
+        dut.rv.instr_mem._mem._mem[3] = 32'hffc200e7;   // jalr    ra, x4, -4
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
             assert(pc === 32'd00);
-            assert(dut.dp.rf._reg[1] === 32'd00);
+            assert(dut.rv.dp.rf._reg[1] === 32'd00);
         #11 assert(pc === 32'd12);
-            assert(dut.dp.rf._reg[1] === 32'd04);
+            assert(dut.rv.dp.rf._reg[1] === 32'd04);
         #20 assert(pc === 32'd00);
-            assert(dut.dp.rf._reg[1] === 32'd16);
+            assert(dut.rv.dp.rf._reg[1] === 32'd16);
 
         $finish;
     end

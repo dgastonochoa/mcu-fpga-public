@@ -20,7 +20,7 @@ module lb_tb;
 
     reg clk = 0, rst;
 
-    riscv dut(
+    riscv_legacy dut(
         reg_we,
         mem_we,
         imm_src,
@@ -42,8 +42,8 @@ module lb_tb;
     // Debug signals
     //
     wire [31:0] x6, x9;
-    assign x6 = dut.dp.rf._reg[6];
-    assign x9 = dut.dp.rf._reg[9];
+    assign x6 = dut.rv.dp.rf._reg[6];
+    assign x9 = dut.rv.dp.rf._reg[9];
 
 
     initial begin
@@ -51,29 +51,29 @@ module lb_tb;
         $dumpvars(1, lb_tb);
 
         // Set register init. vals
-        dut.dp.rf._reg[0] = 32'd0;
-        dut.dp.rf._reg[6] = 32'd0;
-        dut.dp.rf._reg[9] = 32'd8;
+        dut.rv.dp.rf._reg[0] = 32'd0;
+        dut.rv.dp.rf._reg[6] = 32'd0;
+        dut.rv.dp.rf._reg[9] = 32'd8;
 
         // Set mem. init. vals
-        dut.data_mem._mem._mem[1] = 32'hdeadc0de;
-        dut.data_mem._mem._mem[2] = 32'hdeadbeef;
-        dut.data_mem._mem._mem[3] = 32'hc001c0de;
+        dut.rv.data_mem._mem._mem[1] = 32'hdeadc0de;
+        dut.rv.data_mem._mem._mem[2] = 32'hdeadbeef;
+        dut.rv.data_mem._mem._mem[3] = 32'hc001c0de;
 
         // Load words with different addresses
         // Last instr. is to try to load word into x0
-        dut.instr_mem._mem._mem[0] = 32'hffc48303;           // lb x6, -4(x9)
-        dut.instr_mem._mem._mem[1] = 32'h00048303;           // lb x6, 0(x9)
-        dut.instr_mem._mem._mem[2] = 32'h00448303;           // lb x6, 4(x9)
-        dut.instr_mem._mem._mem[3] = 32'h00448003;           // lb x0, 4(x9)
+        dut.rv.instr_mem._mem._mem[0] = 32'hffc48303;           // lb x6, -4(x9)
+        dut.rv.instr_mem._mem._mem[1] = 32'h00048303;           // lb x6, 0(x9)
+        dut.rv.instr_mem._mem._mem[2] = 32'h00448303;           // lb x6, 4(x9)
+        dut.rv.instr_mem._mem._mem[3] = 32'h00448003;           // lb x0, 4(x9)
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.dp.rf._reg[6] === 32'hffffffde);
-        #20 assert(dut.dp.rf._reg[6] === 32'hffffffef);
-        #20 assert(dut.dp.rf._reg[6] === 32'hffffffde);
-        #20 assert(dut.dp.rf._reg[0] === 32'h00000000);
+        #11 assert(dut.rv.dp.rf._reg[6] === 32'hffffffde);
+        #20 assert(dut.rv.dp.rf._reg[6] === 32'hffffffef);
+        #20 assert(dut.rv.dp.rf._reg[6] === 32'hffffffde);
+        #20 assert(dut.rv.dp.rf._reg[0] === 32'h00000000);
 
         #20;
         $finish;

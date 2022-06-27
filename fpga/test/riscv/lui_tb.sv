@@ -20,7 +20,7 @@ module lui_tb;
 
     reg clk = 0, rst;
 
-    riscv dut(
+    riscv_legacy dut(
         reg_we,
         mem_we,
         imm_src,
@@ -42,19 +42,19 @@ module lui_tb;
         $dumpfile(`VCD);
         $dumpvars(1, lui_tb);
 
-        dut.dp.rf._reg[0] = 32'd00;
-        dut.dp.rf._reg[1] = 32'd12;
+        dut.rv.dp.rf._reg[0] = 32'd00;
+        dut.rv.dp.rf._reg[1] = 32'd12;
 
-        dut.instr_mem._mem._mem[0] = 32'hfffff0b7;  // lui x1, 0xfffff
-        dut.instr_mem._mem._mem[1] = 32'h000010b7;  // lui x1, 1
-        dut.instr_mem._mem._mem[2] = 32'h000000b7;  // lui x1, 0
+        dut.rv.instr_mem._mem._mem[0] = 32'hfffff0b7;  // lui x1, 0xfffff
+        dut.rv.instr_mem._mem._mem[1] = 32'h000010b7;  // lui x1, 1
+        dut.rv.instr_mem._mem._mem[2] = 32'h000000b7;  // lui x1, 0
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.dp.rf._reg[1] === 32'hfffff000);
-        #20 assert(dut.dp.rf._reg[1] === 32'h00001000);
-        #20 assert(dut.dp.rf._reg[1] === 32'h00000000);
+        #11 assert(dut.rv.dp.rf._reg[1] === 32'hfffff000);
+        #20 assert(dut.rv.dp.rf._reg[1] === 32'h00001000);
+        #20 assert(dut.rv.dp.rf._reg[1] === 32'h00000000);
 
         #5;
         $finish;

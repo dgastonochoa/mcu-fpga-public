@@ -22,7 +22,7 @@ module or_tb;
 
     reg clk = 0, rst;
 
-    riscv dut(
+    riscv_legacy dut(
         reg_we,
         mem_we,
         imm_src,
@@ -41,27 +41,27 @@ module or_tb;
     always #10 clk = ~clk;
 
     wire [9:0] _ctrls;
-    assign _ctrls = dut.co.ctrls;
+    assign _ctrls = dut.rv.co.ctrls;
 
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, or_tb);
 
-        dut.dp.rf._reg[0] = 32'd00;
-        dut.dp.rf._reg[4] = 32'd00;
-        dut.dp.rf._reg[5] = 32'h01;
-        dut.dp.rf._reg[6] = 32'hfe;
+        dut.rv.dp.rf._reg[0] = 32'd00;
+        dut.rv.dp.rf._reg[4] = 32'd00;
+        dut.rv.dp.rf._reg[5] = 32'h01;
+        dut.rv.dp.rf._reg[6] = 32'hfe;
 
-        dut.instr_mem._mem._mem[0] = 32'h00626033;           // or x0, x4, x6
-        dut.instr_mem._mem._mem[1] = 32'h0002e233;           // or x4, x5, x0
-        dut.instr_mem._mem._mem[2] = 32'h00626233;           // or x4, x4, x6
+        dut.rv.instr_mem._mem._mem[0] = 32'h00626033;           // or x0, x4, x6
+        dut.rv.instr_mem._mem._mem[1] = 32'h0002e233;           // or x4, x5, x0
+        dut.rv.instr_mem._mem._mem[2] = 32'h00626233;           // or x4, x4, x6
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.dp.rf._reg[0] === 32'h00);
-        #20 assert(dut.dp.rf._reg[4] === 32'h01);
-        #20 assert(dut.dp.rf._reg[4] === 32'hff);
+        #11 assert(dut.rv.dp.rf._reg[0] === 32'h00);
+        #20 assert(dut.rv.dp.rf._reg[4] === 32'h01);
+        #20 assert(dut.rv.dp.rf._reg[4] === 32'hff);
 
         #5;
         $finish;

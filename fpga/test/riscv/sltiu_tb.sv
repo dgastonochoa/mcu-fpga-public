@@ -20,7 +20,7 @@ module sltiu_tb;
 
     reg clk = 0, rst;
 
-    riscv dut(
+    riscv_legacy dut(
         reg_we,
         mem_we,
         imm_src,
@@ -43,27 +43,27 @@ module sltiu_tb;
         $dumpfile(`VCD);
         $dumpvars(1, sltiu_tb);
 
-        dut.dp.rf._reg[4] = 32'b00;
+        dut.rv.dp.rf._reg[4] = 32'b00;
 
-        dut.dp.rf._reg[5] = 32'h08;
-        dut.dp.rf._reg[6] = 32'd2;
+        dut.rv.dp.rf._reg[5] = 32'h08;
+        dut.rv.dp.rf._reg[6] = 32'd2;
 
-        dut.dp.rf._reg[7] = 32'hfffffff8;
-        dut.dp.rf._reg[8] = 32'd2;
+        dut.rv.dp.rf._reg[7] = 32'hfffffff8;
+        dut.rv.dp.rf._reg[8] = 32'd2;
 
-        dut.dp.rf._reg[9] = 32'd2;
-        dut.dp.rf._reg[10] = 32'd4;
+        dut.rv.dp.rf._reg[9] = 32'd2;
+        dut.rv.dp.rf._reg[10] = 32'd4;
 
-        dut.instr_mem._mem._mem[0] = 32'h0022b213;   // sltiu    x4, x5, 2
-        dut.instr_mem._mem._mem[1] = 32'h0023b213;   // sltiu    x4, x7, 2
-        dut.instr_mem._mem._mem[2] = 32'h0044b213;   // sltiu    x4, x9, 4
+        dut.rv.instr_mem._mem._mem[0] = 32'h0022b213;   // sltiu    x4, x5, 2
+        dut.rv.instr_mem._mem._mem[1] = 32'h0023b213;   // sltiu    x4, x7, 2
+        dut.rv.instr_mem._mem._mem[2] = 32'h0044b213;   // sltiu    x4, x9, 4
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #20 assert(dut.dp.rf._reg[4] === 32'd0);
-        #20 assert(dut.dp.rf._reg[4] === 32'd0);
-        #20 assert(dut.dp.rf._reg[4] === 32'd1);
+        #20 assert(dut.rv.dp.rf._reg[4] === 32'd0);
+        #20 assert(dut.rv.dp.rf._reg[4] === 32'd0);
+        #20 assert(dut.rv.dp.rf._reg[4] === 32'd1);
 
         #5;
         $finish;

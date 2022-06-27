@@ -22,7 +22,7 @@ module bltu_tb;
 
     reg clk = 0, rst;
 
-    riscv dut(
+    riscv_legacy dut(
         reg_we,
         mem_we,
         imm_src,
@@ -44,16 +44,16 @@ module bltu_tb;
         $dumpfile(`VCD);
         $dumpvars(1, bltu_tb);
 
-        dut.dp.rf._reg[0] = 32'd00;
-        dut.dp.rf._reg[4] = 32'hffff0000;
-        dut.dp.rf._reg[5] = 32'd10;
-        dut.dp.rf._reg[6] = 32'd20;
+        dut.rv.dp.rf._reg[0] = 32'd00;
+        dut.rv.dp.rf._reg[4] = 32'hffff0000;
+        dut.rv.dp.rf._reg[5] = 32'd10;
+        dut.rv.dp.rf._reg[6] = 32'd20;
 
-        dut.instr_mem._mem._mem[0] = 32'h00527863;   // bgeu    x4, x5, 16
-        dut.instr_mem._mem._mem[4] = 32'h00627263;   // bgeu    x4, x6, 4
-        dut.instr_mem._mem._mem[5] = 32'h00437863;   // bgeu    x6, x4, 20
-        dut.instr_mem._mem._mem[6] = 32'h00007263;   // bgeu    x0, x0, 4
-        dut.instr_mem._mem._mem[7] = 32'hfe0272e3;   // bgeu    x4, x0, -28
+        dut.rv.instr_mem._mem._mem[0] = 32'h00527863;   // bgeu    x4, x5, 16
+        dut.rv.instr_mem._mem._mem[4] = 32'h00627263;   // bgeu    x4, x6, 4
+        dut.rv.instr_mem._mem._mem[5] = 32'h00437863;   // bgeu    x6, x4, 20
+        dut.rv.instr_mem._mem._mem[6] = 32'h00007263;   // bgeu    x0, x0, 4
+        dut.rv.instr_mem._mem._mem[7] = 32'hfe0272e3;   // bgeu    x4, x0, -28
 
         // Reset and test
         #2  rst = 1;

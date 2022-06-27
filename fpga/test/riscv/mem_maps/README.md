@@ -1,0 +1,1 @@
+This folder contains memory maps used by some of the RISC-V test benches.
