@@ -2,8 +2,12 @@
 `include "mem.svh"
 `include "synth.svh"
 
+`ifdef CONFIG_ENABLE_MEM_DEFAULT_VALS
+    `include "mem_default_vals.svh"
+`endif
+
 /**
- * Byte-enableable word-length memory. Allows to perform read/write
+ * Byte-enableable word-addressable memory. Allows to perform read/write
  * operations in only the specified bytes within the word whose
  * address is @param{addr}.
  *
@@ -29,13 +33,29 @@
  * @param rd Read value.
  * @param clk Clock signal.
  *
+ * @tparam N Optional parameter. Sets the memory maximum size in words.
+ * @tparam INIT_VALS See notes.
+ *
  * @warning Write is sync. with the provided clock signal. Read is
  *          asynchronous.
  *
  * @warning Address must be word-aligned when accessing the full word
  *          (@see{be}) and half-word-aligned when accessing half words.
+ *
+ * @note This module allows to pre-load information at synthesis time by
+ * enabling `CONFIG_ENABLE_MEM_DEFAULT_VALS`, setting the optional parameter
+ * `INIT_VALS` to a number different than 0 and by defining the macro
+ * `INIT_MEM_F` in a file named `mem_default_vals.svh`. The macro must be
+ * like:
+ *
+ *      `define INIT_MEM_F(mem_reg)         \
+ *              mem_reg[0] = 32'haa;        \
+ *              mem_reg[1] = 32'hbb;
+ *
+ * Beware that the above macro must not be out of bounds with regardst to
+ * the parameter @param{N}.
  */
-module mem_be #(parameter N = 64)(
+module mem_be #(parameter N = 64, INIT_VALS = 0)(
     input   wire        [31:0]  addr,
     input   wire        [31:0]  wd,
     input   wire        [3:0]   be,
@@ -46,16 +66,13 @@ module mem_be #(parameter N = 64)(
 );
     reg [31:0] _mem [N-1:0];
 
-    // TODO remove this when possible
+`ifdef CONFIG_ENABLE_MEM_DEFAULT_VALS
     initial begin
-        _mem[0] = 32'h00000093; // start:   addi    x1, zero, 0
-        _mem[1] = 32'h00100113; //          addi    x2, zero, 1
-        _mem[2] = 32'h002080b3; //          add     x1, x1, x2
-        _mem[3] = 32'h002080b3; //          add     x1, x1, x2
-        _mem[4] = 32'h002080b3; //          add     x1, x1, x2
-        _mem[5] = 32'h002080b3; //          add     x1, x1, x2
-        _mem[6] = 32'hfe1084e3; //          beq     x1, x1, start
+        if (INIT_VALS > 0) begin
+            `INIT_MEM_F(_mem)
+        end
     end
+`endif // CONFIG_ENABLE_MEM_DEFAULT_VALS
 
     //
     // Write logic
@@ -133,8 +150,13 @@ endmodule
  * @param rd Read data.
  * @param err Error flags.
  * @param clk Clock signal.
+ *
+ *
+ * @param N Optional parameter. @see{mem_be}
+ * @param INIT_VALS Optional parameter. @see{mem_be}
+ *
  */
-module mem #(parameter N = 64)(
+module mem #(parameter N = 64, INIT_VALS = 0)(
     input   wire        [31:0]  addr,
     input   wire        [31:0]  wd,
     input   wire                we,
@@ -164,7 +186,7 @@ module mem #(parameter N = 64)(
         endcase
     end
 
-    mem_be _mem(addr, wd, be, we, se, rd, clk);
+    mem_be #(.N(N), .INIT_VALS(INIT_VALS)) _mem(addr, wd, be, we, se, rd, clk);
 
 
     //
