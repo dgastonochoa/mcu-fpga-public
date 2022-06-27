@@ -1,3 +1,7 @@
+/**
+ * 2 to 4 decoder.
+ *
+ */
 module dec(
     input   wire    [1:0] d,
     output  logic   [3:0] q
@@ -30,6 +34,17 @@ module dff #(parameter N = 32) (
     end
 endmodule
 
+/**
+ * Clock divider.
+ *
+ * @param div_clk Divided clock signal
+ * @param clk Clock
+ * @param rst Reset
+ *
+ * @tparam POL Polarity (@param{clk} value when in reset state)
+ * @tparam PWIDTH @param{div_clk} pulse width in @param{clk} pulses.
+ *
+ */
 module clk_div #(parameter POL = 1'd0, parameter PWIDTH = 8'd4) (
     output  reg         div_clk,
     input   wire        clk,
@@ -52,6 +67,16 @@ module clk_div #(parameter POL = 1'd0, parameter PWIDTH = 8'd4) (
     end
 endmodule
 
+/**
+ * Synchronizer.
+ *
+ * @param clk Clock against which the input signal/s will be sync.
+ * @param rst Reset
+ * @param in_p Input async. signal/s
+ * @param out_p Output sync. signal/s
+ *
+ * @tparam N Number of signals to sync.
+ */
 module cell_sync_n #(parameter N = 8) (
     input wire  clk,
     input wire  rst,
@@ -81,11 +106,16 @@ endmodule
  * @param in_data Serial input data
  * @param out_data Parallel output data
  *
- * @param rdy 1 if @param{out_data} contains data to read,
- *            0 otherwise.
+ * @param rdy 1 if @param{out_data} contains data to read, 0 otherwise. This
+ *            parameter and @param{out_data} change at the same time, so it's
+ *            necessary to wait 'some time' after @param{rdy} is driven high
+ *            to be able to read @param{out_data} safely.
  *
  * @param rst Reset
  * @param clk Clock signal
+ *
+ * @todo Determine how much time is required to wait after @param{rdy} is driven
+ *       high to read @param{out_data} safely.
  */
 module sipo_reg(
     input   wire        in_data,
@@ -115,6 +145,18 @@ module sipo_reg(
     assign out_data = {8{rdy}} & buff;
 endmodule
 
+/**
+ * Parallel-in serial-out register. Polarity 0 (it shifts data on the negative
+ * edge of @param{clk}). It keeps shifting data as long as the clock keeps
+ * changing.
+ *
+ * @param in_data Parallel data to shift
+ * @param out_data Shifted serial data
+ * @param busy 1 if busy sending data, 0 otherwise.
+ * @param rst Reset
+ * @param clk Clock
+ *
+ */
 module piso_reg(
     input   wire [7:0]  in_data,
     output  reg         out_data,
@@ -179,6 +221,15 @@ module piso_reg(
     end
 endmodule
 
+/**
+ * Clock dege counter. Counts 8 positive edges.
+ *
+ * @param s 1 every 8*x clock pos. edge is reached, 0 otherwise.
+ * @param clk Clock
+ * @param rst Reset
+ *
+ * @todo Rename this to something clearer.
+ */
 module cnt16(
     output wire s,
     input  wire clk,

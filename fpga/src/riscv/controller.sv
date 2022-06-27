@@ -1,6 +1,9 @@
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
+/**
+ * RISC-V instruction type.
+ */
 typedef enum logic [6:0]
 {
     OP_I_TYPE_L = 7'b0000011,
@@ -176,7 +179,4 @@ module controller(
         default:        ctrls = 11'bx;
         endcase
     end
-
-
-
 endmodule
