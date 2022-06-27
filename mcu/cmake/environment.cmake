@@ -24,6 +24,8 @@ set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 set(CMAKE_EXE_LINKER_FLAGS "-T${PROJECT_SOURCE_DIR}/tm4c123g.ld -Wl,--entry=ResetISR -Wl,--gc-sections")
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS true)
+
 # Processor specific definitions
 add_definitions(-DPART_TM4C123GH6PM)
 add_definitions(-DTARGET_IS_TM4C123_RA1)

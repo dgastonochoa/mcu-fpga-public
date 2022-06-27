@@ -4,10 +4,9 @@ project(mcu)
 
 include(cmake/environment.cmake)
 
-add_executable(${CMAKE_PROJECT_NAME}.axf
-    src/startup_gcc.c
-    src/main.c
-)
+add_executable(${CMAKE_PROJECT_NAME}.axf)
+
+add_subdirectory(apps)
 
 add_dependencies(${CMAKE_PROJECT_NAME}.axf tm4c123_lib)
 
