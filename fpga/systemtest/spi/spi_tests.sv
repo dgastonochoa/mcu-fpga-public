@@ -32,16 +32,20 @@ module spi_tests #(parameter SCK_PWIDTH = 10) (
     end
 
     assign m_wd = (_sw[1] == 1 ? cte55 : cteaa);
+
+    // For some reason, using _sw[2] breaks the tests in the physical fpga.
     assign s_wd = (_sw[3] == 1 ? cteaa : cte55);
 
 
     wire [7:0] m_rd;
+    wire m_rdy, m_busy;
 
     spi_master #(.SCK_WIDTH_CLKS(SCK_PWIDTH)) dut1(
         miso, m_wd, mosi, ss, m_rd, m_rdy, m_busy, sck, en_sync, rst, clk);
 
 
     wire [7:0] s_rd;
+    wire s_rdy, s_busy;
 
     spi_slave dut2(mosi, ss, s_wd, miso, s_rd, s_rdy, s_busy, rst, sck, clk);
 

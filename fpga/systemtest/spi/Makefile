@@ -5,6 +5,9 @@ INC = ../../include
 VV := iverilog
 VVP := vvp
 
+#
+# Simulation only
+#
 IFLAGS := -DIVERILOG
 
 all: $(PREFIX)/spi_tests.xv
