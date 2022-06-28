@@ -114,8 +114,9 @@ module datapath(
     input   wire        rst,
     input   wire        clk
 );
-
+    //
     // Next PC logic
+    //
     wire    [31:0] pc_plus_4;
     wire    [31:0] pc_plus_off;
     wire    [31:0] pc_reg_plus_off;
@@ -124,8 +125,6 @@ module datapath(
     assign pc_plus_4 = pc + 4;
     assign pc_plus_off = pc + ext_imm;
     assign pc_reg_plus_off = reg_rd1 + ext_imm;
-
-    dff pc_ff(pc_next, pc, rst, clk);
 
     always_comb begin
         case (pc_src)
@@ -136,13 +135,15 @@ module datapath(
         endcase
     end
 
+    dff pc_ff(pc_next, pc, rst, clk);
 
+
+    //
     // Register file logic
+    //
     wire    [31:0] reg_rd1;
     wire    [31:0] reg_rd2;
     logic   [31:0] reg_wr_data;
-
-    regfile rf(instr[19:15], instr[24:20], instr[11:7], reg_wr_data, reg_we, reg_rd1, reg_rd2, clk);
 
     always_comb begin
         case (result_src)
@@ -154,26 +155,29 @@ module datapath(
         endcase
     end
 
+    regfile rf(instr[19:15], instr[24:20], instr[11:7], reg_wr_data, reg_we, reg_rd1, reg_rd2, clk);
 
+    assign write_data = reg_rd2;
+
+
+
+    //
     // ALU and extender logic
+    //
     logic   [31:0] alu_srca;
     logic   [31:0] alu_srcb;
     wire    [31:0] ext_imm;
 
-    extend ext(instr, imm_src, ext_imm);
-
-    alu alu0(alu_srca, alu_srcb, alu_ctrl, alu_out, alu_flags);
-
     always_comb begin
         case (alu_src)
         ALU_SRC_EXT_IMM:    {alu_srca, alu_srcb} = {reg_rd1, ext_imm};
-        ALU_SRC_REG:        {alu_srca, alu_srcb} = {reg_rd1, write_data};
+        ALU_SRC_REG:        {alu_srca, alu_srcb} = {reg_rd1, reg_rd2};
         ALU_SRC_PC_EXT_IMM: {alu_srca, alu_srcb} = {pc, ext_imm};
         default:            {alu_srca, alu_srcb} = {32'bx, 32'bx};
         endcase
     end
 
+    extend ext(instr, imm_src, ext_imm);
 
-    // Outputs
-    assign write_data = reg_rd2;
+    alu alu0(alu_srca, alu_srcb, alu_ctrl, alu_out, alu_flags);
 endmodule
