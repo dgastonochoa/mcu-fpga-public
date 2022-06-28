@@ -60,6 +60,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     input   wire        rst,
     input   wire        clk
 );
+    alu_src_e alu_src_a, alu_src_b;
     wire [3:0] alu_flags;
     mem_dt_e dt;
 
@@ -69,8 +70,10 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
         reg_we,
         imm_src,
         alu_op,
-        alu_src,
-        res_src, pc_src,
+        alu_src_a,
+        alu_src_b,
+        res_src,
+        pc_src,
         pc,
         alu_out,
         alu_flags,
@@ -84,7 +87,8 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
         alu_flags,
         reg_we,
         mem_we,
-        alu_src,
+        alu_src_a,
+        alu_src_b,
         res_src,
         pc_src,
         imm_src,

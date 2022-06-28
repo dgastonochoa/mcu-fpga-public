@@ -101,7 +101,8 @@ module datapath(
 
     input   imm_src_e   imm_src,
     input   alu_op_e    alu_ctrl,
-    input   alu_src_e   alu_src,
+    input   alu_src_e   alu_src_a,
+    input   alu_src_e   alu_src_b,
     input   res_src_e   result_src,
     input   pc_src_e    pc_src,
 
@@ -164,20 +165,31 @@ module datapath(
     //
     // ALU and extender logic
     //
-    logic   [31:0] alu_srca;
-    logic   [31:0] alu_srcb;
     wire    [31:0] ext_imm;
-
-    always_comb begin
-        case (alu_src)
-        ALU_SRC_EXT_IMM:    {alu_srca, alu_srcb} = {reg_rd1, ext_imm};
-        ALU_SRC_REG:        {alu_srca, alu_srcb} = {reg_rd1, reg_rd2};
-        ALU_SRC_PC_EXT_IMM: {alu_srca, alu_srcb} = {pc, ext_imm};
-        default:            {alu_srca, alu_srcb} = {32'bx, 32'bx};
-        endcase
-    end
 
     extend ext(instr, imm_src, ext_imm);
 
-    alu alu0(alu_srca, alu_srcb, alu_ctrl, alu_out, alu_flags);
+
+    logic   [31:0] alu_op_a;
+    logic   [31:0] alu_op_b;
+
+    always_comb begin
+        case (alu_src_a)
+        ALU_SRC_REG_1:   alu_op_a = reg_rd1;
+        ALU_SRC_REG_2:   alu_op_a = reg_rd2;
+        ALU_SRC_EXT_IMM: alu_op_a = ext_imm;
+        ALU_SRC_PC:      alu_op_a = pc;
+        endcase
+    end
+
+    always_comb begin
+        case (alu_src_b)
+        ALU_SRC_REG_1:   alu_op_b = reg_rd1;
+        ALU_SRC_REG_2:   alu_op_b = reg_rd2;
+        ALU_SRC_EXT_IMM: alu_op_b = ext_imm;
+        ALU_SRC_PC:      alu_op_b = pc;
+        endcase
+    end
+
+    alu alu0(alu_op_a, alu_op_b, alu_ctrl, alu_out, alu_flags);
 endmodule

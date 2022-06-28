@@ -25,10 +25,10 @@ typedef enum logic [2:0]
  */
 typedef enum logic [1:0]
 {
-    ALU_SRC_REG          = 2'b00,
-    ALU_SRC_EXT_IMM      = 2'b01,
-    ALU_SRC_PC_EXT_IMM   = 2'b10,
-    ALU_SRC_X            = 2'bxx
+    ALU_SRC_REG_1        = 2'b00,
+    ALU_SRC_REG_2        = 2'b01,
+    ALU_SRC_EXT_IMM      = 2'b10,
+    ALU_SRC_PC           = 2'b11
 } alu_src_e;
 
 /**
