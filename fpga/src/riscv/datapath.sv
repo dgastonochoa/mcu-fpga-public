@@ -147,13 +147,9 @@ module datapath(
     always_comb begin
         case (result_src)
         RES_SRC_ALU_OUT:    reg_wr_data = alu_out;
-        RES_SRC_MEM_BYTE:   reg_wr_data = read_data;
-        RES_SRC_MEM_HALF:   reg_wr_data = read_data;
-        RES_SRC_MEM_WORD:   reg_wr_data = read_data;
-        RES_SRC_MEM_UBYTE:  reg_wr_data = read_data;
-        RES_SRC_MEM_UHALF:  reg_wr_data = read_data;
         RES_SRC_PC_PLUS_4:  reg_wr_data = pc_plus_4;
         RES_SRC_EXT_IMM:    reg_wr_data = ext_imm;
+        RES_SRC_MEM:        reg_wr_data = read_data;
         default:            reg_wr_data = 32'hx;
         endcase
     end

@@ -76,10 +76,9 @@ endmodule
  * @param alu_src ALU's second operand source (register, immediate...)
  *
  * @param result_src Source of the result to be written in the register file.
- *                   (alu's output, memory etc.). When it states that the result source
- *                   is memory, this param. will contain expected data type as well (byte
- *                   word etc.). Thus, this field must be properly set both when reading
- *                   and when writing to memory.
+ * (alu's output, memory etc.). When it states that the result source is memory,
+ * this param. will contain expected data type as well (byte word etc.). Thus,
+ * this field must be properly set both when reading and when writing to memory.
  *
  * @param pc_src Source of the next program counter (+4, +offset...)
  * @param imm_src Indicates the type of instr. with regards to how
@@ -99,7 +98,8 @@ module controller(
     output  pc_src_e    pc_src,
     output  imm_src_e   imm_src,
 
-    output  alu_op_e    alu_ctrl
+    output  alu_op_e    alu_ctrl,
+    output  mem_dt_e    dt
 );
     wire [6:0] op;
     wire [2:0] func3;
@@ -112,7 +112,7 @@ module controller(
     assign func7 = instr[31:25];
 
 
-    // icarus verilog doesn't support index accesses within an `always_comb` block.
+    // iverilog doesn't support index accesses within an `always_comb` block.
     wire alu_ov, alu_cout, alu_zero, alu_neg;
     logic [1:0] pc_src_b_type;
 
@@ -140,36 +140,24 @@ module controller(
     assign {reg_we, mem_we, alu_src, result_src, pc_src, imm_src} = ctrls;
     assign imm_src_i_type = (func3[0] & ~func3[1]) ? IMM_SRC_ITYPE2 : IMM_SRC_ITYPE;
 
-    res_src_e res_src_load_type;
 
     always_comb begin
         case (func3)
-        3'b000: res_src_load_type = RES_SRC_MEM_BYTE;
-        3'b001: res_src_load_type = RES_SRC_MEM_HALF;
-        3'b010: res_src_load_type = RES_SRC_MEM_WORD;
-        3'b100: res_src_load_type = RES_SRC_MEM_UBYTE;
-        3'b101: res_src_load_type = RES_SRC_MEM_UHALF;
-        default: res_src_load_type = RES_SRC_X;
-        endcase
-    end
-
-    res_src_e res_src_store_type;
-
-    always_comb begin
-        case (func3)
-        3'b000: res_src_store_type  = RES_SRC_MEM_BYTE;
-        3'b001: res_src_store_type  = RES_SRC_MEM_HALF;
-        3'b010: res_src_store_type  = RES_SRC_MEM_WORD;
-        default: res_src_store_type = RES_SRC_X;
+        3'b000:  dt = MEM_DT_BYTE;
+        3'b001:  dt = MEM_DT_HALF;
+        3'b010:  dt = MEM_DT_WORD;
+        3'b100:  dt = MEM_DT_UBYTE;
+        3'b101:  dt = MEM_DT_UHALF;
+        default: dt = MEM_DT_BYTE;
         endcase
     end
 
     always_comb begin
         case (op)
-        //                       reg_we  mem_we  alu_src                result_src          pc_src                  imm_src
-        OP_I_TYPE_L:    ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       res_src_load_type,  PC_SRC_PLUS_4,         IMM_SRC_ITYPE};
+        //                       reg_we  mem_we  alu_src                result_src          pc_src                 imm_src
+        OP_I_TYPE_L:    ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       RES_SRC_MEM,        PC_SRC_PLUS_4,         IMM_SRC_ITYPE};
         OP_I_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_EXT_IMM,       RES_SRC_ALU_OUT,    PC_SRC_PLUS_4,         imm_src_i_type};
-        OP_S_TYPE:      ctrls = {1'b0,  1'b1,    ALU_SRC_EXT_IMM,       res_src_store_type, PC_SRC_PLUS_4,         IMM_SRC_STYPE};
+        OP_S_TYPE:      ctrls = {1'b0,  1'b1,    ALU_SRC_EXT_IMM,       4'bx,               PC_SRC_PLUS_4,         IMM_SRC_STYPE};
         OP_R_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_REG,           RES_SRC_ALU_OUT,    PC_SRC_PLUS_4,         3'bx         };
         OP_B_TYPE:      ctrls = {1'b0,  1'b0,    ALU_SRC_REG,           RES_SRC_X,          pc_src_b_type,         IMM_SRC_BTYPE};
         OP_J_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_X,             RES_SRC_PC_PLUS_4,  PC_SRC_PLUS_OFF,       IMM_SRC_JTYPE};

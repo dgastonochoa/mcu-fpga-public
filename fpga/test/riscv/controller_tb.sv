@@ -18,6 +18,7 @@ module controller_tb;
     alu_src_e alu_src;
     imm_src_e imm_src;
     alu_op_e alu_ctrl;
+    mem_dt_e dt;
 
     controller ctrl(
         instr,
@@ -28,7 +29,8 @@ module controller_tb;
         res_src,
         pc_src,
         imm_src,
-        alu_ctrl
+        alu_ctrl,
+        dt
     );
 
     initial begin
@@ -43,10 +45,11 @@ module controller_tb;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === ALU_SRC_EXT_IMM);
-            assert(res_src === RES_SRC_MEM_WORD);
+            assert(res_src === RES_SRC_MEM);
             assert(pc_src === PC_SRC_PLUS_4);
             assert(imm_src === IMM_SRC_ITYPE);
             assert(alu_ctrl === ALU_OP_ADD);
+            assert(dt === MEM_DT_WORD);
 
         //
         // sw
@@ -56,10 +59,11 @@ module controller_tb;
         #5  assert(reg_we === 1'b0);
             assert(mem_we === 1'b1);
             assert(alu_src === ALU_SRC_EXT_IMM);
-            assert(res_src === RES_SRC_MEM_WORD);
+            assert(res_src === 4'bx);
             assert(pc_src === PC_SRC_PLUS_4);
             assert(imm_src === IMM_SRC_STYPE);
             assert(alu_ctrl === ALU_OP_ADD);
+            assert(dt === MEM_DT_WORD);
 
         //
         // or
@@ -487,10 +491,11 @@ module controller_tb;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === ALU_SRC_EXT_IMM);
-            assert(res_src === RES_SRC_MEM_BYTE);
+            assert(res_src === RES_SRC_MEM);
             assert(pc_src === PC_SRC_PLUS_4);
             assert(imm_src === IMM_SRC_ITYPE);
             assert(alu_ctrl === ALU_OP_ADD);
+            assert(dt === MEM_DT_BYTE);
 
         //
         // lh
@@ -500,10 +505,11 @@ module controller_tb;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === ALU_SRC_EXT_IMM);
-            assert(res_src === RES_SRC_MEM_HALF);
+            assert(res_src === RES_SRC_MEM);
             assert(pc_src === PC_SRC_PLUS_4);
             assert(imm_src === IMM_SRC_ITYPE);
             assert(alu_ctrl === ALU_OP_ADD);
+            assert(dt === MEM_DT_HALF);
 
         //
         // lbu
@@ -513,10 +519,11 @@ module controller_tb;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === ALU_SRC_EXT_IMM);
-            assert(res_src === RES_SRC_MEM_UBYTE);
+            assert(res_src === RES_SRC_MEM);
             assert(pc_src === PC_SRC_PLUS_4);
             assert(imm_src === IMM_SRC_ITYPE);
             assert(alu_ctrl === ALU_OP_ADD);
+            assert(dt === MEM_DT_UBYTE);
 
         //
         // lhu
@@ -526,10 +533,11 @@ module controller_tb;
         #5  assert(reg_we === 1'b1);
             assert(mem_we === 1'b0);
             assert(alu_src === ALU_SRC_EXT_IMM);
-            assert(res_src === RES_SRC_MEM_UHALF);
+            assert(res_src === RES_SRC_MEM);
             assert(pc_src === PC_SRC_PLUS_4);
             assert(imm_src === IMM_SRC_ITYPE);
             assert(alu_ctrl === ALU_OP_ADD);
+            assert(dt === MEM_DT_UHALF);
 
         //
         // sb
@@ -539,23 +547,25 @@ module controller_tb;
         #5  assert(reg_we === 1'b0);
             assert(mem_we === 1'b1);
             assert(alu_src === ALU_SRC_EXT_IMM);
-            assert(res_src === RES_SRC_MEM_BYTE);
+            assert(res_src === 4'bx);
             assert(pc_src === PC_SRC_PLUS_4);
             assert(imm_src === IMM_SRC_STYPE);
             assert(alu_ctrl === ALU_OP_ADD);
+            assert(dt === MEM_DT_BYTE);
 
         //
-        // sb
+        // sh
         //
         alu_flags = 4'b0;
         instr = 32'hfe649e23;
         #5  assert(reg_we === 1'b0);
             assert(mem_we === 1'b1);
             assert(alu_src === ALU_SRC_EXT_IMM);
-            assert(res_src === RES_SRC_MEM_HALF);
+            assert(res_src === 4'bx);
             assert(pc_src === PC_SRC_PLUS_4);
             assert(imm_src === IMM_SRC_STYPE);
             assert(alu_ctrl === ALU_OP_ADD);
+            assert(dt === MEM_DT_HALF);
 
         //
         // lui

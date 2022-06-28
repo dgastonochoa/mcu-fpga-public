@@ -61,6 +61,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     input   wire        clk
 );
     wire [3:0] alu_flags;
+    mem_dt_e dt;
 
     datapath dp(
         instr,
@@ -87,13 +88,9 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
         res_src,
         pc_src,
         imm_src,
-        alu_op
+        alu_op,
+        dt
     );
-
-    mem_dt_e dt_data;
-    errno_e err_data;
-
-    assign dt_data = `CAST(mem_dt_e, res_src[3:1]);
 
 
     //
@@ -109,10 +106,9 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     assign d_addr       = (tm == 1'b0 ? alu_out : tm_d_addr);
     assign d_wd         = (tm == 1'b0 ? mem_wd_data : tm_d_wd);
     assign d_we         = (tm == 1'b0 ? mem_we : tm_d_we);
-    assign d_dt         = (tm == 1'b0 ? dt_data : tm_d_dt);
+    assign d_dt         = (tm == 1'b0 ? dt : tm_d_dt);
 
     assign mem_rd_data  = (tm == 1'b0 ? d_rd : 32'h00);
-    assign err_data     = (tm == 1'b0 ? d_err : ENONE);
 
     assign tm_d_rd      = (tm == 1'b0 ? 32'h00 : d_rd);
     assign tm_d_err     = (tm == 1'b0 ? ENONE : d_err);
