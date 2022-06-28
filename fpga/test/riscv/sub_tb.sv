@@ -40,22 +40,6 @@ module sub_tb;
 
     always #10 clk = ~clk;
 
-    //
-    // Debug signals
-    //
-    wire [31:0] x6, x9;
-    assign x6 = dut.rv.dp.rf._reg[6];
-    assign x9 = dut.rv.dp.rf._reg[9];
-
-    wire [31:0] addr1, addr3;
-    assign addr1 = dut.rv.dp.rf.addr1;
-    assign addr3 = dut.rv.dp.rf.addr3;
-
-    wire [31:0] mem5, mem10, mem11;
-    assign mem5 = dut.rv.data_mem._mem._mem[5];
-    assign mem10 = dut.rv.data_mem._mem._mem[10];
-    assign mem11 = dut.rv.data_mem._mem._mem[11];
-
 
     initial begin
         $dumpfile(`VCD);

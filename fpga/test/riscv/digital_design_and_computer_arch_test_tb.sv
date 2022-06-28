@@ -38,17 +38,6 @@ module digital_design_and_computer_arch_test_tb;
 
     always #10 clk = ~clk;
 
-    //
-    // Debug signals
-    //
-    wire [31:0] x6, x9;
-    assign x6 = dut.rv.dp.rf._reg[6];
-    assign x9 = dut.rv.dp.rf._reg[9];
-
-    wire [31:0] addr1, addr3;
-    assign addr1 = dut.rv.dp.rf.addr1;
-    assign addr3 = dut.rv.dp.rf.addr3;
-
 
     initial begin
         $dumpfile(`VCD);

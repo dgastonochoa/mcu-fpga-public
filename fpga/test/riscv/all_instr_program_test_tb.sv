@@ -39,15 +39,6 @@ module example_program_tb;
     always #10 clk = ~clk;
 
 
-    wire addr_br;
-    wire [31:0] a, b;
-    alu_op_e op;
-
-    assign addr_br = dut.rv.data_mem.addr === 32'd308;
-    assign a = dut.rv.dp.alu_srca;
-    assign b = dut.rv.dp.alu_srcb;
-    assign op = dut.rv.dp.alu_ctrl;
-
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, example_program_tb);

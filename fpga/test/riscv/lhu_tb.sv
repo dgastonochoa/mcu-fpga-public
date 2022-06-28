@@ -38,13 +38,6 @@ module lh_tb;
 
     always #10 clk = ~clk;
 
-    //
-    // Debug signals
-    //
-    wire [31:0] x6, x9;
-    assign x6 = dut.rv.dp.rf._reg[6];
-    assign x9 = dut.rv.dp.rf._reg[9];
-
 
     initial begin
         $dumpfile(`VCD);
