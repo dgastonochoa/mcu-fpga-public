@@ -30,7 +30,7 @@ module dff #(parameter N = 32) (
     always_ff @(posedge clk, posedge rst) begin
         if (rst)
             q <= 32'b0;
-        else if (en)
+        else if (en == 1'b1)
             q <= d;
     end
 endmodule

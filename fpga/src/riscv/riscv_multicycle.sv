@@ -43,7 +43,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     output  res_src_e   res_src,
     output  pc_src_e    pc_src,
     output  wire [31:0] instr,
-    output  wire [31:0] alu_out,
+    output  wire [31:0] m_addr,
     output  wire [31:0] mem_rd_data,
     output  wire [31:0] mem_wd_data,
     output  wire [31:0] pc,
@@ -60,29 +60,13 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     input   wire        rst,
     input   wire        clk
 );
+    wire en_npc_r, en_ir;
     alu_src_e alu_src_a, alu_src_b;
+    wire m_addr_src;
     wire [3:0] alu_flags;
     mem_dt_e dt;
 
-    datapath dp(
-        instr,
-        mem_rd_data,
-        reg_we,
-        imm_src,
-        alu_op,
-        alu_src_a,
-        alu_src_b,
-        res_src,
-        pc_src,
-        pc,
-        alu_out,
-        alu_flags,
-        mem_wd_data,
-        rst,
-        clk
-    );
-
-    controller co(
+    controller_multicycle cm(
         instr,
         alu_flags,
         reg_we,
@@ -90,10 +74,33 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
         alu_src_a,
         alu_src_b,
         res_src,
-        pc_src,
         imm_src,
         alu_op,
-        dt
+        dt,
+        en_ir,
+        en_npc_r,
+        m_addr_src,
+        clk,
+        rst
+    );
+
+    datapath_multicycle dp(
+        mem_rd_data,
+        reg_we,
+        imm_src,
+        alu_op,
+        alu_src_a,
+        alu_src_b,
+        res_src,
+        m_addr_src,
+        en_ir,
+        en_npc_r,
+        m_addr,
+        alu_flags,
+        mem_wd_data,
+        instr,
+        clk,
+        rst
     );
 
 
@@ -107,7 +114,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     wire [31:0] d_rd;
     errno_e d_err;
 
-    assign d_addr       = (tm == 1'b0 ? alu_out : tm_d_addr);
+    assign d_addr       = (tm == 1'b0 ? m_addr : tm_d_addr);
     assign d_wd         = (tm == 1'b0 ? mem_wd_data : tm_d_wd);
     assign d_we         = (tm == 1'b0 ? mem_we : tm_d_we);
     assign d_dt         = (tm == 1'b0 ? dt : tm_d_dt);
@@ -117,19 +124,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     assign tm_d_rd      = (tm == 1'b0 ? 32'h00 : d_rd);
     assign tm_d_err     = (tm == 1'b0 ? ENONE : d_err);
 
-    mem #(.N(256)) data_mem(d_addr, d_wd, d_we, d_dt, d_rd, d_err, clk);
-
-
-    //
-    // Instruction memory logic
-    //
-    mem_dt_e dt_instr;
-    errno_e err_instr;
-
-    assign dt_instr = MEM_DT_WORD;
-
-    mem #(.N(512), .INIT_VALS(DEFAULT_INSTR)) instr_mem(
-        pc, 32'b00, 1'b0, dt_instr, instr, err_instr, clk);
+    mem #(.N(768)) id_mem(d_addr, d_wd, d_we, d_dt, d_rd, d_err, clk);
 endmodule
 
 /**

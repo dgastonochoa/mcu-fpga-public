@@ -20,3 +20,4 @@
 *.d
 *.o
 **/__pycache__
+.config

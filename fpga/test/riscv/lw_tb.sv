@@ -7,11 +7,19 @@
     `define VCD "lw_tb.vcd"
 `endif
 
-`define MEM_DATA            dut.rv.data_mem._mem._mem
-`define MEM_INSTR           dut.rv.instr_mem._mem._mem
-`define DATA_START_ADDR     0
-`define INSTR_START_ADDR    0
-`define WAIT_INSTR(clk)     @(posedge clk) #1
+`ifdef CONFIG_RISCV_SINGLECYCLE
+    `define MEM_DATA            dut.rv.data_mem._mem._mem
+    `define MEM_INSTR           dut.rv.instr_mem._mem._mem
+    `define DATA_START_ADDR     0
+    `define INSTR_START_ADDR    0
+    `define WAIT_INSTR(clk)     @(posedge clk) #1
+`elsif CONFIG_RISCV_MULTICYCLE
+    `define MEM_DATA            dut.rv.id_mem._mem._mem
+    `define MEM_INSTR           dut.rv.id_mem._mem._mem
+    `define DATA_START_ADDR     512
+    `define INSTR_START_ADDR    0
+    `define WAIT_INSTR(clk)     repeat(5) @(posedge clk); #1
+`endif
 
 module lw_tb;
     wire reg_we, mem_we;
@@ -44,6 +52,13 @@ module lw_tb;
 
     always #10 clk = ~clk;
 
+    //
+    // Debug signals
+    //
+    wire [31:0] x6, x9;
+    assign x6 = dut.rv.dp.rf._reg[6];
+    assign x9 = dut.rv.dp.rf._reg[9];
+
 
     initial begin
         $dumpfile(`VCD);
@@ -52,7 +67,7 @@ module lw_tb;
         // Set register init. vals
         dut.rv.dp.rf._reg[0] = 32'd0;
         dut.rv.dp.rf._reg[6] = 32'd0;
-        dut.rv.dp.rf._reg[9] = 32'd8;
+        dut.rv.dp.rf._reg[9] = (`DATA_START_ADDR * 4) + 8;
 
         // Set mem. init. vals
         `MEM_DATA[`DATA_START_ADDR + 1] = 32'hdeadc0de;

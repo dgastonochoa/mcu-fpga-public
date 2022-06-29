@@ -1,3 +1,5 @@
+-include ./.config
+
 PREFIX ?= ./build
 
 SRC := ../src
@@ -12,7 +14,13 @@ CC := gcc
 VV := iverilog
 VVP := vvp
 
+ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
+IFLAGS := -DIVERILOG -DCONFIG_RISCV_SINGLECYCLE
+else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
+IFLAGS := -DIVERILOG -DCONFIG_RISCV_MULTICYCLE
+else
 IFLAGS := -DIVERILOG
+endif
 
 #
 # Generate a random number. Can be useful for test benches
@@ -87,9 +95,17 @@ common_src := $(SRC)/alu.sv 	\
 			  $(SRC)/utils.sv	\
 			  $(SRC)/spi.sv
 
-riscv_src :=  $(SRCRV)/datapath.sv 			\
-			  $(SRCRV)/riscv.sv 			\
-			  $(SRCRV)/controller.sv
+ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
+riscv_src :=  $(SRCRV)/datapath_singlecycle.sv 		\
+			  $(SRCRV)/datapath_utils.sv	 		\
+			  $(SRCRV)/riscv_singlecycle.sv 		\
+			  $(SRCRV)/controller_singlecycle.sv
+else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
+riscv_src :=  $(SRCRV)/datapath_multicycle.sv 		\
+			  $(SRCRV)/datapath_utils.sv	 		\
+			  $(SRCRV)/riscv_multicycle.sv 			\
+			  $(SRCRV)/controller_multicycle.sv
+endif
 
 
 #
@@ -112,7 +128,7 @@ $(wavedumps): | dirs
 $(PREFIX)/%.xv: %.sv $(common_src)
 	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) -I$(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
 
-$(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src)
+$(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src) $(RISCV_TEST_DIR)/.config_timestamp.sv
 	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) -I$(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
 
 $(PREFIX)/%.xv.vcd: $(PREFIX)/%.xv
@@ -133,3 +149,18 @@ clean:
 dirs:
 	@mkdir -p $(PREFIX)
 	@mkdir -p $(RISCV_TEST_DIR)
+
+.PHONY: config/riscv/singlecycle
+config/riscv/singlecycle: | dirs
+	@echo CONFIG_RISCV_SINGLECYCLE=y > .config
+	@touch $(RISCV_TEST_DIR)/.config_timestamp.sv
+
+.PHONY: config/riscv/multicycle
+config/riscv/multicycle: | dirs
+	@echo CONFIG_RISCV_MULTICYCLE=y > .config
+	@touch $(RISCV_TEST_DIR)/.config_timestamp.sv
+
+# This target will create $(RISCV_TEST_DIR)/.config_timestamp.sv the first time
+# if it doesn't exist
+$(RISCV_TEST_DIR)/.config_timestamp.sv: .config | dirs
+	@touch $(RISCV_TEST_DIR)/.config_timestamp.sv
