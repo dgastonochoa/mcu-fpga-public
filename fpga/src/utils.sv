@@ -21,15 +21,16 @@ endmodule
  *
  */
 module dff #(parameter N = 32) (
-    input wire [N-1:0] d,
-    output reg [N-1:0] q,
-    input wire rst,
-    input wire clk
+    input  wire [N-1:0] d,
+    input  wire         en,
+    output reg  [N-1:0] q,
+    input  wire         rst,
+    input  wire         clk
 );
     always_ff @(posedge clk, posedge rst) begin
         if (rst)
             q <= 32'b0;
-        else
+        else if (en)
             q <= d;
     end
 endmodule

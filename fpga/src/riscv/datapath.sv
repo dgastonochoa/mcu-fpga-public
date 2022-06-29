@@ -136,7 +136,7 @@ module datapath(
         endcase
     end
 
-    dff pc_ff(pc_next, pc, rst, clk);
+    dff pc_ff(pc_next, 1'b1, pc, rst, clk);
 
 
     //
