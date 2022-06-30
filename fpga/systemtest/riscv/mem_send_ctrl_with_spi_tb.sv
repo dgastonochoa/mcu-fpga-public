@@ -30,11 +30,11 @@ module mem_send_ctrl_with_spi_tb;
 
     always_comb begin
         case (tm_d_addr)
-        4'd00: tm_d_rd = 32'haaaaaaaa;
-        4'd04: tm_d_rd = 32'hffffffff;
-        4'd08: tm_d_rd = 32'h55555555;
-        4'd12: tm_d_rd = 32'h00000000;
-        default: tm_d_rd = 32'bx;
+        4'd00:   tm_d_rd = 32'haaaaaaaa;
+        4'd04:   tm_d_rd = 32'hffffffff;
+        4'd08:   tm_d_rd = 32'h55555555;
+        4'd12:   tm_d_rd = 32'h00000000;
+        default: tm_d_rd = 32'hffffffff;
         endcase
     end
 

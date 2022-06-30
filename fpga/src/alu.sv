@@ -64,7 +64,7 @@ module alu (
         ALU_OP_SLL: res = a << b;
         ALU_OP_SRL: res = a >> b;
         ALU_OP_SRA: res = signed_a >>> b;
-        default: res = 4'bx;
+        default: res = 32'hffffffff;
         endcase
     end
 

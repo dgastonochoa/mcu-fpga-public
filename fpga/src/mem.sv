@@ -90,7 +90,7 @@ module mem_be #(parameter N = 64, INIT_VALS = 0)(
 
             4'b1111: _mem[addr[31:2]]          <= wd;
 
-            default: _mem[addr[31:2]]          <= 32'bx;
+            default: _mem[addr[31:2]]          <= 32'hffffffff;
             endcase
         end
     end
@@ -127,7 +127,7 @@ module mem_be #(parameter N = 64, INIT_VALS = 0)(
 
         4'b1111: rd = word;
 
-        default: rd = 32'bx;
+        default: rd = 32'hffffffff;
         endcase
     end
 endmodule
@@ -182,7 +182,7 @@ module mem #(parameter N = 64, INIT_VALS = 0)(
         MEM_DT_WORD:    {be, se} = {w_be, 1'b0};
         MEM_DT_UBYTE:   {be, se} = {b_be, 1'b0};
         MEM_DT_UHALF:   {be, se} = {h_be, 1'b0};
-        default:        be = 32'bx;
+        default:        {be, se} = {4'hf, 1'b0};
         endcase
     end
 

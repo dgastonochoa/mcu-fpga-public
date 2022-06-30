@@ -10,13 +10,14 @@
  * On write, the BYTE/HALF/WORD will be written as it is, therefore
  * BYTE is equivalent to UBYTE and HALF to UHALF in write ops.
  */
-typedef enum logic [2:0]
+typedef enum logic [3:0]
 {
-    MEM_DT_BYTE     = 3'b000,
-    MEM_DT_HALF     = 3'b001,
-    MEM_DT_WORD     = 3'b010,
-    MEM_DT_UBYTE    = 3'b011,
-    MEM_DT_UHALF    = 3'b100
+    MEM_DT_BYTE     = 4'b000,
+    MEM_DT_HALF     = 4'b001,
+    MEM_DT_WORD     = 4'b010,
+    MEM_DT_UBYTE    = 4'b011,
+    MEM_DT_UHALF    = 4'b100,
+    MEM_DT_NONE     = 4'hf
 } mem_dt_e;
 
 `endif // MEM_SVH

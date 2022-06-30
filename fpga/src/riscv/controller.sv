@@ -36,7 +36,7 @@ module alu_dec(
             case (op)
             OP_R_TYPE:  ri_type_alu_ctr = func7 == 7'b0 ? ALU_OP_ADD : ALU_OP_SUB;
             OP_I_TYPE:  ri_type_alu_ctr = ALU_OP_ADD;
-            default:    ri_type_alu_ctr = 4'bx;
+            default:    ri_type_alu_ctr = ALU_OP_NONE;
             endcase
         end
 
@@ -47,7 +47,7 @@ module alu_dec(
         3'b101: ri_type_alu_ctr = func7 == 7'b0 ? ALU_OP_SRL : ALU_OP_SRA;
         3'b010: ri_type_alu_ctr = ALU_OP_SLT;
         3'b011: ri_type_alu_ctr = ALU_OP_SLTU;
-        default: ri_type_alu_ctr = 3'bx;
+        default: ri_type_alu_ctr = ALU_OP_NONE;
         endcase
     end
 
@@ -59,8 +59,8 @@ module alu_dec(
         OP_S_TYPE:      alu_ctrl = ALU_OP_ADD;
         OP_B_TYPE:      alu_ctrl = ALU_OP_SUB;
         OP_AUIPC:       alu_ctrl = ALU_OP_ADD;
-        OP_LUI:         alu_ctrl = ALU_OP_X;
-        default:        alu_ctrl = 3'bx;
+        OP_LUI:         alu_ctrl = ALU_OP_NONE;
+        default:        alu_ctrl = ALU_OP_NONE;
         endcase
     end
 endmodule
@@ -115,7 +115,7 @@ module controller(
 
     // iverilog doesn't support index accesses within an `always_comb` block.
     wire alu_ov, alu_cout, alu_zero, alu_neg;
-    logic [1:0] pc_src_b_type;
+    logic [3:0] pc_src_b_type;
 
     always_comb begin
         case (func3)
@@ -126,9 +126,9 @@ module controller(
         3'b100: pc_src_b_type = (alu_neg ^ alu_ov) ? PC_SRC_PLUS_OFF : PC_SRC_PLUS_4;   // blt
         3'b101: pc_src_b_type = (alu_neg ^ alu_ov) ? PC_SRC_PLUS_4 : PC_SRC_PLUS_OFF;   // bge
 
-        3'b110: pc_src_b_type = alu_cout ? PC_SRC_PLUS_4: PC_SRC_PLUS_OFF;              // bltu
+        3'b110: pc_src_b_type = alu_cout ? PC_SRC_PLUS_4 : PC_SRC_PLUS_OFF;             // bltu
         3'b111: pc_src_b_type = alu_cout ? PC_SRC_PLUS_OFF : PC_SRC_PLUS_4;             // bgeu
-        default: pc_src_b_type = 3'bx;
+        default: pc_src_b_type = PC_SRC_NONE;
         endcase
     end
 
@@ -136,7 +136,7 @@ module controller(
 
 
     imm_src_e imm_src_i_type;
-    logic [14:0] ctrls;
+    logic [21:0] ctrls;
 
     assign {reg_we, mem_we, alu_src_a, alu_src_b, result_src, pc_src, imm_src} = ctrls;
     assign imm_src_i_type = (func3[0] & ~func3[1]) ? IMM_SRC_ITYPE2 : IMM_SRC_ITYPE;
@@ -149,7 +149,7 @@ module controller(
         3'b010:  dt = MEM_DT_WORD;
         3'b100:  dt = MEM_DT_UBYTE;
         3'b101:  dt = MEM_DT_UHALF;
-        default: dt = MEM_DT_BYTE;
+        default: dt = MEM_DT_NONE;
         endcase
     end
 
@@ -158,14 +158,14 @@ module controller(
         //                       reg_we  mem_we  alu_src_a      alu_src_b        result_src         pc_src               imm_src
         OP_I_TYPE_L:    ctrls = {1'b1,  1'b0,    ALU_SRC_REG_1, ALU_SRC_EXT_IMM, RES_SRC_MEM,       PC_SRC_PLUS_4,       IMM_SRC_ITYPE};
         OP_I_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_REG_1, ALU_SRC_EXT_IMM, RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,       imm_src_i_type};
-        OP_S_TYPE:      ctrls = {1'b0,  1'b1,    ALU_SRC_REG_1, ALU_SRC_EXT_IMM, 4'bx,              PC_SRC_PLUS_4,       IMM_SRC_STYPE};
-        OP_R_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_REG_1, ALU_SRC_REG_2,   RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,       3'bx         };
-        OP_B_TYPE:      ctrls = {1'b0,  1'b0,    ALU_SRC_REG_1, ALU_SRC_REG_2,   RES_SRC_X,         pc_src_b_type,       IMM_SRC_BTYPE};
-        OP_J_TYPE:      ctrls = {1'b1,  1'b0,    2'bx,          2'bx,            RES_SRC_PC_PLUS_4, PC_SRC_PLUS_OFF,     IMM_SRC_JTYPE};
-        OP_JALR:        ctrls = {1'b1,  1'b0,    2'bx,          2'bx,            RES_SRC_PC_PLUS_4, PC_SRC_REG_PLUS_OFF, IMM_SRC_ITYPE};
+        OP_S_TYPE:      ctrls = {1'b0,  1'b1,    ALU_SRC_REG_1, ALU_SRC_EXT_IMM, RES_SRC_NONE,      PC_SRC_PLUS_4,       IMM_SRC_STYPE};
+        OP_R_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_REG_1, ALU_SRC_REG_2,   RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,       IMM_SRC_NONE};
+        OP_B_TYPE:      ctrls = {1'b0,  1'b0,    ALU_SRC_REG_1, ALU_SRC_REG_2,   RES_SRC_NONE,      pc_src_b_type,       IMM_SRC_BTYPE};
+        OP_J_TYPE:      ctrls = {1'b1,  1'b0,    ALU_SRC_NONE,  ALU_SRC_NONE,    RES_SRC_PC_PLUS_4, PC_SRC_PLUS_OFF,     IMM_SRC_JTYPE};
+        OP_JALR:        ctrls = {1'b1,  1'b0,    ALU_SRC_NONE,  ALU_SRC_NONE,    RES_SRC_PC_PLUS_4, PC_SRC_REG_PLUS_OFF, IMM_SRC_ITYPE};
         OP_AUIPC:       ctrls = {1'b1,  1'b0,    ALU_SRC_PC,    ALU_SRC_EXT_IMM, RES_SRC_ALU_OUT,   PC_SRC_PLUS_4,       IMM_SRC_UTYPE};
-        OP_LUI:         ctrls = {1'b1,  1'b0,    2'bx,          2'bx,            RES_SRC_EXT_IMM,   PC_SRC_PLUS_4,       IMM_SRC_UTYPE};
-        default:        ctrls = 11'bx;
+        OP_LUI:         ctrls = {1'b1,  1'b0,    ALU_SRC_NONE,  ALU_SRC_NONE,    RES_SRC_EXT_IMM,   PC_SRC_PLUS_4,       IMM_SRC_UTYPE};
+        default:        ctrls = 22'h3fffff;
         endcase
     end
 endmodule

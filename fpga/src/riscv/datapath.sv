@@ -29,7 +29,7 @@ module extend(
         IMM_SRC_JTYPE: ext_imm = j_src;
         IMM_SRC_UTYPE: ext_imm = u_src;
         IMM_SRC_ITYPE2: ext_imm = i2_src;
-        default: ext_imm = 32'bx;
+        default: ext_imm = 32'hffffffff;
         endcase
     end
 endmodule
@@ -132,7 +132,7 @@ module datapath(
         PC_SRC_PLUS_4:          pc_next = pc_plus_4;
         PC_SRC_PLUS_OFF:        pc_next = pc_plus_off;
         PC_SRC_REG_PLUS_OFF:    pc_next = pc_reg_plus_off;
-        default:                pc_next = 2'bx;
+        default:                pc_next = 32'hffffffff;
         endcase
     end
 
