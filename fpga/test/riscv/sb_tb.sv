@@ -3,6 +3,8 @@
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
+`include "riscv_test_utils.svh"
+
 `ifndef VCD
     `define VCD "sw_tb.vcd"
 `endif
@@ -42,28 +44,28 @@ module sw_tb;
         $dumpfile(`VCD);
         $dumpvars(1, sw_tb);
 
-        dut.rv.dp.rf._reg[9] = 32'd32;
+        dut.rv.dp.rf._reg[9] = (`DATA_START_IDX * 4) + 32;
         dut.rv.dp.rf._reg[6] = 32'hdeadc0de;
         dut.rv.dp.rf._reg[7] = 32'hdeadbeef;
         dut.rv.dp.rf._reg[8] = 32'hc001c0de;
 
-        dut.rv.data_mem._mem._mem[5] = 32'h00;
-        dut.rv.data_mem._mem._mem[10] = 32'h00;
-        dut.rv.data_mem._mem._mem[11] = 32'h00;
+        `MEM_DATA[`DATA_START_IDX + 5] = 32'h00;
+        `MEM_DATA[`DATA_START_IDX + 10] = 32'h00;
+        `MEM_DATA[`DATA_START_IDX + 11] = 32'h00;
 
-        dut.rv.instr_mem._mem._mem[0] = 32'hfe648a23;           // sb x6, -12(x9)
-        dut.rv.instr_mem._mem._mem[1] = 32'h00748423;           // sb x7, 8(x9)
-        dut.rv.instr_mem._mem._mem[2] = 32'h00848623;           // sb x8, 12(x9)
-        dut.rv.instr_mem._mem._mem[3] = 32'h00048623;           // sb x0, 12(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'hfe648a23;    // sb x6, -12(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h00748423;    // sb x7, 8(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00848623;    // sb x8, 12(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h00048623;    // sb x0, 12(x9)
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
 
-        #11 assert(dut.rv.data_mem._mem._mem[5] === 32'h000000de);
-        #20 assert(dut.rv.data_mem._mem._mem[10] === 32'h000000ef);
-        #20 assert(dut.rv.data_mem._mem._mem[11] === 32'h000000de);
-        #20 assert(dut.rv.data_mem._mem._mem[11] === 32'h00000000);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 5] === 32'h000000de);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 10] === 32'h000000ef);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'h000000de);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'h00000000);
 
         #5;
         $finish;

@@ -49,6 +49,7 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 			   $(RISCV_TEST_DIR)/lb_tb.xv						\
 			   $(RISCV_TEST_DIR)/lh_tb.xv						\
 			   $(RISCV_TEST_DIR)/lbu_tb.xv						\
+			   $(RISCV_TEST_DIR)/lhu_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sb_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sh_tb.xv						\
@@ -111,7 +112,13 @@ riscv_tmp_tests := 	$(RISCV_TEST_DIR)/and_tb.xv						\
 					$(RISCV_TEST_DIR)/srli_tb.xv					\
 					$(RISCV_TEST_DIR)/srai_tb.xv					\
 					$(RISCV_TEST_DIR)/ori_tb.xv						\
-					$(RISCV_TEST_DIR)/andi_tb.xv
+					$(RISCV_TEST_DIR)/andi_tb.xv					\
+					$(RISCV_TEST_DIR)/lb_tb.xv						\
+					$(RISCV_TEST_DIR)/lh_tb.xv						\
+					$(RISCV_TEST_DIR)/lbu_tb.xv						\
+		 			$(RISCV_TEST_DIR)/sb_tb.xv						\
+		 			$(RISCV_TEST_DIR)/sh_tb.xv						\
+					$(RISCV_TEST_DIR)/lhu_tb.xv
 
 tests_waves := $(addsuffix .vcd,$(tests))
 

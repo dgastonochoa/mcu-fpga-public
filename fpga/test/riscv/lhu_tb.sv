@@ -3,8 +3,16 @@
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
+`include "riscv_test_utils.svh"
+
 `ifndef VCD
     `define VCD "lh_tb.vcd"
+`endif
+
+`ifdef CONFIG_RISCV_SINGLECYCLE
+    `define N_CLKS 1
+`elsif CONFIG_RISCV_MULTICYCLE
+    `define N_CLKS 5
 `endif
 
 module lh_tb;
@@ -46,27 +54,27 @@ module lh_tb;
         // Set register init. vals
         dut.rv.dp.rf._reg[0] = 32'd0;
         dut.rv.dp.rf._reg[6] = 32'd0;
-        dut.rv.dp.rf._reg[9] = 32'd8;
+        dut.rv.dp.rf._reg[9] = (`DATA_START_IDX * 4) + 8;
 
         // Set mem. init. vals
-        dut.rv.data_mem._mem._mem[1] = 32'hdeadc0de;
-        dut.rv.data_mem._mem._mem[2] = 32'hdeadbeef;
-        dut.rv.data_mem._mem._mem[3] = 32'hc001c0de;
+        `MEM_DATA[`DATA_START_IDX + 1] = 32'hdeadc0de;
+        `MEM_DATA[`DATA_START_IDX + 2] = 32'hdeadbeef;
+        `MEM_DATA[`DATA_START_IDX + 3] = 32'hc001c0de;
 
         // Load words with different addresses
         // Last instr. is to try to load word into x0
-        dut.rv.instr_mem._mem._mem[0] = 32'hffc4d303;           // lhu x6, -4(x9)
-        dut.rv.instr_mem._mem._mem[1] = 32'h0004d303;           // lhu x6, 0(x9)
-        dut.rv.instr_mem._mem._mem[2] = 32'h0044d303;           // lhu x6, 4(x9)
-        dut.rv.instr_mem._mem._mem[3] = 32'h0044d003;           // lhu x0, 4(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'hffc4d303;   // lhu x6, -4(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h0004d303;   // lhu x6, 0(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h0044d303;   // lhu x6, 4(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h0044d003;   // lhu x0, 4(x9)
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.rv.dp.rf._reg[6] === 32'h0000c0de);
-        #20 assert(dut.rv.dp.rf._reg[6] === 32'h0000beef);
-        #20 assert(dut.rv.dp.rf._reg[6] === 32'h0000c0de);
-        #20 assert(dut.rv.dp.rf._reg[0] === 32'h00000000);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[6] === 32'h0000c0de);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[6] === 32'h0000beef);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[6] === 32'h0000c0de);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[0] === 32'h00000000);
 
         #20;
         $finish;
