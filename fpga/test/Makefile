@@ -96,7 +96,13 @@ riscv_tmp_tests := 	$(RISCV_TEST_DIR)/and_tb.xv						\
 					$(RISCV_TEST_DIR)/sub_tb.xv						\
 					$(RISCV_TEST_DIR)/xor_tb.xv						\
 					$(RISCV_TEST_DIR)/lw_tb.xv						\
-					$(RISCV_TEST_DIR)/sw_tb.xv
+					$(RISCV_TEST_DIR)/sw_tb.xv						\
+					$(RISCV_TEST_DIR)/beq_tb.xv						\
+					$(RISCV_TEST_DIR)/bne_tb.xv						\
+					$(RISCV_TEST_DIR)/blt_tb.xv						\
+					$(RISCV_TEST_DIR)/bge_tb.xv						\
+					$(RISCV_TEST_DIR)/bltu_tb.xv					\
+					$(RISCV_TEST_DIR)/bgeu_tb.xv
 
 tests_waves := $(addsuffix .vcd,$(tests))
 

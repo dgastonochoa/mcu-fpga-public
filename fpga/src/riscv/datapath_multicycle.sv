@@ -16,6 +16,7 @@ module datapath_multicycle(
     output  wire      [3:0]  alu_flags,
     output  wire      [31:0] m_wd,
     output  wire      [31:0] instr,
+    output  wire      [31:0] pc,
 
     input   wire             clk,
     input   wire             rst
@@ -37,7 +38,7 @@ module datapath_multicycle(
     //
     // PC
     //
-    wire [31:0] pc, pc_next;
+    wire [31:0] pc_next;
 
     assign pc_next = result;
 

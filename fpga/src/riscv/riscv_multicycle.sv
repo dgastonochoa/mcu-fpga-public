@@ -99,6 +99,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
         alu_flags,
         mem_wd_data,
         instr,
+        pc,
         clk,
         rst
     );

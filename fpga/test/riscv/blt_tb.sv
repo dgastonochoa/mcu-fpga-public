@@ -1,12 +1,18 @@
 `timescale 10ps/1ps
+
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
-
-
+`include "riscv_test_utils.svh"
 
 `ifndef VCD
     `define VCD "blt_tb.vcd"
+`endif
+
+`ifdef CONFIG_RISCV_SINGLECYCLE
+    `define N_CLKS 1
+`elsif CONFIG_RISCV_MULTICYCLE
+    `define N_CLKS 3
 `endif
 
 module blt_tb;
@@ -55,18 +61,18 @@ module blt_tb;
         dut.rv.dp.rf._reg[6] = 32'h80000000;
         dut.rv.dp.rf._reg[7] = 32'h00000002;
 
-        dut.rv.instr_mem._mem._mem[0] = 32'h00404863;   // blt x0, x4, 16
-        dut.rv.instr_mem._mem._mem[4] = 32'h00424a63;   // blt x4, x4, 20
-        dut.rv.instr_mem._mem._mem[5] = 32'h00734863;   // blt x6, x7, 16
-        dut.rv.instr_mem._mem._mem[9] = 32'hfc42cee3;   // blt x5, x4, -36
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00404863;   // blt x0, x4, 16
+        `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00424a63;   // blt x4, x4, 20
+        `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h00734863;   // blt x6, x7, 16
+        `MEM_INSTR[`INSTR_START_IDX + 9] = 32'hfc42cee3;   // blt x5, x4, -36
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
             assert(pc === 32'd00);
-        #11 assert(pc === 32'd16);
-        #20 assert(pc === 32'd20);
-        #20 assert(pc === 32'd36);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd16);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd20);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd36);
 
         #5;
         $finish;

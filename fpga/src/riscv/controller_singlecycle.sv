@@ -57,11 +57,8 @@ module controller(
         case (func3)
         3'b000: pc_src_b_type = alu_zero ? PC_SRC_PLUS_OFF : PC_SRC_PLUS_4;             // beq
         3'b001: pc_src_b_type = alu_zero ? PC_SRC_PLUS_4 : PC_SRC_PLUS_OFF;             // bne
-
-        // TODO This two xor's can be optimized by using alu_ctrl = alu_op_slt
         3'b100: pc_src_b_type = (alu_neg ^ alu_ov) ? PC_SRC_PLUS_OFF : PC_SRC_PLUS_4;   // blt
         3'b101: pc_src_b_type = (alu_neg ^ alu_ov) ? PC_SRC_PLUS_4 : PC_SRC_PLUS_OFF;   // bge
-
         3'b110: pc_src_b_type = alu_cout ? PC_SRC_PLUS_4 : PC_SRC_PLUS_OFF;             // bltu
         3'b111: pc_src_b_type = alu_cout ? PC_SRC_PLUS_OFF : PC_SRC_PLUS_4;             // bgeu
         default: pc_src_b_type = PC_SRC_NONE;
