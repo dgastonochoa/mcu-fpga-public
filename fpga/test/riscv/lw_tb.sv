@@ -61,19 +61,19 @@ module lw_tb;
         // Set register init. vals
         dut.rv.dp.rf._reg[0] = 32'd0;
         dut.rv.dp.rf._reg[6] = 32'd0;
-        dut.rv.dp.rf._reg[9] = (`DATA_START_ADDR * 4) + 8;
+        dut.rv.dp.rf._reg[9] = (`DATA_START_IDX * 4) + 8;
 
         // Set mem. init. vals
-        `MEM_DATA[`DATA_START_ADDR + 1] = 32'hdeadc0de;
-        `MEM_DATA[`DATA_START_ADDR + 2] = 32'hdeadbeef;
-        `MEM_DATA[`DATA_START_ADDR + 3] = 32'hc001c0de;
+        `MEM_DATA[`DATA_START_IDX + 1] = 32'hdeadc0de;
+        `MEM_DATA[`DATA_START_IDX + 2] = 32'hdeadbeef;
+        `MEM_DATA[`DATA_START_IDX + 3] = 32'hc001c0de;
 
         // Load words with different addresses
         // Last instr. is to try to load word into x0
-        `MEM_INSTR[`INSTR_START_ADDR + 0] = 32'hffc4a303; // lw x6, -4(x9)
-        `MEM_INSTR[`INSTR_START_ADDR + 1] = 32'h0004a303; // lw x6, 0(x9)
-        `MEM_INSTR[`INSTR_START_ADDR + 2] = 32'h0044a303; // lw x6, 4(x9)
-        `MEM_INSTR[`INSTR_START_ADDR + 3] = 32'h0044a003; // lw x0, 4(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'hffc4a303; // lw x6, -4(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h0004a303; // lw x6, 0(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h0044a303; // lw x6, 4(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h0044a003; // lw x0, 4(x9)
 
         // Reset and test
         #2  rst = 1;

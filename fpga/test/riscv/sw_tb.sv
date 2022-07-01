@@ -44,27 +44,27 @@ module sw_tb;
         $dumpfile(`VCD);
         $dumpvars(1, sw_tb);
 
-        dut.rv.dp.rf._reg[9] = (`DATA_START_ADDR * 4) + 32;
+        dut.rv.dp.rf._reg[9] = (`DATA_START_IDX * 4) + 32;
         dut.rv.dp.rf._reg[6] = 32'hdeadc0de;
         dut.rv.dp.rf._reg[7] = 32'hdeadbeef;
         dut.rv.dp.rf._reg[8] = 32'hc001c0de;
 
-        `MEM_DATA[`DATA_START_ADDR + 5] = 32'h00;
-        `MEM_DATA[`DATA_START_ADDR + 10] = 32'h00;
-        `MEM_DATA[`DATA_START_ADDR + 11] = 32'h00;
+        `MEM_DATA[`DATA_START_IDX + 5] = 32'h00;
+        `MEM_DATA[`DATA_START_IDX + 10] = 32'h00;
+        `MEM_DATA[`DATA_START_IDX + 11] = 32'h00;
 
-        `MEM_INSTR[`INSTR_START_ADDR + 0] = 32'hfe64aa23;   // sw x6, -12(x9)
-        `MEM_INSTR[`INSTR_START_ADDR + 1] = 32'h0074a423;   // sw x7, 8(x9)
-        `MEM_INSTR[`INSTR_START_ADDR + 2] = 32'h0084a6a3;   // sw x8, 12(x9)
-        `MEM_INSTR[`INSTR_START_ADDR + 3] = 32'h0004a6a3;   // sw x0, 12(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'hfe64aa23;   // sw x6, -12(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h0074a423;   // sw x7, 8(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h0084a6a3;   // sw x8, 12(x9)
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h0004a6a3;   // sw x0, 12(x9)
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_ADDR + 5] === 32'hdeadc0de);
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_ADDR + 10] === 32'hdeadbeef);
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_ADDR + 11] === 32'hc001c0de);
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_ADDR + 11] === 32'h00);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 5] === 32'hdeadc0de);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 10] === 32'hdeadbeef);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'hc001c0de);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'h00);
 
         #5;
         $finish;

@@ -56,9 +56,9 @@ module slt_tb;
         dut.rv.dp.rf._reg[9] = 32'd2;
         dut.rv.dp.rf._reg[10] = 32'd4;
 
-        `MEM_INSTR[`INSTR_START_ADDR + 0] = 32'h0062a233; // slt     x4, x5, x6
-        `MEM_INSTR[`INSTR_START_ADDR + 1] = 32'h0083a233; // slt     x4, x7, x8
-        `MEM_INSTR[`INSTR_START_ADDR + 2] = 32'h00a4a233; // slt     x4, x9, x10
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h0062a233; // slt     x4, x5, x6
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h0083a233; // slt     x4, x7, x8
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00a4a233; // slt     x4, x9, x10
 
 
         // Reset and test

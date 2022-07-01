@@ -52,9 +52,9 @@ module or_tb;
         dut.rv.dp.rf._reg[5] = 32'h01;
         dut.rv.dp.rf._reg[6] = 32'hfe;
 
-        `MEM_INSTR[`INSTR_START_ADDR + 0] = 32'h00626033; // or x0, x4, x6
-        `MEM_INSTR[`INSTR_START_ADDR + 1] = 32'h0002e233; // or x4, x5, x0
-        `MEM_INSTR[`INSTR_START_ADDR + 2] = 32'h00626233; // or x4, x4, x6
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00626033; // or x0, x4, x6
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h0002e233; // or x4, x5, x0
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00626233; // or x4, x4, x6
 
         // Reset and test
         #2  rst = 1;

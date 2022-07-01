@@ -51,8 +51,8 @@ module sra_tb;
         dut.rv.dp.rf._reg[7] = 32'hfffffff8;
         dut.rv.dp.rf._reg[8] = 32'd2;
 
-        `MEM_INSTR[`INSTR_START_ADDR + 0] = 32'h4062d233;   // sra x4, x5, x6
-        `MEM_INSTR[`INSTR_START_ADDR + 1] = 32'h4083d233;   // sra x4, x7, x8
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h4062d233;   // sra x4, x5, x6
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h4083d233;   // sra x4, x7, x8
 
         // Reset and test
         #2  rst = 1;

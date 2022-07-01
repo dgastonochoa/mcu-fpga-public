@@ -50,10 +50,10 @@ module xor_tb;
         dut.rv.dp.rf._reg[5] = 32'b101010;
         dut.rv.dp.rf._reg[6] = 32'b010101;
 
-        `MEM_INSTR[`INSTR_START_ADDR + 0] = 32'h0062c033; // xor     x0, x5, x6
-        `MEM_INSTR[`INSTR_START_ADDR + 1] = 32'h0062c233; // xor     x4, x5, x6
-        `MEM_INSTR[`INSTR_START_ADDR + 2] = 32'h00624233; // xor     x4, x4, x6
-        `MEM_INSTR[`INSTR_START_ADDR + 3] = 32'h00424233; // xor     x4, x4, x4
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h0062c033; // xor     x0, x5, x6
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h0062c233; // xor     x4, x5, x6
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00624233; // xor     x4, x4, x6
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h00424233; // xor     x4, x4, x4
 
         // Reset and test
         #2  rst = 1;
