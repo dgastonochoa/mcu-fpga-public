@@ -141,9 +141,9 @@ $(wavedumps): | dirs
 
 
 $(PREFIX)/%.xv: %.sv $(common_src)
-	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) $(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
+	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) $(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^ $(PREFIX)/.include_timestamp.sv
 
-$(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src) $(RISCV_TEST_DIR)/.config_timestamp.sv
+$(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src) $(RISCV_TEST_DIR)/.config_timestamp.sv $(PREFIX)/.include_timestamp.sv
 	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) $(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
 
 $(PREFIX)/%.xv.vcd: $(PREFIX)/%.xv
@@ -179,3 +179,18 @@ config/riscv/multicycle: | dirs
 # if it doesn't exist
 $(RISCV_TEST_DIR)/.config_timestamp.sv: .config | dirs
 	@touch $(RISCV_TEST_DIR)/.config_timestamp.sv
+
+
+# This is a work-around to re-build any target if any of the following header
+# files change, because iverilog does not have a -MMD option to generate
+# a dependencies file, as gcc does. Note: this list could be split into common
+# and RISC-V sources.
+include_deps := ../include/alu.svh 				\
+				../include/errno.svh			\
+				../include/mem.svh				\
+				../include/riscv/datapath.svh	\
+				../include/riscv/controller.svh	\
+				./riscv/riscv_test_utils.svh
+
+$(PREFIX)/.include_timestamp.sv: $(include_deps)
+	@touch $(PREFIX)/.include_timestamp.sv
