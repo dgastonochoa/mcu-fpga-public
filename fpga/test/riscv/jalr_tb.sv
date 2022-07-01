@@ -1,9 +1,9 @@
 `timescale 10ps/1ps
+
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
-
-
+`include "riscv_test_utils.svh"
 
 `ifndef VCD
     `define VCD "jalr_tb.vcd"
@@ -40,9 +40,6 @@ module jalr_tb;
 
     always #10 clk = ~clk;
 
-    wire [31:0] a;
-
-    assign a = dut.rv.dp.rf._reg[1];
 
     initial begin
         $dumpfile(`VCD);
@@ -55,18 +52,20 @@ module jalr_tb;
         dut.rv.dp.rf._reg[3] = 32'd8;
         dut.rv.dp.rf._reg[4] = 32'd4;
 
-        dut.rv.instr_mem._mem._mem[0] = 32'h004180e7;   // jalr    ra, x3, 4
-        dut.rv.instr_mem._mem._mem[3] = 32'hffc200e7;   // jalr    ra, x4, -4
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h004180e7;   // jalr ra, x3, 4
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'hffc200e7;   // jalr ra, x4, -4
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
             assert(pc === 32'd00);
             assert(dut.rv.dp.rf._reg[1] === 32'd00);
-        #11 assert(pc === 32'd12);
-            assert(dut.rv.dp.rf._reg[1] === 32'd04);
-        #20 assert(pc === 32'd00);
-            assert(dut.rv.dp.rf._reg[1] === 32'd16);
+
+        `WAIT_INSTR(clk) assert(pc === 32'd12);
+                         assert(dut.rv.dp.rf._reg[1] === 32'd04);
+
+        `WAIT_INSTR(clk) assert(pc === 32'd00);
+                         assert(dut.rv.dp.rf._reg[1] === 32'd16);
 
         $finish;
     end

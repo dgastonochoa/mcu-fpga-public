@@ -11,6 +11,7 @@ module datapath_multicycle(
     input   wire             addr_src,
     input   wire             en_ir,
     input   wire             en_npc_r,
+    input   wire             rf_wd_src,
 
     output  wire      [31:0] m_addr,
     output  wire      [3:0]  alu_flags,
@@ -62,8 +63,11 @@ module datapath_multicycle(
 
     wire    [31:0] reg_rd1;
     wire    [31:0] reg_rd2;
+    wire    [31:0] reg_wd3;
 
-    regfile rf(instr[19:15], instr[24:20], instr[11:7], result, rf_we, reg_rd1, reg_rd2, clk);
+    assign reg_wd3 = (rf_wd_src == 1'b1 ? pc : result);
+
+    regfile rf(instr[19:15], instr[24:20], instr[11:7], reg_wd3, rf_we, reg_rd1, reg_rd2, clk);
 
     wire [31:0] rd1, rd2;
 

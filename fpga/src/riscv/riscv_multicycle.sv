@@ -65,6 +65,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     wire m_addr_src;
     wire [3:0] alu_flags;
     mem_dt_e dt;
+    wire rf_wd_src;
 
     controller_multicycle co(
         instr,
@@ -75,6 +76,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
         alu_src_b,
         res_src,
         imm_src,
+        rf_wd_src,
         alu_op,
         dt,
         en_ir,
@@ -95,6 +97,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
         m_addr_src,
         en_ir,
         en_npc_r,
+        rf_wd_src,
         m_addr,
         alu_flags,
         mem_wd_data,
