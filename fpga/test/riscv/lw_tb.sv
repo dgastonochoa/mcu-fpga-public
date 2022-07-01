@@ -3,22 +3,10 @@
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
+`include "riscv_test_utils.svh"
+
 `ifndef VCD
     `define VCD "lw_tb.vcd"
-`endif
-
-`ifdef CONFIG_RISCV_SINGLECYCLE
-    `define MEM_DATA            dut.rv.data_mem._mem._mem
-    `define MEM_INSTR           dut.rv.instr_mem._mem._mem
-    `define DATA_START_ADDR     0
-    `define INSTR_START_ADDR    0
-    `define WAIT_INSTR(clk)     @(posedge clk) #1
-`elsif CONFIG_RISCV_MULTICYCLE
-    `define MEM_DATA            dut.rv.id_mem._mem._mem
-    `define MEM_INSTR           dut.rv.id_mem._mem._mem
-    `define DATA_START_ADDR     512
-    `define INSTR_START_ADDR    0
-    `define WAIT_INSTR(clk)     repeat(5) @(posedge clk); #1
 `endif
 
 module lw_tb;

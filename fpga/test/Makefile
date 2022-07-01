@@ -4,7 +4,7 @@ PREFIX ?= ./build
 
 SRC := ../src
 SRCRV := $(SRC)/riscv
-INC := ../include
+INC := -I../include -I./riscv
 
 TSRCRV := ./riscv
 TESTUTILS := ./test-utils
@@ -126,10 +126,10 @@ $(wavedumps): | dirs
 
 
 $(PREFIX)/%.xv: %.sv $(common_src)
-	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) -I$(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
+	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) $(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
 
 $(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src) $(RISCV_TEST_DIR)/.config_timestamp.sv
-	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) -I$(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
+	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) $(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^
 
 $(PREFIX)/%.xv.vcd: $(PREFIX)/%.xv
 	$(VVP) -n $<
