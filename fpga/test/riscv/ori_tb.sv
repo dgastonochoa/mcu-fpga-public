@@ -3,6 +3,12 @@
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
+`include "riscv_test_utils.svh"
+
+`ifndef VCD
+    `define VCD "ori_tb.vcd"
+`endif
+
 module ori_tb;
     wire reg_we, mem_we;
     res_src_e res_src;
@@ -46,16 +52,16 @@ module ori_tb;
         dut.rv.dp.rf._reg[5] = 32'h01;
         dut.rv.dp.rf._reg[6] = 32'hfe;
 
-        dut.rv.instr_mem._mem._mem[0] = 32'h0fe26013;           // or x0, x4, 0xfe
-        dut.rv.instr_mem._mem._mem[1] = 32'h0002e213;           // or x4, x5, 0x00
-        dut.rv.instr_mem._mem._mem[2] = 32'h0fe26213;           // or x4, x4, 0xfe
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h0fe26013;           // or x0, x4, 0xfe
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h0002e213;           // or x4, x5, 0x00
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h0fe26213;           // or x4, x4, 0xfe
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.rv.dp.rf._reg[0] === 32'h00);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'h01);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'hff);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[0] === 32'h00);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'h01);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'hff);
 
         #5;
         $finish;

@@ -3,6 +3,8 @@
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
+`include "riscv_test_utils.svh"
+
 `ifndef VCD
     `define VCD "srai_tb.vcd"
 `endif
@@ -47,14 +49,14 @@ module srai_tb;
         dut.rv.dp.rf._reg[5] = 32'h08;
         dut.rv.dp.rf._reg[7] = 32'hfffffff8;
 
-        dut.rv.instr_mem._mem._mem[0] = 32'h4022d213;   // srai     x4, x5, 2
-        dut.rv.instr_mem._mem._mem[1] = 32'h4023d213;   // srai     x4, x7, 2
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h4022d213;   // srai     x4, x5, 2
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h4023d213;   // srai     x4, x7, 2
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'h02);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'hfffffffe);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'h02);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'hfffffffe);
 
         #5;
         $finish;

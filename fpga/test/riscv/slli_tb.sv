@@ -3,6 +3,8 @@
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
+`include "riscv_test_utils.svh"
+
 `ifndef VCD
     `define VCD "slli_tb.vcd"
 `endif
@@ -48,16 +50,16 @@ module slli_tb;
         dut.rv.dp.rf._reg[5] = 32'h0f000000;
         dut.rv.dp.rf._reg[6] = 32'd4;
 
-        dut.rv.instr_mem._mem._mem[0] = 32'h00421013;   // slli    x0, x4, 4
-        dut.rv.instr_mem._mem._mem[1] = 32'h00429213;   // slli    x4, x5, 4
-        dut.rv.instr_mem._mem._mem[2] = 32'h00421213;   // slli    x4, x4, 4
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00421013;   // slli    x0, x4, 4
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h00429213;   // slli    x4, x5, 4
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00421213;   // slli    x4, x4, 4
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.rv.dp.rf._reg[0] === 32'h00);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'hf0000000);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'b0);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[0] === 32'h00);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'hf0000000);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'b0);
 
         #5;
         $finish;

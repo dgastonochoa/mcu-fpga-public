@@ -3,6 +3,8 @@
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
+`include "riscv_test_utils.svh"
+
 `ifndef VCD
     `define VCD "addi_tb.vcd"
 `endif
@@ -50,42 +52,42 @@ module addi_tb;
         //
         // addi does not write on x0
         //
-        dut.rv.instr_mem._mem._mem[0] = 32'h01420013;   // addi x0, x4, 20
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h01420013;   // addi x0, x4, 20
 
         //
         // load values work
         //
-        dut.rv.instr_mem._mem._mem[1] = 32'h00a00213;   // addi x4, x0, 10
-        dut.rv.instr_mem._mem._mem[2] = 32'h01400293;   // addi x5, x0, 20
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h00a00213;   // addi x4, x0, 10
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h01400293;   // addi x5, x0, 20
 
         //
         // add possitive and negative, same reg., works
         //
-        dut.rv.instr_mem._mem._mem[3] = 32'hff620213;   // addi x4, x4, -10
-        dut.rv.instr_mem._mem._mem[4] = 32'hff620213;   // addi x4, x4, -10
-        dut.rv.instr_mem._mem._mem[5] = 32'h00a20213;   // addi x4, x4, 10
-        dut.rv.instr_mem._mem._mem[6] = 32'h00a20213;   // addi x4, x4, 10
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'hff620213;   // addi x4, x4, -10
+        `MEM_INSTR[`INSTR_START_IDX + 4] = 32'hff620213;   // addi x4, x4, -10
+        `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h00a20213;   // addi x4, x4, 10
+        `MEM_INSTR[`INSTR_START_IDX + 6] = 32'h00a20213;   // addi x4, x4, 10
 
         //
         // move from one reg. to other, reset to 0 and add other works
         //
-        dut.rv.instr_mem._mem._mem[7] = 32'h00028213;   // addi x4, x5, 0
-        dut.rv.instr_mem._mem._mem[8] = 32'h00000213;   // addi x4, zero, 0
-        dut.rv.instr_mem._mem._mem[9] = 32'h01428213;   // addi x4, x5, 20
+        `MEM_INSTR[`INSTR_START_IDX + 7] = 32'h00028213;   // addi x4, x5, 0
+        `MEM_INSTR[`INSTR_START_IDX + 8] = 32'h00000213;   // addi x4, zero, 0
+        `MEM_INSTR[`INSTR_START_IDX + 9] = 32'h01428213;   // addi x4, x5, 20
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.rv.dp.rf._reg[0] === 32'd00);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'd10);
-        #20 assert(dut.rv.dp.rf._reg[5] === 32'd20);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'd00);
-        #20 assert(dut.rv.dp.rf._reg[4] === -10);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'd00);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'd10);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'd20);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'd00);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'd40);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[0] === 32'd00);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd10);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[5] === 32'd20);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd00);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === -10);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd00);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd10);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd20);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd00);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd40);
 
         $finish;
     end

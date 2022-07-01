@@ -41,6 +41,7 @@ module controller_multicycle(
         EXEC_R,
         ALU_W_RF,
         BRANCH,
+        EXEC_I,
         ERROR
     } rv_mcyc_st_e;
 
@@ -51,6 +52,7 @@ module controller_multicycle(
     always_comb begin
         case (op)
         OP_R_TYPE:      decode_ns = EXEC_R;
+        OP_I_TYPE:      decode_ns = EXEC_I;
         OP_I_TYPE_L:    decode_ns = MEM_ADDR;
         OP_S_TYPE:      decode_ns = MEM_ADDR;
         OP_B_TYPE:      decode_ns = BRANCH;
@@ -72,12 +74,17 @@ module controller_multicycle(
             MEM_READ:   cs <= MEM_W_RF;
             MEM_W_RF:   cs <= FETCH;
             EXEC_R:     cs <= ALU_W_RF;
+            EXEC_I:     cs <= ALU_W_RF;
             ALU_W_RF:   cs <= FETCH;
             BRANCH:     cs <= FETCH;
             default:    cs <= ERROR;
             endcase
     end
 
+
+    imm_src_e i_instr_imm_src;
+
+    assign i_instr_imm_src = (funct3[0] & ~funct3[1]) ? IMM_SRC_ITYPE2 : IMM_SRC_ITYPE;
 
     //
     // Outputs logic
@@ -90,6 +97,7 @@ module controller_multicycle(
         MEM_WRITE: imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
         MEM_READ:  imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
         MEM_W_RF:  imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
+        EXEC_I:    imm_src = i_instr_imm_src;
         default:   imm_src = IMM_SRC_NONE;
         endcase
     end
@@ -123,6 +131,7 @@ module controller_multicycle(
         MEM_READ:  ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b1};
         MEM_WRITE: ctrls = {1'b0,   1'b1,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b1};
         EXEC_R:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0};
+        EXEC_I:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0};
         ALU_W_RF:  ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0};
         MEM_W_RF:  ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_MEM,        MEM_DT_WORD, 1'b0,   1'b0,              1'b1};
         BRANCH:    ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   branch_en_npc_r,   1'b0};
@@ -143,6 +152,7 @@ module controller_multicycle(
         MEM_READ:  alu_ctrl = ALU_OP_ADD;
         MEM_W_RF:  alu_ctrl = ALU_OP_ADD;
         EXEC_R:    alu_ctrl = alu_dec_out;
+        EXEC_I:    alu_ctrl = alu_dec_out;
         MEM_W_RF:  alu_ctrl = alu_dec_out;
         BRANCH:    alu_ctrl = alu_dec_out;
         default:   alu_ctrl = ALU_OP_NONE;
