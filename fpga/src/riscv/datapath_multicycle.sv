@@ -69,6 +69,8 @@ module datapath_multicycle(
     dff rd_rd1_r(reg_rd1, 1'b1, rd1, rst, clk);
     dff rd_rd2_r(reg_rd2, 1'b1, rd2, rst, clk);
 
+    assign m_wd = rd2;
+
 
     //
     // Extender

@@ -61,10 +61,10 @@ module sw_tb;
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        `WAIT_INSTR(clk) assert(dut.rv.data_mem._mem._mem[5] === 32'hdeadc0de);
-        `WAIT_INSTR(clk) assert(dut.rv.data_mem._mem._mem[10] === 32'hdeadbeef);
-        `WAIT_INSTR(clk) assert(dut.rv.data_mem._mem._mem[11] === 32'hc001c0de);
-        `WAIT_INSTR(clk) assert(dut.rv.data_mem._mem._mem[11] === 32'h00);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_ADDR + 5] === 32'hdeadc0de);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_ADDR + 10] === 32'hdeadbeef);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_ADDR + 11] === 32'hc001c0de);
+        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_ADDR + 11] === 32'h00);
 
         #5;
         $finish;

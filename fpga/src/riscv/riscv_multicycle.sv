@@ -66,7 +66,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     wire [3:0] alu_flags;
     mem_dt_e dt;
 
-    controller_multicycle cm(
+    controller_multicycle co(
         instr,
         alu_flags,
         reg_we,
