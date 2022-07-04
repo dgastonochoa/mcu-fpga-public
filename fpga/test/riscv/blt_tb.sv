@@ -51,8 +51,8 @@ module blt_tb;
         $dumpvars(1, blt_tb);
 
         dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd10;
-        dut.rv.dp.rf._reg[5] = 32'd20;
+        dut.rv.dp.rf._reg[4] = 32'd4;
+        dut.rv.dp.rf._reg[5] = 32'hffffffff;
 
         // blt'ing these 2 regs. (a < b; a = big. neg. num., b = 2)
         // will produce the special case in which comparing two
@@ -61,18 +61,39 @@ module blt_tb;
         dut.rv.dp.rf._reg[6] = 32'h80000000;
         dut.rv.dp.rf._reg[7] = 32'h00000002;
 
-        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00404863;   // blt x0, x4, 16
-        `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00424a63;   // blt x4, x4, 20
-        `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h00734863;   // blt x6, x7, 16
-        `MEM_INSTR[`INSTR_START_IDX + 9] = 32'hfc42cee3;   // blt x5, x4, -36
+
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h02024e63;
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h02004c63;
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00404863;
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 6] = 32'h02504263;
+        `MEM_INSTR[`INSTR_START_IDX + 7] = 32'h0002c863;
+        `MEM_INSTR[`INSTR_START_IDX + 8] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 9] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 10] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 11] = 32'h00024863;
+        `MEM_INSTR[`INSTR_START_IDX + 12] = 32'h0002c463;
+        `MEM_INSTR[`INSTR_START_IDX + 13] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 14] = 32'hfc7344e3;
+        `MEM_INSTR[`INSTR_START_IDX + 15] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 16] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 17] = 32'h00000013;
+
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
             assert(pc === 32'd00);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd16);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd20);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd36);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd4);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd8);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd24);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd28);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd44);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd48);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd56);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd00);
 
         #5;
         $finish;

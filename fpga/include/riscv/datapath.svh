@@ -31,6 +31,7 @@ typedef enum logic [3:0]
     ALU_SRC_EXT_IMM      = 4'b010,
     ALU_SRC_PC           = 4'b011,
     ALU_SRC_4            = 4'b100,
+    ALU_SRC_PC_OLD       = 4'b101,
     ALU_SRC_NONE         = 4'hf
 } alu_src_e;
 

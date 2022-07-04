@@ -11,6 +11,7 @@ module datapath_multicycle(
     input   wire             addr_src,
     input   wire             en_ir,
     input   wire             en_npc_r,
+    input   wire             en_oldpc_r,
     input   wire             rf_wd_src,
 
     output  wire      [31:0] m_addr,
@@ -39,11 +40,12 @@ module datapath_multicycle(
     //
     // PC
     //
-    wire [31:0] pc_next;
+    wire [31:0] pc_next, pc_old;
 
     assign pc_next = result;
 
     dff pc_ff(pc_next, en_npc_r, pc, rst, clk);
+    dff pc_old_ff(pc, en_oldpc_r, pc_old, rst, clk);
 
 
     //
@@ -98,6 +100,7 @@ module datapath_multicycle(
         ALU_SRC_REG_2:   alu_op_a = rd2;
         ALU_SRC_EXT_IMM: alu_op_a = ext_imm;
         ALU_SRC_PC:      alu_op_a = pc;
+        ALU_SRC_PC_OLD:  alu_op_a = pc_old;
         ALU_SRC_4:       alu_op_a = 4;
         default:         alu_op_b = 32'h00;
         endcase
@@ -109,6 +112,7 @@ module datapath_multicycle(
         ALU_SRC_REG_2:   alu_op_b = rd2;
         ALU_SRC_EXT_IMM: alu_op_b = ext_imm;
         ALU_SRC_PC:      alu_op_b = pc;
+        ALU_SRC_PC_OLD:  alu_op_b = pc_old;
         ALU_SRC_4:       alu_op_b = 4;
         default:         alu_op_b = 32'hffffffff;
         endcase

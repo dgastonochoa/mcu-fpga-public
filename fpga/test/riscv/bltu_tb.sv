@@ -51,21 +51,30 @@ module bltu_tb;
         $dumpvars(1, bltu_tb);
 
         dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd10;
-        dut.rv.dp.rf._reg[5] = 32'hffff0000;
-        dut.rv.dp.rf._reg[6] = 32'd20;
+        dut.rv.dp.rf._reg[4] = 32'd1;
+        dut.rv.dp.rf._reg[5] = 32'hffffffff;
 
-        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00526863;   // bltu    x4, x5, 16
-        `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00626263;   // bltu    x4, x6, 4
-        `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h00436863;   // bltu    x6, x4, 16
-        `MEM_INSTR[`INSTR_START_IDX + 6] = 32'hfe4064e3;   // bltu    x0, x4, -24
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h02026463;  // bltu    x4, x0, .L2
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h02006263;  // bltu    x0, x0, .L2
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00406863;  // bltu    x0, x4, .L1
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h00000013;  // nop
+        `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00000013;  // nop
+        `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h00000013;  // nop
+        `MEM_INSTR[`INSTR_START_IDX + 6] = 32'hfe5064e3;  // bltu    x0, x5, .L3
+        `MEM_INSTR[`INSTR_START_IDX + 7] = 32'h00000013;  // nop
+        `MEM_INSTR[`INSTR_START_IDX + 8] = 32'h00000013;  // nop
+        `MEM_INSTR[`INSTR_START_IDX + 9] = 32'h00000013; // nop
+        `MEM_INSTR[`INSTR_START_IDX + 10] = 32'h00000013; // nop
+        `MEM_INSTR[`INSTR_START_IDX + 11] = 32'h00000013; // nop
+        `MEM_INSTR[`INSTR_START_IDX + 12] = 32'h00000013; // nop
+
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
             assert(pc === 32'd00);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd16);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd20);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd4);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd8);
         `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd24);
         `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd00);
 

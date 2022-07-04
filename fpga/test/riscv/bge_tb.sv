@@ -51,31 +51,40 @@ module bge_tb;
         $dumpvars(1, bge_tb);
 
         dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd10;
-        dut.rv.dp.rf._reg[5] = 32'd20;
+        dut.rv.dp.rf._reg[4] = 32'd04;
+        dut.rv.dp.rf._reg[5] = 32'hffffffff;
 
-        // bge'ing these 2 regs. (a < b; b = big. neg. num., a = 2)
-        // will produce the special case in which comparing two
-        // signed numbers a and b, begin a greater than b, won't cause
-        // an ALU's neg flag to be 0, but an overflow.
-        dut.rv.dp.rf._reg[6] = 32'd02;
-        dut.rv.dp.rf._reg[7] = 32'h80000000;
 
-        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00025863;   // bge x4, x0, 16
-        `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00425263;   // bge x4, x4, 4
-        `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h00735863;   // bge x6, x7, 4
-        `MEM_INSTR[`INSTR_START_IDX + 9] = 32'hfc525ee3;   // blt x4, x5, -36
-        `MEM_INSTR[`INSTR_START_IDX + 10] = 32'hfc42dce3;   // blt x5, x4, -40
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h02405a63;  // bge     x0, x4, 52
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h00005263;  // bge     x0, x0, 4
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00025863;  // bge     x4, x0, 12
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h00000013;  // nop
+        `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00000013;  // nop
+        `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h00000013;  // nop
+        `MEM_INSTR[`INSTR_START_IDX + 6] = 32'h0002de63;  // bge     x5, x0, 36
+        `MEM_INSTR[`INSTR_START_IDX + 7] = 32'h00505863;  // bge     x0, x5, 16
+        `MEM_INSTR[`INSTR_START_IDX + 8] = 32'h00000013;  // nop
+        `MEM_INSTR[`INSTR_START_IDX + 9] = 32'h00000013;  // nop
+        `MEM_INSTR[`INSTR_START_IDX + 10] = 32'h00000013; // nop
+        `MEM_INSTR[`INSTR_START_IDX + 11] = 32'h00405463; // bge     x0, x4, 8
+        `MEM_INSTR[`INSTR_START_IDX + 12] = 32'hfc52d8e3; // bge     x5, x5, -48
+        `MEM_INSTR[`INSTR_START_IDX + 13] = 32'h00000013; // nop
+        `MEM_INSTR[`INSTR_START_IDX + 14] = 32'h00000013; // nop
+        `MEM_INSTR[`INSTR_START_IDX + 15] = 32'h00000013; // nop
+
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
             assert(pc === 32'd00);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd16);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd20);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd36);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd40);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd4);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd8);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd24);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd28);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd44);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd48);
         `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd00);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd04);
 
         #5;
         $finish;
