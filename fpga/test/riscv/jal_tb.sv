@@ -1,12 +1,18 @@
 `timescale 10ps/1ps
+
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
-
-
+`include "riscv_test_utils.svh"
 
 `ifndef VCD
     `define VCD "jal_tb.vcd"
+`endif
+
+`ifdef CONFIG_RISCV_SINGLECYCLE
+    `define N_CLKS 1
+`elsif CONFIG_RISCV_MULTICYCLE
+    `define N_CLKS 3
 `endif
 
 module jal_tb;
@@ -40,38 +46,53 @@ module jal_tb;
 
     always #10 clk = ~clk;
 
+
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, jal_tb);
 
-        dut.rv.instr_mem._mem._mem[0] = 32'h00c000ef;   // jal ra, +12
-        dut.rv.instr_mem._mem._mem[1] = 32'h00000013;
-        dut.rv.instr_mem._mem._mem[2] = 32'h00000013;
-        dut.rv.instr_mem._mem._mem[3] = 32'h00000013;
-        dut.rv.instr_mem._mem._mem[4] = 32'h00000013;
-        dut.rv.instr_mem._mem._mem[5] = 32'h00000013;
-        dut.rv.instr_mem._mem._mem[6] = 32'h00000013;
-        dut.rv.instr_mem._mem._mem[7] = 32'hff9ff0ef;   // jal ra, -8
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00c000ef;   // jal ra, +12
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 6] = 32'h00000013;
+        `MEM_INSTR[`INSTR_START_IDX + 7] = 32'hff9ff0ef;   // jal ra, -8
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(pc === 12);
-        #20 assert(pc === 16);
-        #20 assert(pc === 20);
-        #20 assert(pc === 24);
-        #20 assert(pc === 28);
-        #20 assert(pc === 20);
+        assert(pc === 0);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 12);
+                                    assert(dut.rv.dp.rf._reg[1] === 4);
+
+        `WAIT_INSTR(clk)            assert(pc === 16);
+                                    assert(dut.rv.dp.rf._reg[1] === 4);
+        `WAIT_INSTR(clk)            assert(pc === 20);
+                                    assert(dut.rv.dp.rf._reg[1] === 4);
+        `WAIT_INSTR(clk)            assert(pc === 24);
+                                    assert(dut.rv.dp.rf._reg[1] === 4);
+        `WAIT_INSTR(clk)            assert(pc === 28);
+                                    assert(dut.rv.dp.rf._reg[1] === 4);
+
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 20);
+                                    assert(dut.rv.dp.rf._reg[1] === 32);
 
         // Modify first instr. to jump to itself
-        dut.rv.instr_mem._mem._mem[0] = 32'h000000ef;
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h000000ef;
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(pc === 0);
-        #20 assert(pc === 0);
-        #20 assert(pc === 0);
-        #20 assert(pc === 0);
-        #20 assert(pc === 0);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 0);
+                                    assert(dut.rv.dp.rf._reg[1] === 4);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 0);
+                                    assert(dut.rv.dp.rf._reg[1] === 4);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 0);
+                                    assert(dut.rv.dp.rf._reg[1] === 4);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 0);
+                                    assert(dut.rv.dp.rf._reg[1] === 4);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 0);
+                                    assert(dut.rv.dp.rf._reg[1] === 4);
 
         #5 $finish;
     end

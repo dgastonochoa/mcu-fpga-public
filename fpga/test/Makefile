@@ -119,7 +119,8 @@ riscv_tmp_tests := 	$(RISCV_TEST_DIR)/and_tb.xv						\
 		 			$(RISCV_TEST_DIR)/sb_tb.xv						\
 		 			$(RISCV_TEST_DIR)/sh_tb.xv						\
 					$(RISCV_TEST_DIR)/lhu_tb.xv						\
-					$(RISCV_TEST_DIR)/jalr_tb.xv
+					$(RISCV_TEST_DIR)/jalr_tb.xv					\
+					$(RISCV_TEST_DIR)/jal_tb.xv
 
 tests_waves := $(addsuffix .vcd,$(tests))
 

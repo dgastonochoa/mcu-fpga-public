@@ -43,8 +43,9 @@ module controller_multicycle(
         ALU_W_RF,
         BRANCH,
         EXEC_I,
-        ALU_W_PCN,
+        ALU_W_PCN,      // 10
         EXEC_I_JALR,
+        EXEC_J,
         ERROR
     } rv_mcyc_st_e;
 
@@ -61,6 +62,7 @@ module controller_multicycle(
         OP_I_TYPE_L:    decode_ns = MEM_ADDR;
         OP_S_TYPE:      decode_ns = MEM_ADDR;
         OP_B_TYPE:      decode_ns = BRANCH;
+        OP_J_TYPE:      decode_ns = EXEC_J;
         default:        decode_ns = ERROR;
         endcase
     end
@@ -84,14 +86,17 @@ module controller_multicycle(
             ALU_W_RF:    cs <= FETCH;
             ALU_W_PCN:   cs <= FETCH;
             BRANCH:      cs <= FETCH;
+            EXEC_J:      cs <= FETCH;
             default:     cs <= ERROR;
             endcase
     end
 
 
     imm_src_e i_instr_imm_src;
+    imm_src_e dec_imm_src;
 
     assign i_instr_imm_src = (funct3[0] & ~funct3[1]) ? IMM_SRC_ITYPE2 : IMM_SRC_ITYPE;
+    assign dec_imm_src = (op == OP_J_TYPE ? IMM_SRC_JTYPE : IMM_SRC_BTYPE);
 
     //
     // Outputs logic
@@ -99,7 +104,7 @@ module controller_multicycle(
     always_comb begin
         case(cs)
         FETCH:          imm_src = IMM_SRC_NONE;
-        DECODE:         imm_src = IMM_SRC_BTYPE;
+        DECODE:         imm_src = dec_imm_src;
         MEM_ADDR:       imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
         MEM_WRITE:      imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
         MEM_READ:       imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
@@ -158,6 +163,7 @@ module controller_multicycle(
         ALU_W_PCN:   ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b1,              1'b0,       1'b0,         1'b0};
         MEM_W_RF:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_MEM,        MEM_DT_NONE, 1'b0,   1'b0,              1'b0,       1'b1,         1'b0};
         BRANCH:      ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   branch_en_npc_r,   1'b0,       1'b0,         1'b0};
+        EXEC_J:      ctrls = {1'b1,   1'b0,   ALU_SRC_NONE,   ALU_SRC_NONE,       RES_SRC_ALU_OUT,    MEM_DT_NONE, 1'b0,   1'b1,              1'b0,       1'b0,         1'b1};
         default:     ctrls = {1'b0,   1'b0,   ALU_SRC_NONE,   ALU_SRC_NONE,       RES_SRC_NONE,       MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         1'b0};
         endcase
     end
