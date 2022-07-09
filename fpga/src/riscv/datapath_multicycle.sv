@@ -65,9 +65,16 @@ module datapath_multicycle(
 
     wire    [31:0] reg_rd1;
     wire    [31:0] reg_rd2;
-    wire    [31:0] reg_wd3;
+    logic   [31:0] reg_wd3;
 
-    assign reg_wd3 = (rf_wd_src == RF_WD_SRC_PC ? pc : result);
+    always_comb begin
+        case (rf_wd_src)
+        RF_WD_SRC_RES:  reg_wd3 = result;
+        RF_WD_SRC_PC:   reg_wd3 = pc;
+        RF_WD_SRC_IMM:  reg_wd3 = ext_imm;
+        RF_WD_SRC_NONE: reg_wd3 = 32'hffffffff;
+        endcase
+    end
 
     regfile rf(instr[19:15], instr[24:20], instr[11:7], reg_wd3, rf_we, reg_rd1, reg_rd2, clk);
 

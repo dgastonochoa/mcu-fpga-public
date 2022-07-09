@@ -46,6 +46,7 @@ module controller_multicycle(
         ALU_W_PCN,      // 10
         EXEC_I_JALR,
         EXEC_J,
+        EXEC_LUI,
         ERROR
     } rv_mcyc_st_e;
 
@@ -63,6 +64,7 @@ module controller_multicycle(
         OP_S_TYPE:      decode_ns = MEM_ADDR;
         OP_B_TYPE:      decode_ns = BRANCH;
         OP_J_TYPE:      decode_ns = EXEC_J;
+        OP_LUI:         decode_ns = EXEC_LUI;
         default:        decode_ns = ERROR;
         endcase
     end
@@ -87,6 +89,7 @@ module controller_multicycle(
             ALU_W_PCN:   cs <= FETCH;
             BRANCH:      cs <= FETCH;
             EXEC_J:      cs <= FETCH;
+            EXEC_LUI:    cs <= FETCH;
             default:     cs <= ERROR;
             endcase
     end
@@ -111,6 +114,7 @@ module controller_multicycle(
         MEM_W_RF:       imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
         EXEC_I:         imm_src = i_instr_imm_src;
         EXEC_I_JALR:    imm_src = IMM_SRC_ITYPE;
+        EXEC_LUI:       imm_src = IMM_SRC_UTYPE;
         default:        imm_src = IMM_SRC_NONE;
         endcase
     end
@@ -164,6 +168,7 @@ module controller_multicycle(
         MEM_W_RF:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_MEM,        MEM_DT_NONE, 1'b0,   1'b0,              1'b0,       1'b1,         RF_WD_SRC_RES};
         BRANCH:      ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   branch_en_npc_r,   1'b0,       1'b0,         RF_WD_SRC_RES};
         EXEC_J:      ctrls = {1'b1,   1'b0,   ALU_SRC_NONE,   ALU_SRC_NONE,       RES_SRC_ALU_OUT,    MEM_DT_NONE, 1'b0,   1'b1,              1'b0,       1'b0,         RF_WD_SRC_PC};
+        EXEC_LUI:    ctrls = {1'b1,   1'b0,   ALU_SRC_NONE,   ALU_SRC_NONE,       RES_SRC_NONE,       MEM_DT_NONE, 1'b0,   1'b0,              1'b0,       1'b0,         RF_WD_SRC_IMM};
         default:     ctrls = {1'b0,   1'b0,   ALU_SRC_NONE,   ALU_SRC_NONE,       RES_SRC_NONE,       MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         RF_WD_SRC_RES};
         endcase
     end

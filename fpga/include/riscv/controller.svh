@@ -14,7 +14,7 @@ typedef enum logic [6:0]
     OP_J_TYPE = 7'b1101111,
     OP_JALR = 7'b1100111,
     OP_AUIPC = 7'b0010111,
-    OP_LUI = 7'b0110111
+    OP_LUI = 7'b0110111     // TODO rename this to OP_U_TYPE
 } op_e;
 
 `endif // CONTROLLER_SVH

@@ -3,8 +3,16 @@
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
+`include "riscv_test_utils.svh"
+
 `ifndef VCD
     `define VCD "lui_tb.vcd"
+`endif
+
+`ifdef CONFIG_RISCV_SINGLECYCLE
+    `define N_CLKS 1
+`elsif CONFIG_RISCV_MULTICYCLE
+    `define N_CLKS 3
 `endif
 
 module lui_tb;
@@ -45,16 +53,22 @@ module lui_tb;
         dut.rv.dp.rf._reg[0] = 32'd00;
         dut.rv.dp.rf._reg[1] = 32'd12;
 
-        dut.rv.instr_mem._mem._mem[0] = 32'hfffff0b7;  // lui x1, 0xfffff
-        dut.rv.instr_mem._mem._mem[1] = 32'h000010b7;  // lui x1, 1
-        dut.rv.instr_mem._mem._mem[2] = 32'h000000b7;  // lui x1, 0
+        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'hfffff0b7;  // lui x1, 0xfffff
+        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h000010b7;  // lui x1, 1
+        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h000000b7;  // lui x1, 0
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.rv.dp.rf._reg[1] === 32'hfffff000);
-        #20 assert(dut.rv.dp.rf._reg[1] === 32'h00001000);
-        #20 assert(dut.rv.dp.rf._reg[1] === 32'h00000000);
+        assert(pc === 32'd00);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[1] === 32'hfffff000);
+                                    assert(pc === 32'd04);
+
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[1] === 32'h00001000);
+                                    assert(pc === 32'd08);
+
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[1] === 32'h00000000);
+                                    assert(pc === 32'd12);
 
         #5;
         $finish;

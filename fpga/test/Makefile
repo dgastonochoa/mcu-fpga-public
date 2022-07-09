@@ -113,6 +113,7 @@ riscv_tmp_tests := 	$(RISCV_TEST_DIR)/lb_tb.xv						\
 					$(RISCV_TEST_DIR)/sra_tb.xv						\
 					$(RISCV_TEST_DIR)/or_tb.xv						\
 					$(RISCV_TEST_DIR)/and_tb.xv						\
+					$(RISCV_TEST_DIR)/lui_tb.xv						\
 					$(RISCV_TEST_DIR)/beq_tb.xv						\
 					$(RISCV_TEST_DIR)/bne_tb.xv						\
 					$(RISCV_TEST_DIR)/blt_tb.xv						\
