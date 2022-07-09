@@ -121,7 +121,8 @@ riscv_tmp_tests := 	$(RISCV_TEST_DIR)/lb_tb.xv						\
 					$(RISCV_TEST_DIR)/bltu_tb.xv					\
 					$(RISCV_TEST_DIR)/bgeu_tb.xv					\
 					$(RISCV_TEST_DIR)/jalr_tb.xv					\
-					$(RISCV_TEST_DIR)/jal_tb.xv
+					$(RISCV_TEST_DIR)/jal_tb.xv						\
+					$(RISCV_TEST_DIR)/datapath_tb.xv
 
 ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
 # There is no point in adapting this test to multi-cycle since its stack

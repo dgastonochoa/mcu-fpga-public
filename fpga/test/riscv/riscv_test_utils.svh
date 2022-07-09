@@ -35,7 +35,20 @@
      * Single cycle CPU intructions always take 1 clock cycle.
      *
      */
-    `define WAIT_INSTR(clk)         @(posedge clk) #1
+    `define WAIT_INSTR(clk)         `WAIT_INSTR_C(clk, 1)
+
+    /**
+     * See CONFIG_RISCV_MULTICYCLE section in this file.
+     *
+     */
+    `define L_I_CYC                 1
+    `define S_I_CYC                 1
+    `define R_I_CYC                 1
+    `define I_I_CYC                 1
+    `define B_I_CYC                 1
+    `define J_I_CYC                 1
+    `define U_I_CYC                 1
+
 `elsif CONFIG_RISCV_MULTICYCLE
     `define MEM_DATA                dut.rv.id_mem._mem._mem
     `define MEM_INSTR               dut.rv.id_mem._mem._mem
@@ -47,7 +60,19 @@
      * other number is required, use @see{WAIT_INSTR_C}
      *
      */
-    `define WAIT_INSTR(clk)         repeat(4) @(posedge clk); #1
+    `define WAIT_INSTR(clk)         `WAIT_INSTR_C(clk, 4)
+
+    /**
+     * Cycles required per instruction in multi-cycle CPU mode.
+     *
+     */
+    `define L_I_CYC                 5   // load-type instr.
+    `define S_I_CYC                 4   // store-type instr.
+    `define R_I_CYC                 4   // r-type instr.
+    `define I_I_CYC                 4   // i-type instr.
+    `define B_I_CYC                 3   // b-type instr.
+    `define J_I_CYC                 3   // j-type instr.
+    `define U_I_CYC                 3   // u-type instr.
 `endif
 
 `endif // RISCV_TEST_UTILS_SVH
