@@ -58,4 +58,17 @@ typedef enum logic [3:0]
     PC_SRC_NONE          = 4'hf
 } pc_src_e;
 
+`ifdef CONFIG_RISCV_MULTICYCLE
+/**
+ * Indicates the source of the register file write pin
+ */
+typedef enum logic [3:0]
+{
+    RF_WD_SRC_RES       = 4'b00,
+    RF_WD_SRC_PC        = 4'b01,
+    RF_WD_SRC_IMM       = 4'b10,
+    RF_WD_SRC_NONE      = 4'hf
+} rf_wd_src_e;
+`endif // CONFIG_RISCV_MULTICYCLE
+
 `endif // RISCV_PARAMS_H

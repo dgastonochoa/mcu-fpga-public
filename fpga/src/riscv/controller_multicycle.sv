@@ -11,7 +11,7 @@ module controller_multicycle(
     output  alu_src_e           alu_src_b,
     output  res_src_e           res_src,
     output  imm_src_e           imm_src,
-    output  logic               rf_wd_src,
+    output  rf_wd_src_e         rf_wd_src,
     output  alu_op_e            alu_ctrl,
     output  mem_dt_e            dt,
     output  wire                en_ir,
@@ -145,26 +145,26 @@ module controller_multicycle(
         endcase
     end
 
-    logic [22:0] ctrls;
+    logic [25:0] ctrls;
 
     assign {                  rf_we,  m_we,   alu_src_a,      alu_src_b,          res_src,            dt,          en_ir,  en_npc_r,          en_oldpc_r, m_addr_src,   rf_wd_src} = ctrls;
 
     always_comb begin
         case(cs)
-        FETCH:       ctrls = {1'b0,   1'b0,   ALU_SRC_PC,     ALU_SRC_4,          RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b1,   1'b0,              1'b1,       1'b0,         1'b0};
-        DECODE:      ctrls = {1'b0,   1'b0,   ALU_SRC_PC_OLD, ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b1,              1'b0,       1'b0,         1'b0};
-        MEM_ADDR:    ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b0,         1'b0};
-        MEM_READ:    ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b1,         1'b0};
-        MEM_WRITE:   ctrls = {1'b0,   1'b1,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b1,         1'b0};
-        EXEC_R:      ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         1'b0};
-        EXEC_I:      ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         1'b0};
-        EXEC_I_JALR: ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         1'b1};
-        ALU_W_RF:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         1'b0};
-        ALU_W_PCN:   ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b1,              1'b0,       1'b0,         1'b0};
-        MEM_W_RF:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_MEM,        MEM_DT_NONE, 1'b0,   1'b0,              1'b0,       1'b1,         1'b0};
-        BRANCH:      ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   branch_en_npc_r,   1'b0,       1'b0,         1'b0};
-        EXEC_J:      ctrls = {1'b1,   1'b0,   ALU_SRC_NONE,   ALU_SRC_NONE,       RES_SRC_ALU_OUT,    MEM_DT_NONE, 1'b0,   1'b1,              1'b0,       1'b0,         1'b1};
-        default:     ctrls = {1'b0,   1'b0,   ALU_SRC_NONE,   ALU_SRC_NONE,       RES_SRC_NONE,       MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         1'b0};
+        FETCH:       ctrls = {1'b0,   1'b0,   ALU_SRC_PC,     ALU_SRC_4,          RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b1,   1'b0,              1'b1,       1'b0,         RF_WD_SRC_RES};
+        DECODE:      ctrls = {1'b0,   1'b0,   ALU_SRC_PC_OLD, ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b1,              1'b0,       1'b0,         RF_WD_SRC_RES};
+        MEM_ADDR:    ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b0,         RF_WD_SRC_RES};
+        MEM_READ:    ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b1,         RF_WD_SRC_RES};
+        MEM_WRITE:   ctrls = {1'b0,   1'b1,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b1,         RF_WD_SRC_RES};
+        EXEC_R:      ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         RF_WD_SRC_RES};
+        EXEC_I:      ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         RF_WD_SRC_RES};
+        EXEC_I_JALR: ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         RF_WD_SRC_PC};
+        ALU_W_RF:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         RF_WD_SRC_RES};
+        ALU_W_PCN:   ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b1,              1'b0,       1'b0,         RF_WD_SRC_RES};
+        MEM_W_RF:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_MEM,        MEM_DT_NONE, 1'b0,   1'b0,              1'b0,       1'b1,         RF_WD_SRC_RES};
+        BRANCH:      ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   branch_en_npc_r,   1'b0,       1'b0,         RF_WD_SRC_RES};
+        EXEC_J:      ctrls = {1'b1,   1'b0,   ALU_SRC_NONE,   ALU_SRC_NONE,       RES_SRC_ALU_OUT,    MEM_DT_NONE, 1'b0,   1'b1,              1'b0,       1'b0,         RF_WD_SRC_PC};
+        default:     ctrls = {1'b0,   1'b0,   ALU_SRC_NONE,   ALU_SRC_NONE,       RES_SRC_NONE,       MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         RF_WD_SRC_RES};
         endcase
     end
 
