@@ -101,6 +101,7 @@ riscv_tmp_tests := 	$(RISCV_TEST_DIR)/lb_tb.xv						\
 					$(RISCV_TEST_DIR)/srai_tb.xv					\
 					$(RISCV_TEST_DIR)/ori_tb.xv						\
 					$(RISCV_TEST_DIR)/andi_tb.xv					\
+					$(RISCV_TEST_DIR)/auipc_tb.xv					\
 		 			$(RISCV_TEST_DIR)/sb_tb.xv						\
 		 			$(RISCV_TEST_DIR)/sh_tb.xv						\
 					$(RISCV_TEST_DIR)/sw_tb.xv						\
