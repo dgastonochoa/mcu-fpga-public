@@ -11,7 +11,7 @@ module controller_multicycle(
     output  alu_src_e           alu_src_b,
     output  res_src_e           res_src,
     output  imm_src_e           imm_src,
-    output  wire                rf_wd_src,
+    output  logic               rf_wd_src,
     output  alu_op_e            alu_ctrl,
     output  mem_dt_e            dt,
     output  wire                en_ir,
@@ -23,14 +23,10 @@ module controller_multicycle(
 );
     wire [6:0] op, funct7;
     wire [2:0] funct3;
-    wire is_jalr_jal;
 
     assign op = instr[6:0];
     assign funct7 = instr[31:25];
     assign funct3 = instr[14:12];
-
-    assign is_jalr_jal = ((op == OP_JALR | op == OP_J_TYPE) ? 1'b1 : 1'b0);
-
 
     //
     // Next state logic
@@ -48,6 +44,7 @@ module controller_multicycle(
         BRANCH,
         EXEC_I,
         ALU_W_PCN,
+        EXEC_I_JALR,
         ERROR
     } rv_mcyc_st_e;
 
@@ -60,7 +57,7 @@ module controller_multicycle(
         case (op)
         OP_R_TYPE:      decode_ns = EXEC_R;
         OP_I_TYPE:      decode_ns = EXEC_I;
-        OP_JALR:        decode_ns = EXEC_I;
+        OP_JALR:        decode_ns = EXEC_I_JALR;
         OP_I_TYPE_L:    decode_ns = MEM_ADDR;
         OP_S_TYPE:      decode_ns = MEM_ADDR;
         OP_B_TYPE:      decode_ns = BRANCH;
@@ -69,25 +66,25 @@ module controller_multicycle(
     end
 
     assign mem_addr_ns = (op == OP_I_TYPE_L ? MEM_READ : MEM_WRITE);
-    assign exec_i_ns = is_jalr_jal ? ALU_W_PCN : ALU_W_RF;
 
     always @(posedge clk, posedge rst) begin
         if (rst)
             cs <= FETCH;
         else
             case (cs)
-            FETCH:      cs <= DECODE;
-            DECODE:     cs <= decode_ns;
-            MEM_ADDR:   cs <= mem_addr_ns;
-            MEM_WRITE:  cs <= FETCH;
-            MEM_READ:   cs <= MEM_W_RF;
-            MEM_W_RF:   cs <= FETCH;
-            EXEC_R:     cs <= ALU_W_RF;
-            EXEC_I:     cs <= exec_i_ns;
-            ALU_W_RF:   cs <= FETCH;
-            ALU_W_PCN:  cs <= FETCH;
-            BRANCH:     cs <= FETCH;
-            default:    cs <= ERROR;
+            FETCH:       cs <= DECODE;
+            DECODE:      cs <= decode_ns;
+            MEM_ADDR:    cs <= mem_addr_ns;
+            MEM_WRITE:   cs <= FETCH;
+            MEM_READ:    cs <= MEM_W_RF;
+            MEM_W_RF:    cs <= FETCH;
+            EXEC_R:      cs <= ALU_W_RF;
+            EXEC_I:      cs <= ALU_W_RF;
+            EXEC_I_JALR: cs <= ALU_W_PCN;
+            ALU_W_RF:    cs <= FETCH;
+            ALU_W_PCN:   cs <= FETCH;
+            BRANCH:      cs <= FETCH;
+            default:     cs <= ERROR;
             endcase
     end
 
@@ -101,14 +98,15 @@ module controller_multicycle(
     //
     always_comb begin
         case(cs)
-        FETCH:     imm_src = IMM_SRC_NONE;
-        DECODE:    imm_src = IMM_SRC_BTYPE;
-        MEM_ADDR:  imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
-        MEM_WRITE: imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
-        MEM_READ:  imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
-        MEM_W_RF:  imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
-        EXEC_I:    imm_src = i_instr_imm_src;
-        default:   imm_src = IMM_SRC_NONE;
+        FETCH:          imm_src = IMM_SRC_NONE;
+        DECODE:         imm_src = IMM_SRC_BTYPE;
+        MEM_ADDR:       imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
+        MEM_WRITE:      imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
+        MEM_READ:       imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
+        MEM_W_RF:       imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
+        EXEC_I:         imm_src = i_instr_imm_src;
+        EXEC_I_JALR:    imm_src = IMM_SRC_ITYPE;
+        default:        imm_src = IMM_SRC_NONE;
         endcase
     end
 
@@ -142,26 +140,25 @@ module controller_multicycle(
         endcase
     end
 
-    assign rf_wd_src = is_jalr_jal ? 1'b1 : 1'b0;
+    logic [22:0] ctrls;
 
-    logic [21:0] ctrls;
-
-    assign {                rf_we,  m_we,   alu_src_a,      alu_src_b,          res_src,            dt,          en_ir,  en_npc_r,          en_oldpc_r, m_addr_src} = ctrls;
+    assign {                  rf_we,  m_we,   alu_src_a,      alu_src_b,          res_src,            dt,          en_ir,  en_npc_r,          en_oldpc_r, m_addr_src,   rf_wd_src} = ctrls;
 
     always_comb begin
         case(cs)
-        FETCH:     ctrls = {1'b0,   1'b0,   ALU_SRC_PC,     ALU_SRC_4,          RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b1,   1'b0,              1'b1,       1'b0};
-        DECODE:    ctrls = {1'b0,   1'b0,   ALU_SRC_PC_OLD, ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b1,              1'b0,       1'b0};
-        MEM_ADDR:  ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b0};
-        MEM_READ:  ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b1};
-        MEM_WRITE: ctrls = {1'b0,   1'b1,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b1};
-        EXEC_R:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0};
-        EXEC_I:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0};
-        ALU_W_RF:  ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0};
-        ALU_W_PCN: ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b1,              1'b0,       1'b0};
-        MEM_W_RF:  ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_MEM,        MEM_DT_NONE, 1'b0,   1'b0,              1'b0,       1'b1};
-        BRANCH:    ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   branch_en_npc_r,   1'b0,       1'b0};
-        default:   ctrls = {1'b0,   1'b0,   ALU_SRC_NONE,   ALU_SRC_NONE,       RES_SRC_NONE,       MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0};
+        FETCH:       ctrls = {1'b0,   1'b0,   ALU_SRC_PC,     ALU_SRC_4,          RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b1,   1'b0,              1'b1,       1'b0,         1'b0};
+        DECODE:      ctrls = {1'b0,   1'b0,   ALU_SRC_PC_OLD, ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b1,              1'b0,       1'b0,         1'b0};
+        MEM_ADDR:    ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b0,         1'b0};
+        MEM_READ:    ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b1,         1'b0};
+        MEM_WRITE:   ctrls = {1'b0,   1'b1,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    mem_w_dt,    1'b0,   1'b0,              1'b0,       1'b1,         1'b0};
+        EXEC_R:      ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         1'b0};
+        EXEC_I:      ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         1'b0};
+        EXEC_I_JALR: ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         1'b1};
+        ALU_W_RF:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         1'b0};
+        ALU_W_PCN:   ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b1,              1'b0,       1'b0,         1'b0};
+        MEM_W_RF:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_MEM,        MEM_DT_NONE, 1'b0,   1'b0,              1'b0,       1'b1,         1'b0};
+        BRANCH:      ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   branch_en_npc_r,   1'b0,       1'b0,         1'b0};
+        default:     ctrls = {1'b0,   1'b0,   ALU_SRC_NONE,   ALU_SRC_NONE,       RES_SRC_NONE,       MEM_DT_WORD, 1'b0,   1'b0,              1'b0,       1'b0,         1'b0};
         endcase
     end
 
@@ -171,18 +168,19 @@ module controller_multicycle(
 
     always_comb begin
         case(cs)
-        FETCH:     alu_ctrl = ALU_OP_ADD;
-        DECODE:    alu_ctrl = ALU_OP_ADD;
-        MEM_ADDR:  alu_ctrl = ALU_OP_ADD;
-        MEM_WRITE: alu_ctrl = ALU_OP_ADD;
-        MEM_READ:  alu_ctrl = ALU_OP_ADD;
-        MEM_W_RF:  alu_ctrl = ALU_OP_ADD;
-        EXEC_R:    alu_ctrl = alu_dec_out;
-        EXEC_I:    alu_ctrl = (is_jalr_jal ? ALU_OP_ADD : alu_dec_out);
-        MEM_W_RF:  alu_ctrl = alu_dec_out;
-        BRANCH:    alu_ctrl = alu_dec_out;
-        ALU_W_PCN: alu_ctrl = ALU_OP_ADD;
-        default:   alu_ctrl = ALU_OP_NONE;
+        FETCH:       alu_ctrl = ALU_OP_ADD;
+        DECODE:      alu_ctrl = ALU_OP_ADD;
+        MEM_ADDR:    alu_ctrl = ALU_OP_ADD;
+        MEM_WRITE:   alu_ctrl = ALU_OP_ADD;
+        MEM_READ:    alu_ctrl = ALU_OP_ADD;
+        MEM_W_RF:    alu_ctrl = ALU_OP_ADD;
+        EXEC_R:      alu_ctrl = alu_dec_out;
+        EXEC_I:      alu_ctrl = alu_dec_out;
+        EXEC_I_JALR: alu_ctrl = ALU_OP_ADD;
+        MEM_W_RF:    alu_ctrl = alu_dec_out;
+        BRANCH:      alu_ctrl = alu_dec_out;
+        ALU_W_PCN:   alu_ctrl = ALU_OP_ADD;
+        default:     alu_ctrl = ALU_OP_NONE;
         endcase
     end
 endmodule
