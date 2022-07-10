@@ -83,8 +83,7 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/lui_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/datapath_tb.xv					\
 		 	   $(RISCV_TEST_DIR)/controller_tb.xv				\
-			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv	\
-			   $(RISCV_TEST_DIR)/digital_design_and_computer_arch_test_tb.xv
+			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv
 
 # TODO delete when possible
 riscv_tmp_tests := 	$(RISCV_TEST_DIR)/lb_tb.xv						\
@@ -123,6 +122,14 @@ riscv_tmp_tests := 	$(RISCV_TEST_DIR)/lb_tb.xv						\
 					$(RISCV_TEST_DIR)/bgeu_tb.xv					\
 					$(RISCV_TEST_DIR)/jalr_tb.xv					\
 					$(RISCV_TEST_DIR)/jal_tb.xv
+
+ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
+# There is no point in adapting this test to multi-cycle since its stack
+# pointer is set to a value so that the following '|' and '&' ops. give
+# a particular result, so the test will be rather useless if 'sp' is adapted
+# to mixed instr./data memory.
+riscv_tests += $(RISCV_TEST_DIR)/digital_design_and_computer_arch_test_tb.xv
+endif
 
 tests_waves := $(addsuffix .vcd,$(tests))
 
