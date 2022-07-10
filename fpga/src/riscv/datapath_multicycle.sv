@@ -44,8 +44,8 @@ module datapath_multicycle(
 
     assign pc_next = result;
 
-    dff pc_ff(pc_next, en_npc_r, pc, rst, clk);
-    dff pc_old_ff(pc, en_oldpc_r, pc_old, rst, clk);
+    dff pc_ff(pc_next, en_npc_r, pc, clk, rst);
+    dff pc_old_ff(pc, en_oldpc_r, pc_old, clk, rst);
 
 
     //
@@ -53,7 +53,7 @@ module datapath_multicycle(
     //
     wire [31:0] m_rd_r;
 
-    dff mem_rd_r(m_rd, 1'b1, m_rd_r, rst, clk);
+    dff mem_rd_r(m_rd, 1'b1, m_rd_r, clk, rst);
 
     assign m_addr = (addr_src == 1'b0 ? pc : result);
 
@@ -61,7 +61,7 @@ module datapath_multicycle(
     //
     // Register file
     //
-    dff i_r(m_rd, en_ir, instr, rst, clk);
+    dff i_r(m_rd, en_ir, instr, clk, rst);
 
     wire    [31:0] reg_rd1;
     wire    [31:0] reg_rd2;
@@ -80,8 +80,8 @@ module datapath_multicycle(
 
     wire [31:0] rd1, rd2;
 
-    dff rd_rd1_r(reg_rd1, 1'b1, rd1, rst, clk);
-    dff rd_rd2_r(reg_rd2, 1'b1, rd2, rst, clk);
+    dff rd_rd1_r(reg_rd1, 1'b1, rd1, clk, rst);
+    dff rd_rd2_r(reg_rd2, 1'b1, rd2, clk, rst);
 
     assign m_wd = rd2;
 
@@ -129,5 +129,5 @@ module datapath_multicycle(
 
     wire [31:0] alu_out_r;
 
-    dff alu_out_reg(alu_out, 1'b1, alu_out_r, rst, clk);
+    dff alu_out_reg(alu_out, 1'b1, alu_out_r, clk, rst);
 endmodule

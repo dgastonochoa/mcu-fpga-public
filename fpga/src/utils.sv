@@ -24,8 +24,8 @@ module dff #(parameter N = 32) (
     input  wire [N-1:0] d,
     input  wire         en,
     output reg  [N-1:0] q,
-    input  wire         rst,
-    input  wire         clk
+    input  wire         clk,
+    input  wire         rst
 );
     always_ff @(posedge clk, posedge rst) begin
         if (rst)
