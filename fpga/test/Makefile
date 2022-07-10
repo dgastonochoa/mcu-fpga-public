@@ -131,6 +131,8 @@ ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
 # rather useless if 'sp' is adapted to mixed instr./data memory.
 riscv_tests += $(RISCV_TEST_DIR)/digital_design_and_computer_arch_test_tb.xv	\
 		 	   $(RISCV_TEST_DIR)/controller_singlecycle_tb.xv
+else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
+riscv_tests += $(RISCV_TEST_DIR)/controller_multicycle_tb.xv
 endif
 
 tests_waves := $(addsuffix .vcd,$(tests))
