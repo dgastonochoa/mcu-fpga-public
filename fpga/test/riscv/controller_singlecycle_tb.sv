@@ -5,10 +5,10 @@
 `include "riscv/datapath.svh"
 
 `ifndef VCD
-    `define VCD "controller_tb.vcd"
+    `define VCD "controller_singlecycle_tb.vcd"
 `endif
 
-module controller_tb;
+module controller_singlecycle_tb;
     reg [31:0] instr;
     reg [3:0] alu_flags;
 
@@ -36,7 +36,7 @@ module controller_tb;
 
     initial begin
         $dumpfile(`VCD);
-        $dumpvars(1, controller_tb);
+        $dumpvars(1, controller_singlecycle_tb);
 
         //
         // lw
