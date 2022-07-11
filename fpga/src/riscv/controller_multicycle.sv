@@ -19,9 +19,12 @@ module controller_multicycle(
     input   wire                clk,
     input   wire                rst
 );
-    wire [6:0] op;
+    wire [6:0] op, funct7;
+    wire [2:0] funct3;
 
     assign op = instr[6:0];
+    assign funct7 = instr[31:25];
+    assign funct3 = instr[14:12];
 
 
     //
@@ -34,12 +37,16 @@ module controller_multicycle(
         MEM_ADDR,
         MEM_READ,
         MEM_WRITE,
-        RF_WRITE
+        MEM_W_RF,
+        EXEC_R,
+        ALU_W_RF
     } rv_mcyc_st_e;
 
     rv_mcyc_st_e cs;
+    rv_mcyc_st_e decode_ns;
     rv_mcyc_st_e mem_addr_ns;
 
+    assign decode_ns = (op == OP_R_TYPE ? EXEC_R : MEM_ADDR);
     assign mem_addr_ns = (op == OP_I_TYPE_L ? MEM_READ : MEM_WRITE);
 
     always @(posedge clk, posedge rst) begin
@@ -48,11 +55,13 @@ module controller_multicycle(
         else
             case (cs)
             FETCH:      cs <= DECODE;
-            DECODE:     cs <= MEM_ADDR;
+            DECODE:     cs <= decode_ns;
             MEM_ADDR:   cs <= mem_addr_ns;
             MEM_WRITE:  cs <= FETCH;
-            MEM_READ:   cs <= RF_WRITE;
-            RF_WRITE:   cs <= FETCH;
+            MEM_READ:   cs <= MEM_W_RF;
+            MEM_W_RF:   cs <= FETCH;
+            EXEC_R:     cs <= ALU_W_RF;
+            ALU_W_RF:   cs <= FETCH;
             endcase
     end
 
@@ -67,7 +76,7 @@ module controller_multicycle(
         MEM_ADDR:  imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
         MEM_WRITE: imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
         MEM_READ:  imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
-        RF_WRITE:  imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
+        MEM_W_RF:  imm_src = (op == OP_I_TYPE_L ? IMM_SRC_ITYPE : IMM_SRC_STYPE);
         endcase
     end
 
@@ -82,9 +91,26 @@ module controller_multicycle(
         MEM_ADDR:  ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,       1'b0};
         MEM_WRITE: ctrls = {1'b0,   1'b1,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,       1'b1};
         MEM_READ:  ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,       1'b1};
-        RF_WRITE:  ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_MEM,        MEM_DT_WORD, 1'b0,   1'b0,       1'b1};
+        MEM_W_RF:  ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_EXT_IMM,    RES_SRC_MEM,        MEM_DT_WORD, 1'b0,   1'b0,       1'b1};
+        EXEC_R:    ctrls = {1'b1,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,       1'b0};
+        MEM_W_RF:  ctrls = {1'b0,   1'b0,   ALU_SRC_REG_1,  ALU_SRC_REG_2,      RES_SRC_ALU_OUT,    MEM_DT_WORD, 1'b0,   1'b0,       1'b0};
         endcase
     end
 
-    assign alu_ctrl = ALU_OP_ADD;
+    alu_op_e exec_r_alu_ctrl;
+
+    alu_dec ad(op, funct3, funct7, exec_r_alu_ctrl);
+
+    always_comb begin
+        case(cs)
+        FETCH:     alu_ctrl = ALU_OP_ADD;
+        DECODE:    alu_ctrl = ALU_OP_ADD;
+        MEM_ADDR:  alu_ctrl = ALU_OP_ADD;
+        MEM_WRITE: alu_ctrl = ALU_OP_ADD;
+        MEM_READ:  alu_ctrl = ALU_OP_ADD;
+        MEM_W_RF:  alu_ctrl = ALU_OP_ADD;
+        EXEC_R:    alu_ctrl = exec_r_alu_ctrl;
+        MEM_W_RF:  alu_ctrl = exec_r_alu_ctrl;
+        endcase
+    end
 endmodule

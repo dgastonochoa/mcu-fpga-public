@@ -9,6 +9,12 @@
     `define VCD "lw_tb.vcd"
 `endif
 
+`ifdef CONFIG_RISCV_SINGLECYCLE
+    `define N_CLKS 1
+`elsif CONFIG_RISCV_MULTICYCLE
+    `define N_CLKS 5
+`endif
+
 module lw_tb;
     wire reg_we, mem_we;
     res_src_e res_src;
@@ -72,10 +78,10 @@ module lw_tb;
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[6] === 32'hdeadc0de);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[6] === 32'hdeadbeef);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[6] === 32'hc001c0de);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[0] === 32'h00);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[6] === 32'hdeadc0de);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[6] === 32'hdeadbeef);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[6] === 32'hc001c0de);
+        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[0] === 32'h00);
 
         #20;
         $finish;

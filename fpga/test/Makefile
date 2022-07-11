@@ -94,7 +94,9 @@ riscv_tmp_tests := 	$(RISCV_TEST_DIR)/and_tb.xv						\
 					$(RISCV_TEST_DIR)/slt_tb.xv						\
 					$(RISCV_TEST_DIR)/sll_tb.xv						\
 					$(RISCV_TEST_DIR)/sub_tb.xv						\
-					$(RISCV_TEST_DIR)/xor_tb.xv
+					$(RISCV_TEST_DIR)/xor_tb.xv						\
+					$(RISCV_TEST_DIR)/lw_tb.xv						\
+					$(RISCV_TEST_DIR)/sw_tb.xv
 
 tests_waves := $(addsuffix .vcd,$(tests))
 
@@ -110,12 +112,15 @@ ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
 riscv_src :=  $(SRCRV)/datapath_singlecycle.sv 		\
 			  $(SRCRV)/datapath_utils.sv	 		\
 			  $(SRCRV)/riscv_singlecycle.sv 		\
-			  $(SRCRV)/controller_singlecycle.sv
+			  $(SRCRV)/controller_singlecycle.sv	\
+			  $(SRCRV)/controller_common.sv
+
 else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
 riscv_src :=  $(SRCRV)/datapath_multicycle.sv 		\
 			  $(SRCRV)/datapath_utils.sv	 		\
 			  $(SRCRV)/riscv_multicycle.sv 			\
-			  $(SRCRV)/controller_multicycle.sv
+			  $(SRCRV)/controller_multicycle.sv		\
+			  $(SRCRV)/controller_common.sv
 endif
 
 
