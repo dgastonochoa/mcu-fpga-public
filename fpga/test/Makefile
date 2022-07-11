@@ -84,45 +84,6 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/datapath_tb.xv					\
 			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv
 
-# TODO delete when possible
-riscv_tmp_tests := 	$(RISCV_TEST_DIR)/lb_tb.xv						\
-					$(RISCV_TEST_DIR)/lh_tb.xv						\
-					$(RISCV_TEST_DIR)/lw_tb.xv						\
-					$(RISCV_TEST_DIR)/lbu_tb.xv						\
-					$(RISCV_TEST_DIR)/lhu_tb.xv						\
-					$(RISCV_TEST_DIR)/addi_tb.xv					\
-					$(RISCV_TEST_DIR)/slli_tb.xv					\
-		 			$(RISCV_TEST_DIR)/slti_tb.xv					\
-		 			$(RISCV_TEST_DIR)/sltiu_tb.xv					\
-					$(RISCV_TEST_DIR)/xori_tb.xv					\
-					$(RISCV_TEST_DIR)/srli_tb.xv					\
-					$(RISCV_TEST_DIR)/srai_tb.xv					\
-					$(RISCV_TEST_DIR)/ori_tb.xv						\
-					$(RISCV_TEST_DIR)/andi_tb.xv					\
-					$(RISCV_TEST_DIR)/auipc_tb.xv					\
-		 			$(RISCV_TEST_DIR)/sb_tb.xv						\
-		 			$(RISCV_TEST_DIR)/sh_tb.xv						\
-					$(RISCV_TEST_DIR)/sw_tb.xv						\
-					$(RISCV_TEST_DIR)/sub_tb.xv						\
-					$(RISCV_TEST_DIR)/sll_tb.xv						\
-					$(RISCV_TEST_DIR)/slt_tb.xv						\
-		 	   		$(RISCV_TEST_DIR)/sltu_tb.xv					\
-					$(RISCV_TEST_DIR)/xor_tb.xv						\
-					$(RISCV_TEST_DIR)/srl_tb.xv						\
-					$(RISCV_TEST_DIR)/sra_tb.xv						\
-					$(RISCV_TEST_DIR)/or_tb.xv						\
-					$(RISCV_TEST_DIR)/and_tb.xv						\
-					$(RISCV_TEST_DIR)/lui_tb.xv						\
-					$(RISCV_TEST_DIR)/beq_tb.xv						\
-					$(RISCV_TEST_DIR)/bne_tb.xv						\
-					$(RISCV_TEST_DIR)/blt_tb.xv						\
-					$(RISCV_TEST_DIR)/bge_tb.xv						\
-					$(RISCV_TEST_DIR)/bltu_tb.xv					\
-					$(RISCV_TEST_DIR)/bgeu_tb.xv					\
-					$(RISCV_TEST_DIR)/jalr_tb.xv					\
-					$(RISCV_TEST_DIR)/jal_tb.xv						\
-					$(RISCV_TEST_DIR)/datapath_tb.xv				\
-					$(RISCV_TEST_DIR)/all_instr_program_test_tb.xv
 
 ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
 # There is no point in adapting digital_design_and_computer_arch_test_tb.xv
@@ -174,10 +135,6 @@ all: test wavedumps
 $(tests): | dirs
 
 $(riscv_tests): | dirs
-
-_tmp_test: $(riscv_tmp_tests)
-	$(foreach test,$^,$(VVP) -n $(test) -none;)
-$(riscv_tmp_tests): | dirs
 
 $(wavedumps): | dirs
 
