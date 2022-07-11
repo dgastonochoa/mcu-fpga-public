@@ -3,6 +3,8 @@
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
+`include "riscv_test_utils.svh"
+
 `ifndef VCD
     `define VCD "and_tb.vcd"
 `endif
@@ -48,16 +50,16 @@ module and_tb;
         dut.rv.dp.rf._reg[5] = 32'h01;
         dut.rv.dp.rf._reg[6] = 32'hff;
 
-        dut.rv.instr_mem._mem._mem[0] = 32'h00627033;           // and x0, x4, x6
-        dut.rv.instr_mem._mem._mem[1] = 32'h0062f233;           // and x4, x5, x6
-        dut.rv.instr_mem._mem._mem[2] = 32'h00637233;           // and x4, x6, x6
+        `MEM_INSTR[`INSTR_START_ADDR + 0] = 32'h00627033;  // and x0, x4, x6
+        `MEM_INSTR[`INSTR_START_ADDR + 1] = 32'h0062f233;  // and x4, x5, x6
+        `MEM_INSTR[`INSTR_START_ADDR + 2] = 32'h00637233;  // and x4, x6, x6
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.rv.dp.rf._reg[0] === 32'h00);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'h01);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'hff);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[0] === 32'h00);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'h01);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'hff);
 
         #5;
         $finish;

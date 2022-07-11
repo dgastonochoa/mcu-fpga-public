@@ -3,6 +3,8 @@
 `include "alu.svh"
 `include "riscv/datapath.svh"
 
+`include "riscv_test_utils.svh"
+
 `ifndef VCD
     `define VCD "xor_tb.vcd"
 `endif
@@ -48,18 +50,18 @@ module xor_tb;
         dut.rv.dp.rf._reg[5] = 32'b101010;
         dut.rv.dp.rf._reg[6] = 32'b010101;
 
-        dut.rv.instr_mem._mem._mem[0] = 32'h0062c033;   // xor     x0, x5, x6
-        dut.rv.instr_mem._mem._mem[1] = 32'h0062c233;   // xor     x4, x5, x6
-        dut.rv.instr_mem._mem._mem[2] = 32'h00624233;   // xor     x4, x4, x6
-        dut.rv.instr_mem._mem._mem[3] = 32'h00424233;   // xor     x4, x4, x4
+        `MEM_INSTR[`INSTR_START_ADDR + 0] = 32'h0062c033; // xor     x0, x5, x6
+        `MEM_INSTR[`INSTR_START_ADDR + 1] = 32'h0062c233; // xor     x4, x5, x6
+        `MEM_INSTR[`INSTR_START_ADDR + 2] = 32'h00624233; // xor     x4, x4, x6
+        `MEM_INSTR[`INSTR_START_ADDR + 3] = 32'h00424233; // xor     x4, x4, x4
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        #11 assert(dut.rv.dp.rf._reg[0] === 32'h00);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'b111111);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'b101010);
-        #20 assert(dut.rv.dp.rf._reg[4] === 32'b0);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[0] === 32'h00);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'b111111);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'b101010);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'b0);
 
         #5;
         $finish;
