@@ -85,6 +85,17 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv	\
 			   $(RISCV_TEST_DIR)/digital_design_and_computer_arch_test_tb.xv
 
+# TODO delete when possible
+riscv_tmp_tests := 	$(RISCV_TEST_DIR)/and_tb.xv						\
+					$(RISCV_TEST_DIR)/or_tb.xv						\
+					$(RISCV_TEST_DIR)/sra_tb.xv						\
+					$(RISCV_TEST_DIR)/srl_tb.xv						\
+		 	   		$(RISCV_TEST_DIR)/sltu_tb.xv					\
+					$(RISCV_TEST_DIR)/slt_tb.xv						\
+					$(RISCV_TEST_DIR)/sll_tb.xv						\
+					$(RISCV_TEST_DIR)/sub_tb.xv						\
+					$(RISCV_TEST_DIR)/xor_tb.xv
+
 tests_waves := $(addsuffix .vcd,$(tests))
 
 riscv_tests_waves := $(addsuffix .vcd,$(riscv_tests))
@@ -121,6 +132,10 @@ all: test wavedumps
 $(tests): | dirs
 
 $(riscv_tests): | dirs
+
+_tmp_test: $(riscv_tmp_tests)
+	$(foreach test,$^,$(VVP) -n $(test) -none;)
+$(riscv_tmp_tests): | dirs
 
 $(wavedumps): | dirs
 
