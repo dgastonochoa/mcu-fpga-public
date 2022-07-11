@@ -117,7 +117,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     assign tm_d_rd      = (tm == 1'b0 ? 32'h00 : d_rd);
     assign tm_d_err     = (tm == 1'b0 ? ENONE : d_err);
 
-    mem #(.N(256)) data_mem(d_addr, d_wd, d_we, d_dt, d_rd, d_err, clk);
+    mem #(.N(768)) data_mem(d_addr, d_wd, d_we, d_dt, d_rd, d_err, clk);
 
 
     //

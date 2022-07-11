@@ -7,21 +7,21 @@
 # SIFIVE_E initialization (Comment out when generating the
 # program for the FPGA test)
 #
-.align 4
-# .equ UART_BASE,         0x10013000
+# .align 4
+# # .equ UART_BASE,         0x10013000
 
-.section .text
-.globl _start
+# .section .text
+# .globl _start
 
-_start:
-        la      sp, stack_top           # setup stack pointer
+# _start:
+        # la      sp, stack_top           # setup stack pointer
 
 
-        # #
-        # # STACK POINTER INITIALIZATION FOR TESTS (Uncomment when
-        # # generating the program for the FPGA test)
-        # #
-        # addi    x2, x0, 0             # setup stack pointer
+        #
+        # STACK POINTER INITIALIZATION FOR TESTS (Uncomment when
+        # generating the program for the FPGA test)
+        #
+        addi    x2, x0, 1728             # setup stack pointer
 
         #
         # addi, sw, jal
@@ -574,12 +574,12 @@ tj:     sw      x3, (2*4)(x2)   # sp[2] = 24
 # Finish program (uncomment when generating the FPGA
 # program)
 #
-# .OK:    jal     x3, .OK
-# .FAIL:  jal     x3, .FAIL
+.OK:    jal     x3, .OK
+.FAIL:  jal     x3, .FAIL
 
 #
 # Finish program (comment out when generating the FPGA
 # program)
 #
-.FAIL:  nop
-halt:   wfi                     # enter the infinite loop
+# .FAIL:  nop
+# halt:   wfi                     # enter the infinite loop
