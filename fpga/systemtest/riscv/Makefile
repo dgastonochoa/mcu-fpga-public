@@ -29,9 +29,11 @@ src_files := $(SRC)/spi.sv 							\
 			 $(SRC)/mem.sv 							\
 			 $(SRC)/utils.sv 						\
 			 $(SRC)/alu.sv 							\
-			 $(SRC)/riscv/riscv.sv 					\
-			 $(SRC)/riscv/controller.sv 			\
-			 $(SRC)/riscv/datapath.sv 				\
+			 $(SRC)/riscv/riscv_singlecycle.sv		\
+			 $(SRC)/riscv/controller_singlecycle.sv	\
+			 $(SRC)/riscv/controller_common.sv		\
+			 $(SRC)/riscv/datapath_singlecycle.sv	\
+			 $(SRC)/riscv/datapath_utils.sv			\
 			 $(SRC)/legacy/utils/debounce_filter.v
 
 
