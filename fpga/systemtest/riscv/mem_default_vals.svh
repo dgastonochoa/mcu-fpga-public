@@ -6,7 +6,7 @@
  */
 
 `define INIT_MEM_F(mem_reg)         \
-    mem_reg[0] = 32'h00000113;      \
+    mem_reg[0] = 32'h6c000113;      \
     mem_reg[1] = 32'h02500293;      \
     mem_reg[2] = 32'h00328313;      \
     mem_reg[3] = 32'h00512023;      \

@@ -12,14 +12,16 @@
     `define DEBOUNCE_FILTER_WAIT_CLK 100
 `endif
 
+`define FIRST_ADDR_TO_SEND 32'd1728
+
 /**
  * Last address the SPI master must send.
  *
  */
-`define LAST_ADDR_TO_SEND 32'h1f8
+`define LAST_ADDR_TO_SEND (32'h1f8 + `FIRST_ADDR_TO_SEND)
 
 
-module mem_send_ctrl #(parameter END_ADDR = 12) (
+module mem_send_ctrl #(parameter START_ADDR = 0, parameter END_ADDR = 12) (
     input   wire         si_busy,
     output  logic [31:0] tm_d_addr,
     output  logic        tm,
@@ -42,7 +44,7 @@ module mem_send_ctrl #(parameter END_ADDR = 12) (
     always @(posedge clk, posedge rst) begin
         if (rst) begin
             cs <= IDLE;
-            addr_reg <= 0;
+            addr_reg <= START_ADDR;
         end else begin
             case (cs)
             IDLE:      cs <= SEND_WORD;
@@ -154,7 +156,8 @@ module riscv_single_all_instr_top(
     wire si_busy;
     wire si_en;
 
-    mem_send_ctrl #(.END_ADDR(`LAST_ADDR_TO_SEND)) msc(
+    mem_send_ctrl #(.START_ADDR(`FIRST_ADDR_TO_SEND),
+                    .END_ADDR(`LAST_ADDR_TO_SEND)) msc(
         si_busy, tm_d_addr, tm, si_en, clk_1khz, rst | ~pr_finished);
 
 

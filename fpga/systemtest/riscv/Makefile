@@ -7,6 +7,9 @@ SRC = ../../src
 #
 INC = -I../../include -I.
 
+# TODO delete this
+INC += -I../../test/riscv
+
 VV := iverilog
 VVP := vvp
 
@@ -16,6 +19,12 @@ VVP := vvp
 # synthesis time.
 #
 DEFS := -DCONFIG_ENABLE_MEM_DEFAULT_VALS
+
+ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
+DEFS += -DIVERILOG -DCONFIG_RISCV_SINGLECYCLE
+else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
+DEFS += -DIVERILOG -DCONFIG_RISCV_MULTICYCLE
+endif
 
 #
 # Simulation-only definitions
@@ -29,12 +38,20 @@ src_files := $(SRC)/spi.sv 							\
 			 $(SRC)/mem.sv 							\
 			 $(SRC)/utils.sv 						\
 			 $(SRC)/alu.sv 							\
-			 $(SRC)/riscv/riscv_singlecycle.sv		\
-			 $(SRC)/riscv/controller_singlecycle.sv	\
-			 $(SRC)/riscv/controller_common.sv		\
-			 $(SRC)/riscv/datapath_singlecycle.sv	\
+			 $(SRC)/legacy/utils/debounce_filter.v	\
 			 $(SRC)/riscv/datapath_utils.sv			\
-			 $(SRC)/legacy/utils/debounce_filter.v
+			 $(SRC)/riscv/controller_common.sv
+
+ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
+src_files += $(SRC)/riscv/riscv_singlecycle.sv		\
+			 $(SRC)/riscv/controller_singlecycle.sv	\
+			 $(SRC)/riscv/datapath_singlecycle.sv
+
+else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
+src_files += $(SRC)/riscv/riscv_multicycle.sv		\
+			 $(SRC)/riscv/controller_multicycle.sv	\
+			 $(SRC)/riscv/datapath_multicycle.sv
+endif
 
 
 all: tests wavedumps
