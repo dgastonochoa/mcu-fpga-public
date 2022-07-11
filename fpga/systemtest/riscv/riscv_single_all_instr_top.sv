@@ -143,9 +143,21 @@ module riscv_single_all_instr_top(
         clk_1khz
     );
 
-    wire pr_finished;
 
-    assign pr_finished = (pc == 32'h680 ? 1'b1 : 1'b0);
+`ifdef CONFIG_RISCV_MULTICYCLE
+    localparam LAST_PC = 32'h684;
+`elsif CONFIG_RISCV_SINGLECYCLE
+    localparam LAST_PC = 32'h680;
+`endif
+
+    reg pr_finished;
+
+    always @(posedge clk_1khz, posedge rst) begin
+        if (rst)
+            pr_finished <= 1'b0;
+        else if (pc == LAST_PC && pr_finished == 1'b0)
+            pr_finished <= 1'b1;
+    end
 
     assign LED[0] = pr_finished;
 
@@ -158,7 +170,7 @@ module riscv_single_all_instr_top(
 
     mem_send_ctrl #(.START_ADDR(`FIRST_ADDR_TO_SEND),
                     .END_ADDR(`LAST_ADDR_TO_SEND)) msc(
-        si_busy, tm_d_addr, tm, si_en, clk_1khz, rst | ~pr_finished);
+        si_busy, tm_d_addr, tm, si_en, clk_1khz, ~pr_finished);
 
 
     //

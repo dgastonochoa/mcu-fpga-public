@@ -76,6 +76,15 @@ module riscv_single_all_instr_top_tb;
 
     integer i = 0;
 
+    wire __pr_finished;
+    wire [2:0] __msc_cs;
+    wire [31:0] __pc;
+
+    assign __pr_finished = dut.pr_finished;
+    assign __msc_cs = dut.msc.cs;
+    assign __pc = dut.pc;
+
+
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, riscv_single_all_instr_top_tb);
@@ -87,7 +96,15 @@ module riscv_single_all_instr_top_tb;
         //
         // Program finishes correctly
         //
+`ifdef CONFIG_RISCV_MULTICYCLE
+        // if using a multi-cycle CPU, the instruction at address X won't have
+        // finished executing when PC === X. Wait for PC to be X + 4 to be sure
+        // the instruction was executed.
+        wait(dut.pc === 32'h684);
+`elsif CONFIG_RISCV_SINGLECYCLE
         wait(dut.pc === 32'h680);
+`endif // CONFIG_RISCV_MULTICYCLE
+
         assert(`MEM_DATA[`DATA_IDX + 0] === 37);
         assert(`MEM_DATA[`DATA_IDX + 1] === 40);
         assert(`MEM_DATA[`DATA_IDX + 2] === 24);
@@ -215,7 +232,6 @@ module riscv_single_all_instr_top_tb;
         assert(`MEM_DATA[`DATA_IDX + 124] === 6);
         assert(`MEM_DATA[`DATA_IDX + 125] === 6);
         assert(`MEM_DATA[`DATA_IDX + 126] === 6);
-
 
         //
         // SPI sends all the results

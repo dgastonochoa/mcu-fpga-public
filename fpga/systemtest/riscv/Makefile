@@ -7,7 +7,7 @@ SRC = ../../src
 #
 INC = -I../../include -I.
 
-# TODO delete this
+# TODO remove this dependency when possible
 INC += -I../../test/riscv
 
 VV := iverilog
