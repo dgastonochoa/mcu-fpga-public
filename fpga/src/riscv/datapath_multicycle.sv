@@ -108,8 +108,8 @@ module datapath_multicycle(
         ALU_SRC_EXT_IMM: alu_op_a = ext_imm;
         ALU_SRC_PC:      alu_op_a = pc;
         ALU_SRC_PC_OLD:  alu_op_a = pc_old;
-        ALU_SRC_4:       alu_op_a = 4;
-        default:         alu_op_b = 32'h00;
+        ALU_SRC_4:       alu_op_a = 32'd4;
+        default:         alu_op_a = 32'hffffffff;
         endcase
     end
 
@@ -120,7 +120,7 @@ module datapath_multicycle(
         ALU_SRC_EXT_IMM: alu_op_b = ext_imm;
         ALU_SRC_PC:      alu_op_b = pc;
         ALU_SRC_PC_OLD:  alu_op_b = pc_old;
-        ALU_SRC_4:       alu_op_b = 4;
+        ALU_SRC_4:       alu_op_b = 32'd4;
         default:         alu_op_b = 32'hffffffff;
         endcase
     end

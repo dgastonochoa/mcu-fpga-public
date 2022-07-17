@@ -1,4 +1,5 @@
 `include "alu.svh"
+`include "mem.svh"
 `include "riscv/datapath.svh"
 `include "riscv/controller.svh"
 

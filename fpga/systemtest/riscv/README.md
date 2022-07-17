@@ -54,7 +54,7 @@ only bytes ontained, one in each line, and **nothing** else (no text, no empty l
 
 Execute:
 
-        bytes-to-words.py riscv-fpga-test-res.txt
+        verif_results.py riscv-fpga-test-res.txt
 
 If the above returns nothing, everything is file. Errors will be reported as assertion errors.
 
