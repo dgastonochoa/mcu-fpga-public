@@ -22,8 +22,18 @@ tests might take a few seconds to perform, but not too many.
 **Note:** Inspect the `Makefile` to see how to configure a Vivado project. `cnstr` contains
 the required constrains file for the project.
 
+# How to execute the test benches
+It's recommended to do this before executing the system tests on the physical FPGA.
+ - Execute `CONFIG_RISCV_SINGLECYCLE=y make` for the single-cycle RISC-V tests
+ - Execute `CONFIG_RISCV_MULTICYCLE=y make` for the multicycle-cycle RISC-V tests
+
 
 # How to execute these tests in the physical FPGA
+Create a Vivado project and add all the files required to build the tests, which can be
+found in the `Makefile` in this directory. Remember to add the required include directories
+and the required definitions (e.g.:`CONFIG_RISCV_MULTICYCLE=y`). Some of the definitions might
+require to **not** be present when running the physical FPGA tests (e.g.: `IVERILOG`)
+
 **Note:** This test requires to read from an SPI port, therefore a device
 capable of this must act as a bridge between the FPGA and the host. You can
 user `find_spi_iface.sh` to try find this SPI interface by providing a keyword.
