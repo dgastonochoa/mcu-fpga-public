@@ -6,13 +6,32 @@
  *
  */
 
+`ifdef CONFIG_RISCV_SINGLECYCLE
+    /**
+     * Work-arround the fact that SystemVerilog doesn't support statements like
+     * `if defined(X) || defined(Y) ... `endif
+     *
+     */
+    `define RISCV_ONE_CYCLE 1
+
+    `define WAIT_INIT_CYCLES(clk)
+
+`elsif CONFIG_RISCV_PIPELINE
+    `define RISCV_ONE_CYCLE 1
+    `define WAIT_INIT_CYCLES(clk)   `WAIT_INSTR_C(clk, 4)
+
+`elsif CONFIG_RISCV_MULTICYCLE
+    `define WAIT_INIT_CYCLES(clk)
+
+`endif // CONFIG_RISCV_SINGLECYCLE
+
 /**
  * Waits for 'n' clock cycles.
  *
  */
 `define WAIT_INSTR_C(clk, n)        repeat(n) @(posedge clk); #1
 
-`ifdef CONFIG_RISCV_SINGLECYCLE
+`ifdef RISCV_ONE_CYCLE
     `define MEM_DATA                dut.rv.data_mem._mem._mem
     `define MEM_INSTR               dut.rv.instr_mem._mem._mem
 

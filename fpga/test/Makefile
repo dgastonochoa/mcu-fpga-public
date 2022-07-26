@@ -18,6 +18,8 @@ ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
 IFLAGS := -DIVERILOG -DCONFIG_RISCV_SINGLECYCLE
 else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
 IFLAGS := -DIVERILOG -DCONFIG_RISCV_MULTICYCLE
+else ifeq ($(CONFIG_RISCV_PIPELINE),y)
+IFLAGS := -DIVERILOG -DCONFIG_RISCV_PIPELINE
 else
 IFLAGS := -DIVERILOG
 endif
@@ -119,6 +121,14 @@ riscv_src :=  $(SRCRV)/datapath_multicycle.sv 		\
 			  $(SRCRV)/riscv_multicycle.sv 			\
 			  $(SRCRV)/controller_multicycle.sv		\
 			  $(SRCRV)/controller_common.sv
+
+else ifeq ($(CONFIG_RISCV_PIPELINE),y)
+# RISC-V pipeline version can re-use a lot of the singlecycle logic
+riscv_src :=  $(SRCRV)/datapath_pipeline.sv 		\
+			  $(SRCRV)/datapath_utils.sv			\
+			  $(SRCRV)/controller_common.sv			\
+			  $(SRCRV)/controller_singlecycle.sv	\
+			  $(SRCRV)/riscv_singlecycle.sv
 endif
 
 
@@ -140,6 +150,7 @@ $(wavedumps): | dirs
 
 
 $(PREFIX)/%.xv: %.sv $(common_src)
+	@echo ASDASDASD
 	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) $(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^ $(PREFIX)/.include_timestamp.sv
 
 $(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src) $(RISCV_TEST_DIR)/.config_timestamp.sv $(PREFIX)/.include_timestamp.sv
@@ -172,6 +183,11 @@ config/riscv/singlecycle: | dirs
 .PHONY: config/riscv/multicycle
 config/riscv/multicycle: | dirs
 	@echo CONFIG_RISCV_MULTICYCLE=y > .config
+	@touch $(RISCV_TEST_DIR)/.config_timestamp.sv
+
+.PHONY: config/riscv/pipelined
+config/riscv/pipelined: | dirs
+	@echo CONFIG_RISCV_PIPELINE=y > .config
 	@touch $(RISCV_TEST_DIR)/.config_timestamp.sv
 
 # This target will create $(RISCV_TEST_DIR)/.config_timestamp.sv the first time

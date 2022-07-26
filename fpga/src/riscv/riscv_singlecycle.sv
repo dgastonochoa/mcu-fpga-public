@@ -117,6 +117,10 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     assign tm_d_rd      = (tm == 1'b0 ? 32'h00 : d_rd);
     assign tm_d_err     = (tm == 1'b0 ? ENONE : d_err);
 
+    // TODO this requires to be 768 because riscv_multicycle requires to write
+    // from an offset that is far enough from the instructions. This can be
+    // avoided if the offset from which the data is written is changed from
+    // multicycle to singlecycle/pipeline tests
     mem #(.N(768)) data_mem(d_addr, d_wd, d_we, d_dt, d_rd, d_err, clk);
 
 
