@@ -51,17 +51,21 @@ module or_tb;
         dut.rv.dp.rf._reg[4] = 32'd00;
         dut.rv.dp.rf._reg[5] = 32'h01;
         dut.rv.dp.rf._reg[6] = 32'hfe;
+        dut.rv.dp.rf._reg[7] = 32'h00;
 
         `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00626033; // or x0, x4, x6
         `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h0002e233; // or x4, x5, x0
         `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00626233; // or x4, x4, x6
+        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h004063b3; // or x7, x0, x4
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
+        `WAIT_INIT_CYCLES(clk);
         `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[0] === 32'h00);
         `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'h01);
         `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'hff);
+        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[7] === 32'hff);
 
         #5;
         $finish;

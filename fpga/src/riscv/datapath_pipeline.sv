@@ -1,10 +1,13 @@
 module hazard_ctrl(
     input  wire [4:0] a1_e,
+    input  wire [4:0] a2_e,
     input  wire [4:0] a3_m,
     input  wire       rf_we_m,
-    output wire       forward_alu_out_m
+    output wire       forward_alu_out_m_a,
+    output wire       forward_alu_out_m_b
 );
-    assign forward_alu_out_m = ((a1_e != 4'd0) && rf_we_m && (a1_e == a3_m));
+    assign forward_alu_out_m_a = ((a1_e != 4'd0) && rf_we_m && (a1_e == a3_m));
+    assign forward_alu_out_m_b = ((a2_e != 4'd0) && rf_we_m && (a2_e == a3_m));
 endmodule
 
 /**
@@ -112,12 +115,12 @@ module datapath(
     extend ext(instr_d, imm_src_d, ext_imm);
 
     wire [31:0] rd1_e, rd2_e, pc_e, ext_imm_e, pc_plus_4_e;
-    wire [4:0] a1_e, a3_e;
+    wire [4:0] a1_e, a2_e, a3_e;
 
-    dff #(.N(32*5 + 2*5)) dff_decode(
-        {rd1,   rd2,    pc_d, ext_imm,      pc_plus_4_d, instr_d[19:15], instr_d[11:7]},
+    dff #(.N(32*5 + 3*5)) dff_decode(
+        {rd1,   rd2,    pc_d, ext_imm,      pc_plus_4_d, instr_d[19:15], instr_d[24:20], instr_d[11:7]},
         1'b1,
-        {rd1_e, rd2_e,  pc_e, ext_imm_e,    pc_plus_4_e, a1_e,           a3_e},
+        {rd1_e, rd2_e,  pc_e, ext_imm_e,    pc_plus_4_e, a1_e,           a2_e,           a3_e},
         clk,
         rst
     );
@@ -143,9 +146,10 @@ module datapath(
     //
     logic [31:0] alu_op_a, alu_op_b;
     wire [31:0] alu_out;
-    wire [31:0] alu_op_a_rd1;
+    wire [31:0] alu_op_a_rd1, alu_op_b_rd1;
 
-    assign alu_op_a_rd1 = forward_alu_out_m ? alu_out_m : rd1_e;
+    assign alu_op_a_rd1 = forward_alu_out_m_a ? alu_out_m : rd1_e;
+    assign alu_op_b_rd1 = forward_alu_out_m_b ? alu_out_m : rd2_e;
 
     always_comb begin
         case (_alu_src_a_e)
@@ -160,7 +164,7 @@ module datapath(
     always_comb begin
         case (_alu_src_b_e)
         ALU_SRC_REG_1:   alu_op_b = rd1_e;
-        ALU_SRC_REG_2:   alu_op_b = rd2_e;
+        ALU_SRC_REG_2:   alu_op_b = alu_op_b_rd1;
         ALU_SRC_EXT_IMM: alu_op_b = ext_imm_e;
         ALU_SRC_PC:      alu_op_b = pc_e;
         default:         alu_op_a = 32'hffffffff;
@@ -250,7 +254,8 @@ module datapath(
     //
     // Hazard controller
     //
-    wire forward_alu_out_m;
+    wire forward_alu_out_m_a, forward_alu_out_m_b;
 
-    hazard_ctrl hc(a1_e, a3_m, rf_we_m, forward_alu_out_m);
+    hazard_ctrl hc(
+        a1_e, a2_e, a3_m, rf_we_m, forward_alu_out_m_a, forward_alu_out_m_b);
 endmodule
