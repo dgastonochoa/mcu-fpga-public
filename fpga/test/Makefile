@@ -84,6 +84,9 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/auipc_tb.xv					\
 		 	   $(RISCV_TEST_DIR)/lui_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/datapath_tb.xv					\
+		 	   $(RISCV_TEST_DIR)/raw_hazards_tb.xv			 	\
+		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv			 	\
+			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv				\
 			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv
 
 
@@ -141,6 +144,8 @@ test: $(tests) $(riscv_tests)
 wavedumps: $(tests_waves) $(riscv_tests_waves)
 
 all: test wavedumps
+
+_tmp_tests: $(RISCV_TEST_DIR)/ori_tb.xv.vcd $(RISCV_TEST_DIR)/or_tb.xv.vcd $(RISCV_TEST_DIR)/raw_hazards_tb.xv.vcd $(RISCV_TEST_DIR)/lw_hazards_tb.xv.vcd $(RISCV_TEST_DIR)/lw_tb.xv.vcd $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd
 
 $(tests): | dirs
 

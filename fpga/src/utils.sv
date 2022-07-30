@@ -35,6 +35,22 @@ module dff #(parameter N = 32) (
     end
 endmodule
 
+module clear_dff #(parameter N = 32) (
+    input  wire [N-1:0] d,
+    input  wire         en,
+    output reg  [N-1:0] q,
+    input  wire         clear,
+    input  wire         clk,
+    input  wire         rst
+);
+    always_ff @(posedge clk, posedge rst) begin
+        if (rst)
+            q <= 32'b0;
+        else if (en == 1'b1)
+            q <= clear ? 0 : d;
+    end
+endmodule
+
 /**
  * Clock divider.
  *

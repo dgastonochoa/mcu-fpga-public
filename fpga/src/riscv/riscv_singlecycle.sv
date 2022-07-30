@@ -2,6 +2,22 @@
 `include "mem.svh"
 `include "synth.svh"
 
+// TODO better way to do this?
+`ifdef CONFIG_RISCV_PIPELINE
+module mem_dt_pipeline(
+    input  mem_dt_e dt,
+    output mem_dt_e dt_m,
+    input  clk,
+    input rst
+);
+    mem_dt_e dt_d, dt_e;
+
+    dff #(.N(4)) dff_fetch (dt,   1'b1, dt_d, clk, rst);
+    dff #(.N(4)) dff_decode(dt_d, 1'b1, dt_e, clk, rst);
+    dff #(.N(4)) dff_mem   (dt_e, 1'b1, dt_m, clk, rst);
+endmodule
+`endif
+
 /**
  * RISC-V top module. Connects the RISC-V CPU with external
  * memories.
@@ -96,6 +112,11 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
         dt
     );
 
+`ifdef CONFIG_RISCV_PIPELINE
+    mem_dt_e dt_m;
+
+    mem_dt_pipeline mdp(dt, dt_m, clk, rst);
+`endif
 
     //
     // Data memory logic (normal and test modes)
@@ -110,7 +131,12 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     assign d_addr       = (tm == 1'b0 ? m_addr : tm_d_addr);
     assign d_wd         = (tm == 1'b0 ? mem_wd_data : tm_d_wd);
     assign d_we         = (tm == 1'b0 ? mem_we : tm_d_we);
+
+`ifdef CONFIG_RISCV_PIPELINE
+    assign d_dt         = (tm == 1'b0 ? dt_m : tm_d_dt);
+`else
     assign d_dt         = (tm == 1'b0 ? dt : tm_d_dt);
+`endif
 
     assign mem_rd_data  = (tm == 1'b0 ? d_rd : 32'h00);
 

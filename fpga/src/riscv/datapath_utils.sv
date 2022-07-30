@@ -49,7 +49,7 @@ endmodule
 * @param rd2 Value of the regiser whose address is @p addr2
 * @param clk
 */
-module regfile(
+module regfile #(parameter EDGE = 1) (
     input   wire [4:0]  addr1,
     input   wire [4:0]  addr2,
     input   wire [4:0]  addr3,
@@ -61,13 +61,24 @@ module regfile(
 );
     reg [31:0] _reg [32];
 
-    always_ff @(posedge clk) begin
-        if (we) begin
-            if (addr3 != 5'b00) begin
-                _reg[addr3] <= wd3;
+    generate
+        if (EDGE == 0)
+            always_ff @(negedge clk) begin
+                if (we) begin
+                    if (addr3 != 5'b00) begin
+                        _reg[addr3] <= wd3;
+                    end
+                end
             end
-        end
-    end
+        else
+            always_ff @(posedge clk) begin
+                if (we) begin
+                    if (addr3 != 5'b00) begin
+                        _reg[addr3] <= wd3;
+                    end
+                end
+            end
+    endgenerate
 
     assign rd1 = addr1 == 5'b0 ? 32'b0 : _reg[addr1];
     assign rd2 = addr2 == 5'b0 ? 32'b0 : _reg[addr2];
