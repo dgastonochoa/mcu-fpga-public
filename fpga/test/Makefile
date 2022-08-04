@@ -191,6 +191,7 @@ __tmp_tests := $(RISCV_TEST_DIR)/lw_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/ori_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/andi_tb.xv.vcd						\
 			   $(RISCV_TEST_DIR)/pipeline_jalr_tb.xv.vcd			\
+			   $(RISCV_TEST_DIR)/lui_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/auipc_tb.xv.vcd					\
 			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv.vcd				\
 		 	   $(RISCV_TEST_DIR)/pipeline_bne_tb.xv.vcd				\
