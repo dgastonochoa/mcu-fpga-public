@@ -41,35 +41,6 @@ module ctrl_hazards_tb;
         clk
     );
 
-
-    // wire [31:0] __alu_a_e, __alu_b_e, __alu_ctrl_e, __alu_out_e;
-    // wire [31:0] __rd1, __rd2, ___pc_src, __instr_d;
-    // wire [3:0] __alu_flags_e;
-    // wire [6:0] __op;
-    // wire __flush, __stall;
-
-    // assign __alu_a_e = dut.rv.rv.dp.alu_op_a_e;
-    // assign __alu_b_e = dut.rv.rv.dp.alu_op_b_e;
-    // assign __alu_out_e = dut.rv.rv.dp.alu_out_e;
-    // assign __alu_ctrl_e = dut.rv.rv.dp.ac_e;
-    // assign __alu_flags_e = dut.rv.rv.dp.alu_flags;
-
-    // assign __rd1 = dut.rv.rv.dp.rd1_d;
-    // assign __rd2 = dut.rv.rv.dp.rd2_d;
-    // assign ___pc_src = dut.rv.rv.dp._pc_src;
-    // assign __instr_d = dut.rv.rv.dp.instr_d;
-
-    // assign __op = dut.rv.rv.dp._op_e;
-    // assign __flush = dut.rv.rv.dp.flush;
-
-
-    // wire [31:0] x1, x2, x3, x4;
-
-    // assign x1 = dut.rv.dp.rf._reg[1];
-    // assign x2 = dut.rv.dp.rf._reg[2];
-    // assign x3 = dut.rv.dp.rf._reg[3];
-    // assign x4 = dut.rv.dp.rf._reg[4];
-
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, ctrl_hazards_tb);
