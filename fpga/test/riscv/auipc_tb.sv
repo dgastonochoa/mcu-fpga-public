@@ -9,24 +9,21 @@
     `define VCD "auipc_tb.vcd"
 `endif
 
-`ifdef CONFIG_RISCV_SINGLECYCLE
-    `define N_CLKS 1
-`elsif CONFIG_RISCV_MULTICYCLE
-    `define N_CLKS 3
-`endif
-
 module auipc_tb;
+    reg clk = 0, rst;
+
+    always #10 clk = ~clk;
+
+
     wire reg_we, mem_we;
     res_src_e res_src;
-	pc_src_e pc_src;
-	alu_src_e alu_src;
+    pc_src_e pc_src;
+    alu_src_e alu_src;
     imm_src_e imm_src;
     alu_op_e alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
-
-    reg clk = 0, rst;
 
     riscv_legacy dut(
         reg_we,
@@ -44,8 +41,12 @@ module auipc_tb;
         clk
     );
 
-    always #10 clk = ~clk;
+    wire [31:0] alu_op_a_e, alu_op_b_e, alu_out_e, alu_out_w;
 
+    assign alu_op_a_e = dut.rv.dp.alu_op_a_e;
+    assign alu_op_b_e = dut.rv.dp.alu_op_b_e;
+    assign alu_out_e = dut.rv.dp.alu_out_e;
+    assign alu_out_w = dut.rv.dp.alu_out_w;
 
     initial begin
         $dumpfile(`VCD);
@@ -61,12 +62,9 @@ module auipc_tb;
         #2  rst = 1;
         #2  rst = 0;
         assert(pc === 32'd0);
-
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[1] === (32'd20 << 12));
-                                    assert(pc === 32'd4);
-
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(dut.rv.dp.rf._reg[1] === (32'd20 << 12) + 4);
-                                    assert(pc === 32'd8);
+        `WAIT_INIT_CYCLES(clk);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[1] === (32'd20 << 12));
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[1] === (32'd20 << 12) + 4);
 
         #5;
         $finish;
