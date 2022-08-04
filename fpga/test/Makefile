@@ -145,7 +145,34 @@ wavedumps: $(tests_waves) $(riscv_tests_waves)
 
 all: test wavedumps
 
-_tmp_tests: $(RISCV_TEST_DIR)/ori_tb.xv.vcd $(RISCV_TEST_DIR)/or_tb.xv.vcd $(RISCV_TEST_DIR)/raw_hazards_tb.xv.vcd $(RISCV_TEST_DIR)/lw_hazards_tb.xv.vcd $(RISCV_TEST_DIR)/lw_tb.xv.vcd $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd
+__tmp_tests := $(RISCV_TEST_DIR)/lw_tb.xv.vcd						\
+			   $(RISCV_TEST_DIR)/lb_tb.xv.vcd						\
+			   $(RISCV_TEST_DIR)/lh_tb.xv.vcd						\
+			   $(RISCV_TEST_DIR)/lbu_tb.xv.vcd						\
+			   $(RISCV_TEST_DIR)/lhu_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/or_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/and_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/sub_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/xor_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/sll_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/srl_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/sra_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/slt_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/sltu_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/addi_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/slli_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/slti_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/sltiu_tb.xv.vcd					\
+		 	   $(RISCV_TEST_DIR)/xori_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/srli_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/srai_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/ori_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/andi_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/raw_hazards_tb.xv.vcd			 	\
+		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv.vcd			 	\
+			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd
+
+_tmp_tests: $(__tmp_tests)
 
 $(tests): | dirs
 
