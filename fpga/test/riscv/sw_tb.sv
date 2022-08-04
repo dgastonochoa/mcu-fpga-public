@@ -10,16 +10,19 @@
 `endif
 
 module sw_tb;
+    reg clk = 0, rst;
+
+    always #10 clk = ~clk;
+
+
     wire reg_we, mem_we;
     res_src_e res_src;
-	pc_src_e pc_src;
-	alu_src_e alu_src;
+    pc_src_e pc_src;
+    alu_src_e alu_src;
     imm_src_e imm_src;
     alu_op_e alu_ctrl;
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
-
-    reg clk = 0, rst;
 
     riscv_legacy dut(
         reg_we,
@@ -37,8 +40,9 @@ module sw_tb;
         clk
     );
 
-    always #10 clk = ~clk;
+    // wire [31:0] write_data;
 
+    // assign write_data = dut.rv.dp.write_data;
 
     initial begin
         $dumpfile(`VCD);
@@ -61,10 +65,15 @@ module sw_tb;
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 5] === 32'hdeadc0de);
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 10] === 32'hdeadbeef);
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'hc001c0de);
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'h00);
+
+`ifdef CONFIG_RISCV_PIPELINE
+        `WAIT_INSTR_C(clk, 3);
+`endif
+
+        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 5] === 32'hdeadc0de);
+        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 10] === 32'hdeadbeef);
+        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'hc001c0de);
+        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'h00);
 
         #5;
         $finish;

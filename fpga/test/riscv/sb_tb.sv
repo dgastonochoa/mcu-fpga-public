@@ -62,10 +62,14 @@ module sw_tb;
         #2  rst = 1;
         #2  rst = 0;
 
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 5] === 32'h000000de);
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 10] === 32'h000000ef);
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'h000000de);
-        `WAIT_INSTR(clk) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'h00000000);
+`ifdef CONFIG_RISCV_PIPELINE
+        `WAIT_INSTR_C(clk, 3);
+`endif
+
+        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 5] === 32'h000000de);
+        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 10] === 32'h000000ef);
+        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'h000000de);
+        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'h00000000);
 
         #5;
         $finish;

@@ -171,6 +171,9 @@ __tmp_tests := $(RISCV_TEST_DIR)/lw_tb.xv.vcd						\
 			   $(RISCV_TEST_DIR)/lh_tb.xv.vcd						\
 			   $(RISCV_TEST_DIR)/lbu_tb.xv.vcd						\
 			   $(RISCV_TEST_DIR)/lhu_tb.xv.vcd						\
+			   $(RISCV_TEST_DIR)/sw_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/sb_tb.xv.vcd						\
+		 	   $(RISCV_TEST_DIR)/sh_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/or_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/and_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/sub_tb.xv.vcd						\
