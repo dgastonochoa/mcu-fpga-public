@@ -112,6 +112,7 @@ else ifeq ($(CONFIG_RISCV_PIPELINE),y)
 # with regards to the values that pc takes, therefore it is simpler
 # to have separated tests for it.
 riscv_tests += $(RISCV_TEST_DIR)/controller_multicycle_tb.xv	\
+			   $(RISCV_TEST_DIR)/pipeline_jal_tb.xv				\
 			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv				\
 		 	   $(RISCV_TEST_DIR)/pipeline_bne_tb.xv				\
 		 	   $(RISCV_TEST_DIR)/pipeline_blt_tb.xv				\

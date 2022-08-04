@@ -130,7 +130,20 @@ module branch_dec(
         endcase
     end
 
-    assign pc_src = (op == OP_B_TYPE ? pc_src_b_type : PC_SRC_PLUS_4);
+    always_comb begin
+        case (op)
+        OP_B_TYPE:   pc_src = pc_src_b_type;
+        OP_J_TYPE:   pc_src = PC_SRC_PLUS_OFF;
+        OP_AUIPC:    pc_src = PC_SRC_PLUS_4;
+        OP_LUI:      pc_src = PC_SRC_PLUS_4;
+        OP_I_TYPE_L: pc_src = PC_SRC_PLUS_4;
+        OP_I_TYPE:   pc_src = PC_SRC_PLUS_4;
+        OP_S_TYPE:   pc_src = PC_SRC_PLUS_4;
+        OP_R_TYPE:   pc_src = PC_SRC_PLUS_4;
+        0:           pc_src = PC_SRC_PLUS_4; // TODO why is this needed
+        default:     pc_src = PC_SRC_NONE;
+        endcase
+    end
 endmodule
 
 /**

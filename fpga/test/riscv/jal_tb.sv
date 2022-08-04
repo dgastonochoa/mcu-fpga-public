@@ -58,7 +58,7 @@ module jal_tb;
         `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00000013;
         `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h00000013;
         `MEM_INSTR[`INSTR_START_IDX + 6] = 32'h00000013;
-        `MEM_INSTR[`INSTR_START_IDX + 7] = 32'hff9ff0ef;   // jal ra, -8
+        `MEM_INSTR[`INSTR_START_IDX + 7] = 32'hff9ff0ef;   // jal ra, 0x14
 
         // Reset and test
         #2  rst = 1;
