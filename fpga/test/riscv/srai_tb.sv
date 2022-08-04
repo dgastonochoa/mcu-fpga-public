@@ -55,8 +55,9 @@ module srai_tb;
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'h02);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'hfffffffe);
+        `WAIT_INIT_CYCLES(clk);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'h02);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'hfffffffe);
 
         #5;
         $finish;

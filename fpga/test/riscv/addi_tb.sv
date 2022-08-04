@@ -78,16 +78,18 @@ module addi_tb;
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[0] === 32'd00);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd10);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[5] === 32'd20);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd00);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === -10);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd00);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd10);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd20);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd00);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'd40);
+
+        `WAIT_INIT_CYCLES(clk);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[0] === 32'd00);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd10);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[5] === 32'd20);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd00);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === -10);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd00);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd10);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd20);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd00);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd40);
 
         $finish;
     end

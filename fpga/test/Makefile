@@ -68,11 +68,11 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/bge_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/bltu_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/bgeu_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/addi_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/jal_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/slt_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sltu_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/jalr_tb.xv						\
+		 	   $(RISCV_TEST_DIR)/addi_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/slli_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/slti_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sltiu_tb.xv					\
@@ -81,8 +81,8 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/srai_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/ori_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/andi_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/auipc_tb.xv					\
 		 	   $(RISCV_TEST_DIR)/lui_tb.xv						\
+		 	   $(RISCV_TEST_DIR)/auipc_tb.xv					\
 		 	   $(RISCV_TEST_DIR)/datapath_tb.xv					\
 		 	   $(RISCV_TEST_DIR)/raw_hazards_tb.xv			 	\
 		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv			 	\

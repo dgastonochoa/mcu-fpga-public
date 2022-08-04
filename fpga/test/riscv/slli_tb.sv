@@ -57,9 +57,10 @@ module slli_tb;
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[0] === 32'h00);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'hf0000000);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'b0);
+        `WAIT_INIT_CYCLES(clk);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[0] === 32'h00);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'hf0000000);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'b0);
 
         #5;
         $finish;

@@ -60,9 +60,9 @@ module ori_tb;
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[0] === 32'h00);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'h01);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'hff);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[0] === 32'h00);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'h01);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'hff);
 
         #5;
         $finish;

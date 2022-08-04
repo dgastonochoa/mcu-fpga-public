@@ -12,8 +12,8 @@
 module andi_tb;
     wire reg_we, mem_we;
     res_src_e res_src;
-	pc_src_e pc_src;
-	alu_src_e alu_src;
+    pc_src_e pc_src;
+    alu_src_e alu_src;
     imm_src_e imm_src;
     alu_op_e alu_ctrl;
 
@@ -56,9 +56,10 @@ module andi_tb;
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[0] === 32'h00);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'h01);
-        `WAIT_INSTR(clk) assert(dut.rv.dp.rf._reg[4] === 32'hff);
+        `WAIT_INIT_CYCLES(clk);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[0] === 32'h00);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'h01);
+        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'hff);
 
         #5;
         $finish;
