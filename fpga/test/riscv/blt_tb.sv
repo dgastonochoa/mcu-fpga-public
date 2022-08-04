@@ -9,12 +9,6 @@
     `define VCD "blt_tb.vcd"
 `endif
 
-`ifdef CONFIG_RISCV_SINGLECYCLE
-    `define N_CLKS 1
-`elsif CONFIG_RISCV_MULTICYCLE
-    `define N_CLKS 3
-`endif
-
 module blt_tb;
     wire reg_we, mem_we;
     res_src_e res_src;
@@ -86,14 +80,14 @@ module blt_tb;
         #2  rst = 1;
         #2  rst = 0;
             assert(pc === 32'd00);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd4);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd8);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd24);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd28);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd44);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd48);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd56);
-        `WAIT_INSTR_C(clk, `N_CLKS) assert(pc === 32'd00);
+        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd4);
+        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd8);
+        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd24);
+        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd28);
+        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd44);
+        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd48);
+        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd56);
+        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd00);
 
         #5;
         $finish;
