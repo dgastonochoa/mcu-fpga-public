@@ -62,9 +62,9 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sll_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/srl_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sra_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/jal_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/slt_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sltu_tb.xv						\
+		 	   $(RISCV_TEST_DIR)/jal_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/addi_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/slli_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/slti_tb.xv						\
@@ -78,9 +78,6 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/lui_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/auipc_tb.xv					\
 		 	   $(RISCV_TEST_DIR)/datapath_tb.xv					\
-		 	   $(RISCV_TEST_DIR)/raw_hazards_tb.xv			 	\
-		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv			 	\
-			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv				\
 			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv
 
 
@@ -119,7 +116,10 @@ riscv_tests += $(RISCV_TEST_DIR)/controller_multicycle_tb.xv	\
 		 	   $(RISCV_TEST_DIR)/pipeline_blt_tb.xv				\
 		 	   $(RISCV_TEST_DIR)/pipeline_bge_tb.xv				\
 		 	   $(RISCV_TEST_DIR)/pipeline_bltu_tb.xv			\
-		 	   $(RISCV_TEST_DIR)/pipeline_bgeu_tb.xv
+		 	   $(RISCV_TEST_DIR)/pipeline_bgeu_tb.xv			\
+			   $(RISCV_TEST_DIR)/raw_hazards_tb.xv			 	\
+		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv			 	\
+			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv
 endif
 
 tests_waves := $(addsuffix .vcd,$(tests))
@@ -180,6 +180,7 @@ __tmp_tests := $(RISCV_TEST_DIR)/lw_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/sra_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/slt_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/sltu_tb.xv.vcd						\
+			   $(RISCV_TEST_DIR)/pipeline_jal_tb.xv.vcd				\
 		 	   $(RISCV_TEST_DIR)/addi_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/slli_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/slti_tb.xv.vcd						\
@@ -189,14 +190,16 @@ __tmp_tests := $(RISCV_TEST_DIR)/lw_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/srai_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/ori_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/andi_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/raw_hazards_tb.xv.vcd			 	\
-		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv.vcd			 	\
+			   $(RISCV_TEST_DIR)/pipeline_jalr_tb.xv.vcd			\
+		 	   $(RISCV_TEST_DIR)/auipc_tb.xv.vcd					\
 			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv.vcd				\
 		 	   $(RISCV_TEST_DIR)/pipeline_bne_tb.xv.vcd				\
 		 	   $(RISCV_TEST_DIR)/pipeline_blt_tb.xv.vcd				\
 		 	   $(RISCV_TEST_DIR)/pipeline_bge_tb.xv.vcd				\
 		 	   $(RISCV_TEST_DIR)/pipeline_bltu_tb.xv.vcd			\
 		 	   $(RISCV_TEST_DIR)/pipeline_bgeu_tb.xv.vcd			\
+		 	   $(RISCV_TEST_DIR)/raw_hazards_tb.xv.vcd			 	\
+		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv.vcd			 	\
 			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd
 
 _tmp_tests: $(__tmp_tests)
