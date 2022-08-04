@@ -190,8 +190,11 @@ __tmp_tests := $(RISCV_TEST_DIR)/lw_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/raw_hazards_tb.xv.vcd			 	\
 		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv.vcd			 	\
 			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv.vcd				\
-			   $(RISCV_TEST_DIR)/pipeline_bne_tb.xv.vcd				\
-			   $(RISCV_TEST_DIR)/pipeline_bge_tb.xv.vcd				\
+		 	   $(RISCV_TEST_DIR)/pipeline_bne_tb.xv.vcd				\
+		 	   $(RISCV_TEST_DIR)/pipeline_blt_tb.xv.vcd				\
+		 	   $(RISCV_TEST_DIR)/pipeline_bge_tb.xv.vcd				\
+		 	   $(RISCV_TEST_DIR)/pipeline_bltu_tb.xv.vcd			\
+		 	   $(RISCV_TEST_DIR)/pipeline_bgeu_tb.xv.vcd			\
 			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd
 
 _tmp_tests: $(__tmp_tests)
