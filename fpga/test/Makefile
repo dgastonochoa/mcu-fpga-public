@@ -112,7 +112,12 @@ else ifeq ($(CONFIG_RISCV_PIPELINE),y)
 # with regards to the values that pc takes, therefore it is simpler
 # to have separated tests for it.
 riscv_tests += $(RISCV_TEST_DIR)/controller_multicycle_tb.xv	\
-			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv
+			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv				\
+		 	   $(RISCV_TEST_DIR)/pipeline_bne_tb.xv				\
+		 	   $(RISCV_TEST_DIR)/pipeline_blt_tb.xv				\
+		 	   $(RISCV_TEST_DIR)/pipeline_bge_tb.xv				\
+		 	   $(RISCV_TEST_DIR)/pipeline_bltu_tb.xv			\
+		 	   $(RISCV_TEST_DIR)/pipeline_bgeu_tb.xv
 endif
 
 tests_waves := $(addsuffix .vcd,$(tests))
@@ -184,8 +189,10 @@ __tmp_tests := $(RISCV_TEST_DIR)/lw_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/andi_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/raw_hazards_tb.xv.vcd			 	\
 		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv.vcd			 	\
-			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd				\
-			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv
+			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv.vcd				\
+			   $(RISCV_TEST_DIR)/pipeline_bne_tb.xv.vcd				\
+			   $(RISCV_TEST_DIR)/pipeline_bge_tb.xv.vcd				\
+			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd
 
 _tmp_tests: $(__tmp_tests)
 
