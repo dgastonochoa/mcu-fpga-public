@@ -134,6 +134,7 @@ module branch_dec(
         case (op)
         OP_B_TYPE:   pc_src = pc_src_b_type;
         OP_J_TYPE:   pc_src = PC_SRC_PLUS_OFF;
+        OP_JALR:     pc_src = PC_SRC_REG_PLUS_OFF;
         OP_AUIPC:    pc_src = PC_SRC_PLUS_4;
         OP_LUI:      pc_src = PC_SRC_PLUS_4;
         OP_I_TYPE_L: pc_src = PC_SRC_PLUS_4;
