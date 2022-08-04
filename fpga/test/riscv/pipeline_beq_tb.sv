@@ -6,10 +6,10 @@
 `include "riscv_test_utils.svh"
 
 `ifndef VCD
-    `define VCD "beq_tb.vcd"
+    `define VCD "pipeline_beq_tb.vcd"
 `endif
 
-module beq_tb;
+module pipeline_beq_tb;
     wire reg_we, mem_we;
     res_src_e res_src;
 	pc_src_e pc_src;
@@ -43,7 +43,7 @@ module beq_tb;
 
     initial begin
         $dumpfile(`VCD);
-        $dumpvars(1, beq_tb);
+        $dumpvars(1, pipeline_beq_tb);
 
         dut.rv.dp.rf._reg[0] = 32'd00;
         dut.rv.dp.rf._reg[4] = 32'd01;
@@ -64,11 +64,10 @@ module beq_tb;
         #2  rst = 1;
         #2  rst = 0;
             assert(pc === 32'd00);
-
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd4);
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd20);
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd24);
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd0);
+        `WAIT_INSTR_C(clk, 3) assert(pc === 32'd12);
+        `WAIT_INSTR_C(clk, 1) assert(pc === 32'd20);
+        `WAIT_INSTR_C(clk, 3) assert(pc === 32'd32);
+        `WAIT_INSTR_C(clk, 1) assert(pc === 32'd00);
 
         #5;
         $finish;

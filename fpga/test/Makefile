@@ -62,12 +62,6 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sll_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/srl_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sra_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/beq_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/bne_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/blt_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/bge_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/bltu_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/bgeu_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/jal_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/slt_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sltu_tb.xv						\
@@ -91,14 +85,34 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 
 
 ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
+riscv_tests += $(RISCV_TEST_DIR)/digital_design_and_computer_arch_test_tb.xv	\
+		 	   $(RISCV_TEST_DIR)/controller_singlecycle_tb.xv					\
+			   $(RISCV_TEST_DIR)/beq_tb.xv										\
+		 	   $(RISCV_TEST_DIR)/bne_tb.xv										\
+		 	   $(RISCV_TEST_DIR)/blt_tb.xv										\
+		 	   $(RISCV_TEST_DIR)/bge_tb.xv										\
+		 	   $(RISCV_TEST_DIR)/bltu_tb.xv										\
+		 	   $(RISCV_TEST_DIR)/bgeu_tb.xv
+
+else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
 # There is no point in adapting digital_design_and_computer_arch_test_tb.xv
 # to multi-cycle since its stack pointer is set to a value so that the
 # following '|' and '&' ops. give a particular result, so the test will be
 # rather useless if 'sp' is adapted to mixed instr./data memory.
-riscv_tests += $(RISCV_TEST_DIR)/digital_design_and_computer_arch_test_tb.xv	\
-		 	   $(RISCV_TEST_DIR)/controller_singlecycle_tb.xv
-else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
-riscv_tests += $(RISCV_TEST_DIR)/controller_multicycle_tb.xv
+riscv_tests += $(RISCV_TEST_DIR)/controller_multicycle_tb.xv	\
+			   $(RISCV_TEST_DIR)/beq_tb.xv						\
+		 	   $(RISCV_TEST_DIR)/bne_tb.xv						\
+		 	   $(RISCV_TEST_DIR)/blt_tb.xv						\
+		 	   $(RISCV_TEST_DIR)/bge_tb.xv						\
+		 	   $(RISCV_TEST_DIR)/bltu_tb.xv						\
+		 	   $(RISCV_TEST_DIR)/bgeu_tb.xv
+
+else ifeq ($(CONFIG_RISCV_PIPELINE),y)
+# Pipelined RISC-V branch behaviour is very different from the others
+# with regards to the values that pc takes, therefore it is simpler
+# to have separated tests for it.
+riscv_tests += $(RISCV_TEST_DIR)/controller_multicycle_tb.xv	\
+			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv
 endif
 
 tests_waves := $(addsuffix .vcd,$(tests))
@@ -170,7 +184,8 @@ __tmp_tests := $(RISCV_TEST_DIR)/lw_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/andi_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/raw_hazards_tb.xv.vcd			 	\
 		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv.vcd			 	\
-			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd
+			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd				\
+			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv
 
 _tmp_tests: $(__tmp_tests)
 
