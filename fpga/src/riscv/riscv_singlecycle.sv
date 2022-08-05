@@ -6,15 +6,19 @@
 `ifdef CONFIG_RISCV_PIPELINE
 module mem_dt_pipeline(
     input  mem_dt_e dt,
+    input  wire     m_we,
     output mem_dt_e dt_m,
-    input  clk,
-    input rst
+    output wire     m_we_m,
+    input           clk,
+    input           rst
 );
+    // TODO this requires flush
     mem_dt_e dt_d, dt_e;
+    wire m_we_d, m_we_e;
 
-    dff #(.N(4)) dff_fetch (dt,   1'b1, dt_d, clk, rst);
-    dff #(.N(4)) dff_decode(dt_d, 1'b1, dt_e, clk, rst);
-    dff #(.N(4)) dff_mem   (dt_e, 1'b1, dt_m, clk, rst);
+    dff #(.N(5)) dff_fetch ({dt,   m_we},   1'b1, {dt_d, m_we_d}, clk, rst);
+    dff #(.N(5)) dff_decode({dt_d, m_we_d}, 1'b1, {dt_e, m_we_e}, clk, rst);
+    dff #(.N(5)) dff_mem   ({dt_e, m_we_e}, 1'b1, {dt_m, m_we_m}, clk, rst);
 endmodule
 `endif
 
@@ -114,8 +118,9 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
 
 `ifdef CONFIG_RISCV_PIPELINE
     mem_dt_e dt_m;
+    wire m_we_m;
 
-    mem_dt_pipeline mdp(dt, dt_m, clk, rst);
+    mem_dt_pipeline mdp(dt, mem_we, dt_m, m_we_m, clk, rst);
 `endif
 
     //
@@ -130,7 +135,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
 
     assign d_addr       = (tm == 1'b0 ? m_addr : tm_d_addr);
     assign d_wd         = (tm == 1'b0 ? mem_wd_data : tm_d_wd);
-    assign d_we         = (tm == 1'b0 ? mem_we : tm_d_we);
+    assign d_we         = (tm == 1'b0 ? m_we_m : tm_d_we);
 
 `ifdef CONFIG_RISCV_PIPELINE
     assign d_dt         = (tm == 1'b0 ? dt_m : tm_d_dt);
