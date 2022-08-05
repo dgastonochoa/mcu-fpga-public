@@ -72,34 +72,37 @@ module hazard_ctrl(
     assign flush = ps_e != PC_SRC_PLUS_4;
 endmodule
 
-module alu_operand_dec(
-    input  alu_src_e      oper_src,
-    input  forward_type_e fw_t,
-    input  wire  [31:0]   rf_rd,
-    input  wire  [31:0]   ext_imm,
-    input  wire  [31:0]   pc,
-    input  wire  [31:0]   alu_out_m,
-    input  wire  [31:0]   wd3,
-    output logic [31:0]   alu_oper
+module forward_mux(
+    input  forward_type_e          fw_t,
+    input  wire           [31:0]   rf_rd,
+    input  wire           [31:0]   alu_out_m,
+    input  wire           [31:0]   wd3_w,
+    output logic          [31:0]   rd
 );
-    logic [31:0] rd;
-
     always_comb begin
         case (fw_t)
         FORW_NO:        rd = rf_rd;
         FORW_ALU_OUT_M: rd = alu_out_m;
-        FORW_ALU_OUT_W: rd = wd3;
+        FORW_ALU_OUT_W: rd = wd3_w;
         default:        rd = 32'hffffffff;
         endcase
     end
+endmodule
 
+module alu_op_dec(
+    input  alu_src_e      oper_src,
+    input  wire  [31:0]   rf_rd,
+    input  wire  [31:0]   ext_imm,
+    input  wire  [31:0]   pc,
+    output logic [31:0]   alu_oper
+);
     // TODO possibly ALU_SRC_REG_2 should not exist:
     // alu_op_a can never be assigned to rd2, neither can
     // alu_op_b be assigned to rd1.
     always_comb begin
         case (oper_src)
-        ALU_SRC_REG_1:   alu_oper = rd;
-        ALU_SRC_REG_2:   alu_oper = rd;
+        ALU_SRC_REG_1:   alu_oper = rf_rd;
+        ALU_SRC_REG_2:   alu_oper = rf_rd;
         ALU_SRC_EXT_IMM: alu_oper = ext_imm;
         ALU_SRC_PC:      alu_oper = pc;
         default:         alu_oper = 32'hffffffff;
@@ -183,7 +186,7 @@ module datapath(
 
     output  wire [31:0] pc,
 
-    output  wire [31:0] mem_wd,
+    output  wire [31:0] m_addr,
     output  wire [3:0]  alu_flags,
     output  wire [31:0] write_data,
 
@@ -259,7 +262,8 @@ module datapath(
     //
     // Execute
     //
-    wire [31:0] rd1_e, rd2_e, pc_e, ext_imm_e, pc_plus_4_e, i_e;
+    wire [31:0] rd1_e_aux, rd2_e_aux, rd1_e, rd2_e;
+    wire [31:0] pc_e, ext_imm_e, pc_plus_4_e, i_e;
     wire [31:0] alu_op_a_e, alu_op_b_e, alu_out_e;
     pc_src_e pcs_e;
 
@@ -273,13 +277,16 @@ module datapath(
     );
 
     clear_dff #(.N(32*6)) dff_e(
-        {rd1_d, rd2_d,  pc_d, ext_imm_d, pc_plus_4_d, i_d},
+        {rd1_d,     rd2_d,      pc_d, ext_imm_d, pc_plus_4_d, i_d},
         1'b1,
-        {rd1_e, rd2_e,  pc_e, ext_imm_e, pc_plus_4_e, i_e},
+        {rd1_e_aux, rd2_e_aux,  pc_e, ext_imm_e, pc_plus_4_e, i_e},
         stall | flush,
         clk,
         rst
     );
+
+    alu_op_dec aod_b(as_b_e, rd2_e, ext_imm_e, pc_e, alu_op_b_e);
+    alu_op_dec aod_a(as_a_e, rd1_e, ext_imm_e, pc_e, alu_op_a_e);
 
     alu alu0(alu_op_a_e, alu_op_b_e, ac_e, alu_out_e, alu_flags);
 
@@ -310,7 +317,7 @@ module datapath(
         rst
     );
 
-    assign mem_wd = alu_out_m;
+    assign m_addr = alu_out_m;
     assign write_data = write_data_m;
 
 
@@ -349,8 +356,8 @@ module datapath(
     //
     // Hazard controller
     //
-    forward_type_e forward_alu_op_b;
-    forward_type_e forward_alu_op_a;
+    forward_type_e forward_rd2;
+    forward_type_e forward_rd1;
 
     hazard_ctrl hc(
         i_d[`A1],
@@ -364,32 +371,12 @@ module datapath(
         rwe_w,
         rs_e,
         pcs_e,
-        forward_alu_op_a,
-        forward_alu_op_b,
+        forward_rd1,
+        forward_rd2,
         stall,
         flush
     );
 
-
-    alu_operand_dec alu_op_b_dec(
-        as_b_e,
-        forward_alu_op_b,
-        rd2_e,
-        ext_imm_e,
-        pc_e,
-        alu_out_m,
-        wd3,
-        alu_op_b_e
-    );
-
-    alu_operand_dec alu_op_a_dec(
-        as_a_e,
-        forward_alu_op_a,
-        rd1_e,
-        ext_imm_e,
-        pc_e,
-        alu_out_m,
-        wd3,
-        alu_op_a_e
-    );
+    forward_mux fm_a(forward_rd1, rd1_e_aux, alu_out_m, wd3, rd1_e);
+    forward_mux fm_b(forward_rd2, rd2_e_aux, alu_out_m, wd3, rd2_e);
 endmodule
