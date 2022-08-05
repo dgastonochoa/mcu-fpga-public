@@ -41,12 +41,6 @@ module auipc_tb;
         clk
     );
 
-    wire [31:0] alu_op_a_e, alu_op_b_e, alu_out_e, alu_out_w;
-
-    assign alu_op_a_e = dut.rv.dp.alu_op_a_e;
-    assign alu_op_b_e = dut.rv.dp.alu_op_b_e;
-    assign alu_out_e = dut.rv.dp.alu_out_e;
-    assign alu_out_w = dut.rv.dp.alu_out_w;
 
     initial begin
         $dumpfile(`VCD);

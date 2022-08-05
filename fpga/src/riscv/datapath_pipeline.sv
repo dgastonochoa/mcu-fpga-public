@@ -285,8 +285,8 @@ module datapath(
         rst
     );
 
-    alu_op_dec aod_b(as_b_e, rd2_e, ext_imm_e, pc_e, alu_op_b_e);
     alu_op_dec aod_a(as_a_e, rd1_e, ext_imm_e, pc_e, alu_op_a_e);
+    alu_op_dec aod_b(as_b_e, rd2_e, ext_imm_e, pc_e, alu_op_b_e);
 
     alu alu0(alu_op_a_e, alu_op_b_e, ac_e, alu_out_e, alu_flags);
 
@@ -300,6 +300,7 @@ module datapath(
     // Mem. read/write
     //
     wire [31:0] alu_out_m, write_data_m, pc_plus_4_m, ext_imm_m, i_m;
+    logic [31:0] exec_out_m;
 
     dff #(.N(CTRL_LEN)) dff_c_m(
         {is_e, ac_e, as_a_e, as_b_e, rs_e, ps_e, rwe_e},
@@ -320,11 +321,21 @@ module datapath(
     assign m_addr = alu_out_m;
     assign write_data = write_data_m;
 
+    always_comb begin
+        case (rs_m)
+        RES_SRC_ALU_OUT:   exec_out_m = alu_out_m;
+        RES_SRC_PC_PLUS_4: exec_out_m = pc_plus_4_m;
+        RES_SRC_EXT_IMM:   exec_out_m = ext_imm_m;
+        RES_SRC_MEM:       exec_out_m = mem_rd;
+        default:           exec_out_m = 32'hffffffff;
+        endcase
+    end
+
 
     //
     // Write register
     //
-    wire [31:0] pc_plus_4_w, alu_out_w, ext_imm_w, mem_rd_w, i_w;
+    wire [31:0] i_w;
 
     dff #(.N(CTRL_LEN)) dff_c_w(
         {is_m, ac_m, as_a_m, as_b_m, rs_m, ps_m, rwe_m},
@@ -334,23 +345,13 @@ module datapath(
         rst
     );
 
-    dff #(.N(32*5)) dff_w(
-        {pc_plus_4_m,   alu_out_m,  mem_rd,   ext_imm_m,  i_m},
+    dff #(.N(32*2)) dff_w(
+        {exec_out_m,  i_m},
         1'b1,
-        {pc_plus_4_w,   alu_out_w,  mem_rd_w, ext_imm_w,  i_w},
+        {wd3,  i_w},
         clk,
         rst
     );
-
-    always_comb begin
-        case (rs_w)
-        RES_SRC_ALU_OUT:    wd3 = alu_out_w;
-        RES_SRC_PC_PLUS_4:  wd3 = pc_plus_4_w;
-        RES_SRC_EXT_IMM:    wd3 = ext_imm_w;
-        RES_SRC_MEM:        wd3 = mem_rd_w;
-        default:            wd3 = 32'hffffffff;
-        endcase
-    end
 
 
     //
@@ -377,6 +378,8 @@ module datapath(
         flush
     );
 
-    forward_mux fm_a(forward_rd1, rd1_e_aux, alu_out_m, wd3, rd1_e);
-    forward_mux fm_b(forward_rd2, rd2_e_aux, alu_out_m, wd3, rd2_e);
+    // TODO alu_out_m: Sometimes it will be necessary to forward from the
+    // extender
+    forward_mux fm_a(forward_rd1, rd1_e_aux, exec_out_m, wd3, rd1_e);
+    forward_mux fm_b(forward_rd2, rd2_e_aux, exec_out_m, wd3, rd2_e);
 endmodule
