@@ -27,7 +27,7 @@ module dff #(parameter N = 32) (
     input  wire         clk,
     input  wire         rst
 );
-    always_ff @(posedge clk, posedge rst) begin
+    always @(posedge clk, posedge rst) begin
         if (rst)
             q <= 32'b0;
         else if (en == 1'b1)
@@ -43,7 +43,7 @@ module clear_dff #(parameter N = 32) (
     input  wire         clk,
     input  wire         rst
 );
-    always_ff @(posedge clk, posedge rst) begin
+    always @(posedge clk, posedge rst) begin
         if (rst)
             q <= 32'b0;
         else if (en == 1'b1)
