@@ -10,17 +10,20 @@
 `endif
 
 module jalr_tb;
+    reg clk = 0, rst;
+
+    always #10 clk = ~clk;
+
+
     wire reg_we, mem_we;
     res_src_e res_src;
-	pc_src_e pc_src;
-	alu_src_e alu_src;
+    pc_src_e pc_src;
+    alu_src_e alu_src;
     imm_src_e imm_src;
     alu_op_e alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
-
-    reg clk = 0, rst;
 
     riscv_legacy dut(
         reg_we,
@@ -38,9 +41,6 @@ module jalr_tb;
         clk
     );
 
-    always #10 clk = ~clk;
-
-
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, jalr_tb);
@@ -52,8 +52,8 @@ module jalr_tb;
         dut.rv.dp.rf._reg[3] = 32'd8;
         dut.rv.dp.rf._reg[4] = 32'd4;
 
-        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h004180e7;   // jalr ra, x3, 4
-        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'hffc200e7;   // jalr ra, x4, -4
+        `SET_MEM_I(0, 32'h004180e7);   // jalr ra, x3, 4
+        `SET_MEM_I(3, 32'hffc200e7);   // jalr ra, x4, -4
 
         // Reset and test
         #2  rst = 1;
@@ -61,11 +61,11 @@ module jalr_tb;
             assert(pc === 32'd00);
             assert(dut.rv.dp.rf._reg[1] === 32'd00);
 
-        `WAIT_INSTR(clk) assert(pc === 32'd12);
-                         assert(dut.rv.dp.rf._reg[1] === 32'd04);
+        `WAIT_CLKS(clk, `R_I_CYC)   assert(pc === 32'd12);
+                                    assert(dut.rv.dp.rf._reg[1] === 32'd04);
 
-        `WAIT_INSTR(clk) assert(pc === 32'd00);
-                         assert(dut.rv.dp.rf._reg[1] === 32'd16);
+        `WAIT_CLKS(clk, `R_I_CYC)   assert(pc === 32'd00);
+                                    assert(dut.rv.dp.rf._reg[1] === 32'd16);
 
         $finish;
     end

@@ -55,37 +55,37 @@ module ctrl_hazards_tb;
             dut.rv.dp.rf._reg[4] = 32'd25;
             dut.rv.dp.rf._reg[5] = 32'd7;
 
-            `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00208a63; //         beq x1, x2, .L1
-            `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h401201b3; //         sub x3, x4, x1
-            `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h0020e233; //         or  x4, x1, x2
-            `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h00000013; //         nop
-            `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00000013; //         nop
-            `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h001281b3; // .L1:    add x3, x5, x1
+            `SET_MEM_I(0, 32'h00208a63); //         beq x1, x2, .L1
+            `SET_MEM_I(1, 32'h401201b3); //         sub x3, x4, x1
+            `SET_MEM_I(2, 32'h0020e233); //         or  x4, x1, x2
+            `SET_MEM_I(3, 32'h00000013); //         nop
+            `SET_MEM_I(4, 32'h00000013); //         nop
+            `SET_MEM_I(5, 32'h001281b3); // .L1:    add x3, x5, x1
         #2  rst = 0;
 
-        `WAIT_INSTR_C(clk, 5); assert(dut.rv.dp.rf._reg[1] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[2] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[3] === 32'd4);
-                               assert(dut.rv.dp.rf._reg[4] === 32'd25);
-                               assert(dut.rv.dp.rf._reg[5] === 32'd7);
+        `WAIT_CLKS(clk, 5); assert(dut.rv.dp.rf._reg[1] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[2] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[3] === 32'd4);
+                            assert(dut.rv.dp.rf._reg[4] === 32'd25);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd7);
 
-        `WAIT_INSTR_C(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[2] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[3] === 32'd4);
-                               assert(dut.rv.dp.rf._reg[4] === 32'd25);
-                               assert(dut.rv.dp.rf._reg[5] === 32'd7);
+        `WAIT_CLKS(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[2] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[3] === 32'd4);
+                            assert(dut.rv.dp.rf._reg[4] === 32'd25);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd7);
 
-        `WAIT_INSTR_C(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[2] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[3] === 32'd4);
-                               assert(dut.rv.dp.rf._reg[4] === 32'd25);
-                               assert(dut.rv.dp.rf._reg[5] === 32'd7);
+        `WAIT_CLKS(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[2] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[3] === 32'd4);
+                            assert(dut.rv.dp.rf._reg[4] === 32'd25);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd7);
 
-        `WAIT_INSTR_C(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[2] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[3] === 32'd8);
-                               assert(dut.rv.dp.rf._reg[4] === 32'd25);
-                               assert(dut.rv.dp.rf._reg[5] === 32'd7);
+        `WAIT_CLKS(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[2] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[3] === 32'd8);
+                            assert(dut.rv.dp.rf._reg[4] === 32'd25);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd7);
 
 
         //
@@ -98,37 +98,37 @@ module ctrl_hazards_tb;
             dut.rv.dp.rf._reg[4] = 32'd25;
             dut.rv.dp.rf._reg[5] = 32'd7;
 
-            `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00208a63; //         beq x1, x2, .L1
-            `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h401201b3; //         sub x3, x4, x1
-            `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h0020e233; //         or  x4, x1, x2
-            `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h00000013; //         nop
-            `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00000013; //         nop
-            `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h003280b3; // .L1:    add x1, x5, x3
+            `SET_MEM_I(0, 32'h00208a63); //         beq x1, x2, .L1
+            `SET_MEM_I(1, 32'h401201b3); //         sub x3, x4, x1
+            `SET_MEM_I(2, 32'h0020e233); //         or  x4, x1, x2
+            `SET_MEM_I(3, 32'h00000013); //         nop
+            `SET_MEM_I(4, 32'h00000013); //         nop
+            `SET_MEM_I(5, 32'h003280b3); // .L1:    add x1, x5, x3
         #2  rst = 0;
 
-        `WAIT_INSTR_C(clk, 5); assert(dut.rv.dp.rf._reg[1] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[2] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[3] === 32'd4);
-                               assert(dut.rv.dp.rf._reg[4] === 32'd25);
-                               assert(dut.rv.dp.rf._reg[5] === 32'd7);
+        `WAIT_CLKS(clk, 5); assert(dut.rv.dp.rf._reg[1] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[2] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[3] === 32'd4);
+                            assert(dut.rv.dp.rf._reg[4] === 32'd25);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd7);
 
-        `WAIT_INSTR_C(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[2] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[3] === 32'd4);
-                               assert(dut.rv.dp.rf._reg[4] === 32'd25);
-                               assert(dut.rv.dp.rf._reg[5] === 32'd7);
+        `WAIT_CLKS(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[2] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[3] === 32'd4);
+                            assert(dut.rv.dp.rf._reg[4] === 32'd25);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd7);
 
-        `WAIT_INSTR_C(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[2] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[3] === 32'd4);
-                               assert(dut.rv.dp.rf._reg[4] === 32'd25);
-                               assert(dut.rv.dp.rf._reg[5] === 32'd7);
+        `WAIT_CLKS(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[2] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[3] === 32'd4);
+                            assert(dut.rv.dp.rf._reg[4] === 32'd25);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd7);
 
-        `WAIT_INSTR_C(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd11);
-                               assert(dut.rv.dp.rf._reg[2] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[3] === 32'd4);
-                               assert(dut.rv.dp.rf._reg[4] === 32'd25);
-                               assert(dut.rv.dp.rf._reg[5] === 32'd7);
+        `WAIT_CLKS(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd11);
+                            assert(dut.rv.dp.rf._reg[2] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[3] === 32'd4);
+                            assert(dut.rv.dp.rf._reg[4] === 32'd25);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd7);
 
 
         //
@@ -141,31 +141,31 @@ module ctrl_hazards_tb;
             dut.rv.dp.rf._reg[4] = 32'd25;
             dut.rv.dp.rf._reg[5] = 32'd7;
 
-            `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00308a63; //         beq x1, x3, .L1
-            `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h401201b3; //         sub x3, x4, x1
-            `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h0020e233; //         or  x4, x1, x2
-            `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h00000013; //         nop
-            `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00000013; //         nop
-            `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h003280b3; // .L1:    add x1, x5, x3
+            `SET_MEM_I(0, 32'h00308a63); //         beq x1, x3, .L1
+            `SET_MEM_I(1, 32'h401201b3); //         sub x3, x4, x1
+            `SET_MEM_I(2, 32'h0020e233); //         or  x4, x1, x2
+            `SET_MEM_I(3, 32'h00000013); //         nop
+            `SET_MEM_I(4, 32'h00000013); //         nop
+            `SET_MEM_I(5, 32'h003280b3); // .L1:    add x1, x5, x3
         #2  rst = 0;
 
-        `WAIT_INSTR_C(clk, 5); assert(dut.rv.dp.rf._reg[1] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[2] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[3] === 32'd4);
-                               assert(dut.rv.dp.rf._reg[4] === 32'd25);
-                               assert(dut.rv.dp.rf._reg[5] === 32'd7);
+        `WAIT_CLKS(clk, 5); assert(dut.rv.dp.rf._reg[1] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[2] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[3] === 32'd4);
+                            assert(dut.rv.dp.rf._reg[4] === 32'd25);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd7);
 
-        `WAIT_INSTR_C(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[2] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[3] === 32'd24);
-                               assert(dut.rv.dp.rf._reg[4] === 32'd25);
-                               assert(dut.rv.dp.rf._reg[5] === 32'd7);
+        `WAIT_CLKS(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[2] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[3] === 32'd24);
+                            assert(dut.rv.dp.rf._reg[4] === 32'd25);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd7);
 
-        `WAIT_INSTR_C(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[2] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[3] === 32'd24);
-                               assert(dut.rv.dp.rf._reg[4] === 32'd1);
-                               assert(dut.rv.dp.rf._reg[5] === 32'd7);
+        `WAIT_CLKS(clk, 1); assert(dut.rv.dp.rf._reg[1] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[2] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[3] === 32'd24);
+                            assert(dut.rv.dp.rf._reg[4] === 32'd1);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd7);
 
         #20;
         $finish;

@@ -40,10 +40,6 @@ module sw_tb;
         clk
     );
 
-    // wire [31:0] write_data;
-
-    // assign write_data = dut.rv.dp.write_data;
-
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, sw_tb);
@@ -53,27 +49,26 @@ module sw_tb;
         dut.rv.dp.rf._reg[7] = 32'hdeadbeef;
         dut.rv.dp.rf._reg[8] = 32'hc001c0de;
 
-        `MEM_DATA[`DATA_START_IDX + 5] = 32'h00;
-        `MEM_DATA[`DATA_START_IDX + 10] = 32'h00;
-        `MEM_DATA[`DATA_START_IDX + 11] = 32'h00;
+        `SET_MEM_D(5, 32'h00);
+        `SET_MEM_D(10, 32'h00);
+        `SET_MEM_D(11, 32'h00);
 
-        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'hfe64aa23;   // sw x6, -12(x9)
-        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h0074a423;   // sw x7, 8(x9)
-        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h0084a6a3;   // sw x8, 12(x9)
-        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h0004a6a3;   // sw x0, 12(x9)
+        `SET_MEM_I(0, 32'hfe64aa23);   // sw x6, -12(x9)
+        `SET_MEM_I(1, 32'h0074a423);   // sw x7, 8(x9)
+        `SET_MEM_I(2, 32'h0084a6a3);   // sw x8, 12(x9)
+        `SET_MEM_I(3, 32'h0004a6a3);   // sw x0, 12(x9)
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
 
 `ifdef CONFIG_RISCV_PIPELINE
-        `WAIT_INSTR_C(clk, 3);
+        `WAIT_CLKS(clk, 3);
 `endif
-
-        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 5] === 32'hdeadc0de);
-        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 10] === 32'hdeadbeef);
-        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'hc001c0de);
-        `WAIT_INSTR_C(clk, `S_I_CYC) assert(`MEM_DATA[`DATA_START_IDX + 11] === 32'h00);
+        `WAIT_CLKS(clk, `S_I_CYC) assert(`GET_MEM_D(5) === 32'hdeadc0de);
+        `WAIT_CLKS(clk, `S_I_CYC) assert(`GET_MEM_D(10) === 32'hdeadbeef);
+        `WAIT_CLKS(clk, `S_I_CYC) assert(`GET_MEM_D(11) === 32'hc001c0de);
+        `WAIT_CLKS(clk, `S_I_CYC) assert(`GET_MEM_D(11) === 32'h00);
 
         #5;
         $finish;

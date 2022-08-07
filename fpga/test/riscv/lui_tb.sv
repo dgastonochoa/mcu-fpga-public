@@ -48,17 +48,17 @@ module lui_tb;
         dut.rv.dp.rf._reg[0] = 32'd00;
         dut.rv.dp.rf._reg[1] = 32'd12;
 
-        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'hfffff0b7;  // lui x1, 0xfffff
-        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h000010b7;  // lui x1, 1
-        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h000000b7;  // lui x1, 0
+        `SET_MEM_I(0, 32'hfffff0b7);  // lui x1, 0xfffff
+        `SET_MEM_I(1, 32'h000010b7);  // lui x1, 1
+        `SET_MEM_I(2, 32'h000000b7);  // lui x1, 0
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_INSTR_C(clk, `U_I_CYC) assert(dut.rv.dp.rf._reg[1] === 32'hfffff000);
-        `WAIT_INSTR_C(clk, `U_I_CYC) assert(dut.rv.dp.rf._reg[1] === 32'h00001000);
-        `WAIT_INSTR_C(clk, `U_I_CYC) assert(dut.rv.dp.rf._reg[1] === 32'h00000000);
+        `WAIT_CLKS(clk, `U_I_CYC) assert(dut.rv.dp.rf._reg[1] === 32'hfffff000);
+        `WAIT_CLKS(clk, `U_I_CYC) assert(dut.rv.dp.rf._reg[1] === 32'h00001000);
+        `WAIT_CLKS(clk, `U_I_CYC) assert(dut.rv.dp.rf._reg[1] === 32'h00000000);
 
         #5;
         $finish;

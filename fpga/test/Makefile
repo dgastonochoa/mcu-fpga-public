@@ -64,7 +64,6 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sra_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/slt_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sltu_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/jal_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/addi_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/slli_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/slti_tb.xv						\
@@ -74,18 +73,17 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/srai_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/ori_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/andi_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/jalr_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/lui_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/auipc_tb.xv					\
-		 	   $(RISCV_TEST_DIR)/sw_2_tb.xv						\
-		 	   $(RISCV_TEST_DIR)/sw_lw_hazard_tb.xv				\
-		 	   $(RISCV_TEST_DIR)/datapath_tb.xv					\
 			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv
 
 
 ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
 riscv_tests += $(RISCV_TEST_DIR)/digital_design_and_computer_arch_test_tb.xv	\
 		 	   $(RISCV_TEST_DIR)/controller_singlecycle_tb.xv					\
+		 	   $(RISCV_TEST_DIR)/datapath_tb.xv									\
+		 	   $(RISCV_TEST_DIR)/jal_tb.xv										\
+		 	   $(RISCV_TEST_DIR)/jalr_tb.xv										\
 			   $(RISCV_TEST_DIR)/beq_tb.xv										\
 		 	   $(RISCV_TEST_DIR)/bne_tb.xv										\
 		 	   $(RISCV_TEST_DIR)/blt_tb.xv										\
@@ -99,6 +97,9 @@ else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
 # following '|' and '&' ops. give a particular result, so the test will be
 # rather useless if 'sp' is adapted to mixed instr./data memory.
 riscv_tests += $(RISCV_TEST_DIR)/controller_multicycle_tb.xv	\
+		 	   $(RISCV_TEST_DIR)/datapath_tb.xv					\
+			   $(RISCV_TEST_DIR)/jal_tb.xv						\
+		 	   $(RISCV_TEST_DIR)/jalr_tb.xv						\
 			   $(RISCV_TEST_DIR)/beq_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/bne_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/blt_tb.xv						\
@@ -110,8 +111,7 @@ else ifeq ($(CONFIG_RISCV_PIPELINE),y)
 # Pipelined RISC-V branch behaviour is very different from the others
 # with regards to the values that pc takes, therefore it is simpler
 # to have separated tests for it.
-riscv_tests += $(RISCV_TEST_DIR)/controller_multicycle_tb.xv	\
-			   $(RISCV_TEST_DIR)/pipeline_jal_tb.xv				\
+riscv_tests += $(RISCV_TEST_DIR)/pipeline_jal_tb.xv				\
 			   $(RISCV_TEST_DIR)/pipeline_jalr_tb.xv			\
 			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv				\
 		 	   $(RISCV_TEST_DIR)/pipeline_bne_tb.xv				\
@@ -121,6 +121,8 @@ riscv_tests += $(RISCV_TEST_DIR)/controller_multicycle_tb.xv	\
 		 	   $(RISCV_TEST_DIR)/pipeline_bgeu_tb.xv			\
 			   $(RISCV_TEST_DIR)/raw_hazards_tb.xv			 	\
 		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv			 	\
+			   $(RISCV_TEST_DIR)/sw_hazards_tb.xv				\
+		 	   $(RISCV_TEST_DIR)/sw_lw_hazard_tb.xv				\
 			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv
 endif
 

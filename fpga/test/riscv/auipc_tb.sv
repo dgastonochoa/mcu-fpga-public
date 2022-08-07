@@ -49,16 +49,16 @@ module auipc_tb;
         dut.rv.dp.rf._reg[0] = 32'd00;
         dut.rv.dp.rf._reg[1] = 32'd12;
 
-        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h00014097;   // auipc   x1, 20
-        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h00014097;   // auipc   x1, 20
+        `SET_MEM_I(0, 32'h00014097);   // auipc   x1, 20
+        `SET_MEM_I(1, 32'h00014097);   // auipc   x1, 20
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
         assert(pc === 32'd0);
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[1] === (32'd20 << 12));
-        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[1] === (32'd20 << 12) + 4);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[1] === (32'd20 << 12));
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[1] === (32'd20 << 12) + 4);
 
         #5;
         $finish;

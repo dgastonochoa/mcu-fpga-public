@@ -10,6 +10,11 @@
 `endif
 
 module andi_tb;
+    reg clk = 0, rst;
+
+    always #10 clk = ~clk;
+
+
     wire reg_we, mem_we;
     res_src_e res_src;
     pc_src_e pc_src;
@@ -19,8 +24,6 @@ module andi_tb;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
-
-    reg clk = 0, rst;
 
     riscv_legacy dut(
         reg_we,
@@ -38,8 +41,6 @@ module andi_tb;
         clk
     );
 
-    always #10 clk = ~clk;
-
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, andi_tb);
@@ -49,17 +50,17 @@ module andi_tb;
         dut.rv.dp.rf._reg[5] = 32'h01;
         dut.rv.dp.rf._reg[6] = 32'hff;
 
-        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h0ff27013;           // and x0, x4, 0xff
-        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h0ff2f213;           // and x4, x5, 0xff
-        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h0ff37213;           // and x4, x6, 0xff
+        `SET_MEM_I(0, 32'h0ff27013);           // and x0, x4, 0xff
+        `SET_MEM_I(1, 32'h0ff2f213);           // and x4, x5, 0xff
+        `SET_MEM_I(2, 32'h0ff37213);           // and x4, x6, 0xff
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[0] === 32'h00);
-        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'h01);
-        `WAIT_INSTR_C(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'hff);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[0] === 32'h00);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'h01);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'hff);
 
         #5;
         $finish;

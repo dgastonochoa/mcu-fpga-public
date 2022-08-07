@@ -64,10 +64,10 @@ module pipeline_beq_tb;
         #2  rst = 1;
         #2  rst = 0;
             assert(pc === 32'd00);
-        `WAIT_INSTR_C(clk, 3) assert(pc === 32'd12);
-        `WAIT_INSTR_C(clk, 1) assert(pc === 32'd20);
-        `WAIT_INSTR_C(clk, 3) assert(pc === 32'd32);
-        `WAIT_INSTR_C(clk, 1) assert(pc === 32'd00);
+        `WAIT_CLKS(clk, 3) assert(pc === 32'd12);
+        `WAIT_CLKS(clk, 1) assert(pc === 32'd20);
+        `WAIT_CLKS(clk, 3) assert(pc === 32'd32);
+        `WAIT_CLKS(clk, 1) assert(pc === 32'd00);
 
         #5;
         $finish;

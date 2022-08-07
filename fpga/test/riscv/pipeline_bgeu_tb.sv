@@ -50,22 +50,22 @@ module pipeline_bgeu_tb;
         dut.rv.dp.rf._reg[4] = 32'd04;
         dut.rv.dp.rf._reg[5] = 32'hffffffff;
 
-        `MEM_INSTR[`INSTR_START_IDX + 0]  = 32'h02407e63; // .L0:    bgeu    x0, x4, .Lx
-        `MEM_INSTR[`INSTR_START_IDX + 1]  = 32'h00007263; //         bgeu    x0, x0, .L2
-        `MEM_INSTR[`INSTR_START_IDX + 2]  = 32'h00027863; // .L2:    bgeu    x4, x0, .L3
-        `MEM_INSTR[`INSTR_START_IDX + 3]  = 32'h00000013; //         nop
-        `MEM_INSTR[`INSTR_START_IDX + 4]  = 32'h00000013; //         nop
-        `MEM_INSTR[`INSTR_START_IDX + 5]  = 32'h00000013; //         nop
-        `MEM_INSTR[`INSTR_START_IDX + 6]  = 32'h02507263; // .L3:    bgeu    x0, x5, .Lx
-        `MEM_INSTR[`INSTR_START_IDX + 7]  = 32'h0002f863; //         bgeu    x5, x0, .L4
-        `MEM_INSTR[`INSTR_START_IDX + 8]  = 32'h00000013; //         nop
-        `MEM_INSTR[`INSTR_START_IDX + 9]  = 32'h00000013; //         nop
-        `MEM_INSTR[`INSTR_START_IDX + 10] = 32'h00000013; //         nop
-        `MEM_INSTR[`INSTR_START_IDX + 11] = 32'h00407863; // .L4:    bgeu    x4, x0, .Lx
-        `MEM_INSTR[`INSTR_START_IDX + 12] = 32'hfc52f8e3; //         bgeu    x5, x5, .L0
-        `MEM_INSTR[`INSTR_START_IDX + 13] = 32'h00000013; //         nop
-        `MEM_INSTR[`INSTR_START_IDX + 14] = 32'h00000013; //         nop
-        `MEM_INSTR[`INSTR_START_IDX + 15] = 32'h00000013; // .Lx:    nop
+        `SET_MEM_I(0, 32'h02407e63);  // .L0:    bgeu    x0, x4, .Lx
+        `SET_MEM_I(1, 32'h00007263);  //         bgeu    x0, x0, .L2
+        `SET_MEM_I(2, 32'h00027863);  // .L2:    bgeu    x4, x0, .L3
+        `SET_MEM_I(3, 32'h00000013);  //         nop
+        `SET_MEM_I(4, 32'h00000013);  //         nop
+        `SET_MEM_I(5, 32'h00000013);  //         nop
+        `SET_MEM_I(6, 32'h02507263);  // .L3:    bgeu    x0, x5, .Lx
+        `SET_MEM_I(7, 32'h0002f863);  //         bgeu    x5, x0, .L4
+        `SET_MEM_I(8, 32'h00000013);  //         nop
+        `SET_MEM_I(9, 32'h00000013);  //         nop
+        `SET_MEM_I(10, 32'h00000013); //         nop
+        `SET_MEM_I(11, 32'h00407863); // .L4:    bgeu    x4, x0, .Lx
+        `SET_MEM_I(12, 32'hfc52f8e3); //         bgeu    x5, x5, .L0
+        `SET_MEM_I(13, 32'h00000013); //         nop
+        `SET_MEM_I(14, 32'h00000013); //         nop
+        `SET_MEM_I(15, 32'h00000013); // .Lx:    nop
 
 
         // Reset and test
@@ -74,13 +74,13 @@ module pipeline_bgeu_tb;
             assert(pc === 32'd00);
 
         repeat(3) begin
-            `WAIT_INSTR_C(clk, 1);                       // .L0 doesn't jump
-            `WAIT_INSTR_C(clk, 3) assert(pc === 32'd8);
-            `WAIT_INSTR_C(clk, 3) assert(pc === 32'd24);
-            `WAIT_INSTR_C(clk, 1);                       // .L3 doesn't jump
-            `WAIT_INSTR_C(clk, 3) assert(pc === 32'd44);
-            `WAIT_INSTR_C(clk, 1);                       // .L4 doesn't jump
-            `WAIT_INSTR_C(clk, 3) assert(pc === 32'd00);
+            `WAIT_CLKS(clk, 1);                       // .L0 doesn't jump
+            `WAIT_CLKS(clk, 3) assert(pc === 32'd8);
+            `WAIT_CLKS(clk, 3) assert(pc === 32'd24);
+            `WAIT_CLKS(clk, 1);                       // .L3 doesn't jump
+            `WAIT_CLKS(clk, 3) assert(pc === 32'd44);
+            `WAIT_CLKS(clk, 1);                       // .L4 doesn't jump
+            `WAIT_CLKS(clk, 3) assert(pc === 32'd00);
         end
 
         #5;

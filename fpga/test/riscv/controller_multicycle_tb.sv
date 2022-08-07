@@ -78,7 +78,7 @@ module controller_multicycle_tb;
             assert(en_oldpc_r === 1'b1);
             assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -92,7 +92,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -106,7 +106,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -120,7 +120,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b1);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -139,7 +139,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h01410083;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -153,7 +153,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -167,7 +167,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -181,7 +181,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -195,7 +195,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b1);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -214,7 +214,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'hffc49303;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -228,7 +228,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -242,7 +242,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -256,7 +256,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -270,7 +270,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b1);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -289,7 +289,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'hffc4c303;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -303,7 +303,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -317,7 +317,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -331,7 +331,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -345,7 +345,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b1);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -364,7 +364,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'hffc4d303;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -378,7 +378,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -392,7 +392,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -406,7 +406,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -420,7 +420,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b1);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -439,7 +439,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0064a423;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -453,7 +453,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -467,7 +467,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -481,7 +481,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b1);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -500,7 +500,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'hfe648e23;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -514,7 +514,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -528,7 +528,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -542,7 +542,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b1);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -561,7 +561,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'hfe649e23;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -575,7 +575,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -589,7 +589,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -603,7 +603,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b1);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -622,7 +622,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0062e233;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -636,7 +636,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -650,7 +650,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -664,7 +664,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -683,7 +683,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h4062d233;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -697,7 +697,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -711,7 +711,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -725,7 +725,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -744,7 +744,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0062a233;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -758,7 +758,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -772,7 +772,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -786,7 +786,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -805,7 +805,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0062b233;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -819,7 +819,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -833,7 +833,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -847,7 +847,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -866,7 +866,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h003180b3;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -880,7 +880,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -894,7 +894,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -908,7 +908,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -927,7 +927,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h403180b3;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -941,7 +941,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -955,7 +955,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -969,7 +969,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -988,7 +988,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0031f0b3;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1002,7 +1002,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1016,7 +1016,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1030,7 +1030,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -1049,7 +1049,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0031c0b3;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1063,7 +1063,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1077,7 +1077,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1091,7 +1091,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -1110,7 +1110,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h003190b3;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1124,7 +1124,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1138,7 +1138,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1152,7 +1152,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -1171,7 +1171,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0031d0b3;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1185,7 +1185,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1199,7 +1199,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1213,7 +1213,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -1232,7 +1232,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'hfe420ae3;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1246,7 +1246,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1260,7 +1260,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1275,7 +1275,7 @@ module controller_multicycle_tb;
                                 assert(m_addr_src === 1'b0);
 
         alu_flags = 4'b0100;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1289,7 +1289,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1303,7 +1303,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1322,7 +1322,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h00311863;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1336,7 +1336,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1350,7 +1350,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1365,7 +1365,7 @@ module controller_multicycle_tb;
                                 assert(m_addr_src === 1'b0);
 
         alu_flags = 4'b0100;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1379,7 +1379,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1393,7 +1393,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1412,7 +1412,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b1000;
         instr = 32'h00314863;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1426,7 +1426,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1440,7 +1440,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1455,7 +1455,7 @@ module controller_multicycle_tb;
                                 assert(m_addr_src === 1'b0);
 
         alu_flags = 4'b0000;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1469,7 +1469,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1483,7 +1483,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1502,7 +1502,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b1000;
         instr = 32'h00315863;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1516,7 +1516,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1530,7 +1530,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1545,7 +1545,7 @@ module controller_multicycle_tb;
                                 assert(m_addr_src === 1'b0);
 
         alu_flags = 4'b0000;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1559,7 +1559,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1573,7 +1573,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1592,7 +1592,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0000;
         instr = 32'h00316863;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1606,7 +1606,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1620,7 +1620,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1635,7 +1635,7 @@ module controller_multicycle_tb;
                                 assert(m_addr_src === 1'b0);
 
         alu_flags = 4'b0010;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1649,7 +1649,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1663,7 +1663,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1682,7 +1682,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0000;
         instr = 32'h00317863;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1696,7 +1696,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1710,7 +1710,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1725,7 +1725,7 @@ module controller_multicycle_tb;
                                 assert(m_addr_src === 1'b0);
 
         alu_flags = 4'b0010;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1739,7 +1739,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1753,7 +1753,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_REG_2);
@@ -1772,7 +1772,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h00a00213;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1786,7 +1786,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1800,7 +1800,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1814,7 +1814,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -1833,7 +1833,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0ff27013;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1847,7 +1847,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1861,7 +1861,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1875,7 +1875,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -1894,7 +1894,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h00425013;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1908,7 +1908,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1922,7 +1922,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1936,7 +1936,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -1955,7 +1955,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0fe26013;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -1969,7 +1969,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1983,7 +1983,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -1997,7 +1997,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -2016,7 +2016,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h00421013;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -2030,7 +2030,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2044,7 +2044,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2058,7 +2058,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -2077,7 +2077,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0022a213;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -2091,7 +2091,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2105,7 +2105,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2119,7 +2119,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -2138,7 +2138,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0022b213;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -2152,7 +2152,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2166,7 +2166,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2180,7 +2180,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -2199,7 +2199,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h4022d213;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -2213,7 +2213,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2227,7 +2227,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2241,7 +2241,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -2260,7 +2260,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0152c013;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -2274,7 +2274,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2288,7 +2288,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2302,7 +2302,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -2321,7 +2321,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h0000016f; // TODO fix jal test in single-cycle
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -2335,7 +2335,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2349,7 +2349,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -2368,7 +2368,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h019080e7;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -2382,7 +2382,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2396,7 +2396,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_REG_1);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2410,7 +2410,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -2429,7 +2429,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h00014097;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -2443,7 +2443,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2457,7 +2457,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);
@@ -2476,7 +2476,7 @@ module controller_multicycle_tb;
         //
         alu_flags = 4'b0;
         instr = 32'h000ff3b7;
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC);
                                 assert(alu_src_b === ALU_SRC_4);
@@ -2490,7 +2490,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b1);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b0);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b0);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_PC_OLD);
                                 assert(alu_src_b === ALU_SRC_EXT_IMM);
@@ -2504,7 +2504,7 @@ module controller_multicycle_tb;
                                 assert(en_oldpc_r === 1'b0);
                                 assert(m_addr_src === 1'b0);
 
-        `WAIT_INSTR_C(clk, 1)   assert(rf_we === 1'b1);
+        `WAIT_CLKS(clk, 1)      assert(rf_we === 1'b1);
                                 assert(m_we === 1'b0);
                                 assert(alu_src_a === ALU_SRC_NONE);
                                 assert(alu_src_b === ALU_SRC_NONE);

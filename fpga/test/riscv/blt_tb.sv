@@ -10,17 +10,20 @@
 `endif
 
 module blt_tb;
+    reg clk = 0, rst;
+
+    always #10 clk = ~clk;
+
+
     wire reg_we, mem_we;
     res_src_e res_src;
-	pc_src_e pc_src;
-	alu_src_e alu_src;
+    pc_src_e pc_src;
+    alu_src_e alu_src;
     imm_src_e imm_src;
     alu_op_e alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
-
-    reg clk = 0, rst;
 
     riscv_legacy dut(
         reg_we,
@@ -38,8 +41,6 @@ module blt_tb;
         clk
     );
 
-    always #10 clk = ~clk;
-
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, blt_tb);
@@ -56,38 +57,38 @@ module blt_tb;
         dut.rv.dp.rf._reg[7] = 32'h00000002;
 
 
-        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h02024e63;
-        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h02004c63;
-        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00404863;
-        `MEM_INSTR[`INSTR_START_IDX + 3] = 32'h00000013;
-        `MEM_INSTR[`INSTR_START_IDX + 4] = 32'h00000013;
-        `MEM_INSTR[`INSTR_START_IDX + 5] = 32'h00000013;
-        `MEM_INSTR[`INSTR_START_IDX + 6] = 32'h02504263;
-        `MEM_INSTR[`INSTR_START_IDX + 7] = 32'h0002c863;
-        `MEM_INSTR[`INSTR_START_IDX + 8] = 32'h00000013;
-        `MEM_INSTR[`INSTR_START_IDX + 9] = 32'h00000013;
-        `MEM_INSTR[`INSTR_START_IDX + 10] = 32'h00000013;
-        `MEM_INSTR[`INSTR_START_IDX + 11] = 32'h00024863;
-        `MEM_INSTR[`INSTR_START_IDX + 12] = 32'h0002c463;
-        `MEM_INSTR[`INSTR_START_IDX + 13] = 32'h00000013;
-        `MEM_INSTR[`INSTR_START_IDX + 14] = 32'hfc7344e3;
-        `MEM_INSTR[`INSTR_START_IDX + 15] = 32'h00000013;
-        `MEM_INSTR[`INSTR_START_IDX + 16] = 32'h00000013;
-        `MEM_INSTR[`INSTR_START_IDX + 17] = 32'h00000013;
+        `SET_MEM_I(0, 32'h02024e63);
+        `SET_MEM_I(1, 32'h02004c63);
+        `SET_MEM_I(2, 32'h00404863);
+        `SET_MEM_I(3, 32'h00000013);
+        `SET_MEM_I(4, 32'h00000013);
+        `SET_MEM_I(5, 32'h00000013);
+        `SET_MEM_I(6, 32'h02504263);
+        `SET_MEM_I(7, 32'h0002c863);
+        `SET_MEM_I(8, 32'h00000013);
+        `SET_MEM_I(9, 32'h00000013);
+        `SET_MEM_I(10, 32'h00000013);
+        `SET_MEM_I(11, 32'h00024863);
+        `SET_MEM_I(12, 32'h0002c463);
+        `SET_MEM_I(13, 32'h00000013);
+        `SET_MEM_I(14, 32'hfc7344e3);
+        `SET_MEM_I(15, 32'h00000013);
+        `SET_MEM_I(16, 32'h00000013);
+        `SET_MEM_I(17, 32'h00000013);
 
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
             assert(pc === 32'd00);
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd4);
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd8);
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd24);
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd28);
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd44);
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd48);
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd56);
-        `WAIT_INSTR_C(clk, `B_I_CYC) assert(pc === 32'd00);
+        `WAIT_CLKS(clk, `B_I_CYC) assert(pc === 32'd4);
+        `WAIT_CLKS(clk, `B_I_CYC) assert(pc === 32'd8);
+        `WAIT_CLKS(clk, `B_I_CYC) assert(pc === 32'd24);
+        `WAIT_CLKS(clk, `B_I_CYC) assert(pc === 32'd28);
+        `WAIT_CLKS(clk, `B_I_CYC) assert(pc === 32'd44);
+        `WAIT_CLKS(clk, `B_I_CYC) assert(pc === 32'd48);
+        `WAIT_CLKS(clk, `B_I_CYC) assert(pc === 32'd56);
+        `WAIT_CLKS(clk, `B_I_CYC) assert(pc === 32'd00);
 
         #5;
         $finish;

@@ -6,10 +6,10 @@
 `include "riscv_test_utils.svh"
 
 `ifndef VCD
-    `define VCD "sw_lw_hazard_tb.vcd"
+    `define VCD "sw_2_tb.vcd"
 `endif
 
-module sw_lw_hazard_tb;
+module sw_2_tb;
     reg clk = 0, rst;
 
     always #10 clk = ~clk;
@@ -42,31 +42,32 @@ module sw_lw_hazard_tb;
 
     initial begin
         $dumpfile(`VCD);
-        $dumpvars(1, sw_lw_hazard_tb);
+        $dumpvars(1, sw_2_tb);
 
         dut.rv.dp.rf._reg[2] = 32'h00;
         dut.rv.dp.rf._reg[5] = 32'h00;
         dut.rv.dp.rf._reg[6] = 32'h00;
 
-        `MEM_DATA[0] = 32'hdeadc0de;
-        `MEM_DATA[1] = 32'hdeadbeef;
+        `MEM_DATA[8] = 32'hdeadc0de;
+        `MEM_DATA[9] = 32'hdeadbeef;
 
 
         `SET_MEM_I(0, 32'h02000113); //         addi    x2, x0, 32
-        `SET_MEM_I(1, 32'h00202023); //         sw      x2, (0)(x0)
-        `SET_MEM_I(2, 32'h00002183); //         lw      x3, (0)(x0)
-        `SET_MEM_I(3, 32'h00302223); //         sw      x3, (4)(x0)
-        `SET_MEM_I(4, 32'h0000006f); // .L0:    jal     x0, .L0
-
+        `SET_MEM_I(1, 32'h02500293); //         addi    x5, x0, 37
+        `SET_MEM_I(2, 32'h00328313); //         addi    x6, x5, 3
+        `SET_MEM_I(3, 32'h00512023); //         sw      x5, (0*4)(x2)
+        `SET_MEM_I(4, 32'h00612223); //         sw      x6, (1*4)(x2)
+        `SET_MEM_I(5, 32'h0000006f); // .L0:    jal     x0, .L0
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
 
         `WAIT_CLKS(clk, 20) assert(dut.rv.dp.rf._reg[2] === 32'd32);
-                            assert(dut.rv.dp.rf._reg[3] === 32'd32);
-                            assert(`MEM_DATA[0] === 32'd32);
-                            assert(`MEM_DATA[1] === 32'd32);
+                            assert(dut.rv.dp.rf._reg[5] === 32'd37);
+                            assert(dut.rv.dp.rf._reg[6] === 32'd40);
+                            assert(`MEM_DATA[8] === 32'd37);
+                            assert(`MEM_DATA[9] === 32'd40);
 
         #5;
         $finish;

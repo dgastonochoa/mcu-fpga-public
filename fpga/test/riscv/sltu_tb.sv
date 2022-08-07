@@ -10,17 +10,20 @@
 `endif
 
 module sltu_tb;
+    reg clk = 0, rst;
+
+    always #10 clk = ~clk;
+
+
     wire reg_we, mem_we;
     res_src_e res_src;
-	pc_src_e pc_src;
-	alu_src_e alu_src;
+    pc_src_e pc_src;
+    alu_src_e alu_src;
     imm_src_e imm_src;
     alu_op_e alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
-
-    reg clk = 0, rst;
 
     riscv_legacy dut(
         reg_we,
@@ -38,35 +41,29 @@ module sltu_tb;
         clk
     );
 
-    always #10 clk = ~clk;
-
-
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, sltu_tb);
 
         dut.rv.dp.rf._reg[4] = 32'b00;
-
         dut.rv.dp.rf._reg[5] = 32'h08;
         dut.rv.dp.rf._reg[6] = 32'd2;
-
         dut.rv.dp.rf._reg[7] = 32'hfffffff8;
         dut.rv.dp.rf._reg[8] = 32'd2;
-
         dut.rv.dp.rf._reg[9] = 32'd2;
         dut.rv.dp.rf._reg[10] = 32'd4;
 
-        `MEM_INSTR[`INSTR_START_IDX + 0] = 32'h0062b233; // sltu   x4, x5, x6
-        `MEM_INSTR[`INSTR_START_IDX + 1] = 32'h0083b233; // sltu   x4, x7, x8
-        `MEM_INSTR[`INSTR_START_IDX + 2] = 32'h00a4b233; // sltu   x4, x9, x10
+        `SET_MEM_I(0, 32'h0062b233); // sltu   x4, x5, x6
+        `SET_MEM_I(1, 32'h0083b233); // sltu   x4, x7, x8
+        `SET_MEM_I(2, 32'h00a4b233); // sltu   x4, x9, x10
 
         // Reset and test
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_INSTR_C(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd0);
-        `WAIT_INSTR_C(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd0);
-        `WAIT_INSTR_C(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd1);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd0);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd0);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd1);
 
         #5;
         $finish;

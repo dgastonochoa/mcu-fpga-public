@@ -70,12 +70,12 @@ module example_program_tb;
             417
         );
 
-        assert(`MEM_INSTR[0] === 32'h6c000113);
-        assert(`MEM_INSTR[1] === 32'h02500293);
-        assert(`MEM_INSTR[2] === 32'h00328313);
-        assert(`MEM_INSTR[415] === 32'h1e612c23);
-        assert(`MEM_INSTR[416] === 32'h000001ef);
-        assert(`MEM_INSTR[417] === 32'h000001ef);
+        assert(`GET_MEM_I(0) === 32'h6c000113);
+        assert(`GET_MEM_I(1) === 32'h02500293);
+        assert(`GET_MEM_I(2) === 32'h00328313);
+        assert(`GET_MEM_I(415) === 32'h1e612c23);
+        assert(`GET_MEM_I(416) === 32'h000001ef);
+        assert(`GET_MEM_I(417) === 32'h000001ef);
 
         // Reset
         #2  rst = 1;
@@ -84,19 +84,9 @@ module example_program_tb;
 
         wait(pc === 32'h680);
 
-`ifdef CONFIG_RISCV_PIPELINE
-        // Wait for some cycles to let the last instr. go to all the pipeline
-        // stages.
-        `WAIT_INSTR_C(clk, 20);
-`endif // CONFIG_RISCV_PIPELINE
-
-`ifdef CONFIG_RISCV_MULTICYCLE
-        // if using a multi-cycle CPU, the instruction at address X won't have
-        // finished executing when PC === X. Wait for PC to be X + 4 to be sure
-        // the instruction was executed.
-        wait(pc === 32'h684);
-`endif // CONFIG_RISCV_MULTICYCLE
-
+        // Wait for some cycles to let the last instr. go to all the stages if
+        // applicable.
+        `WAIT_CLKS(clk, 20);
 
         assert(`MEM_DATA[`DATA_IDX + 0] === 37);
         assert(`MEM_DATA[`DATA_IDX + 1] === 40);
