@@ -208,7 +208,8 @@ __tmp_tests := $(RISCV_TEST_DIR)/lw_tb.xv.vcd						\
 		 	   $(RISCV_TEST_DIR)/pipeline_bgeu_tb.xv.vcd			\
 		 	   $(RISCV_TEST_DIR)/raw_hazards_tb.xv.vcd			 	\
 		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv.vcd			 	\
-			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd
+			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd				\
+			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv
 
 _tmp_tests: $(__tmp_tests)
 

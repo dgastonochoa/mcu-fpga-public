@@ -27,17 +27,20 @@
 `define DATA_IDX    (`DATA_OFFS / 4)
 
 module example_program_tb;
+    reg clk = 0, rst;
+
+    always #10 clk = ~clk;
+
+
     wire reg_we, mem_we;
     res_src_e res_src;
-	pc_src_e pc_src;
-	alu_src_e alu_src;
+    pc_src_e pc_src;
+    alu_src_e alu_src;
     imm_src_e imm_src;
     alu_op_e alu_ctrl;
 
     wire [31:0] pc, alu_out, wdata;
     wire [31:0] instr, mem_rd_data, mem_wd_data;
-
-    reg clk = 0, rst;
 
     riscv_legacy dut(
         reg_we,
@@ -54,8 +57,6 @@ module example_program_tb;
         rst,
         clk
     );
-
-    always #10 clk = ~clk;
 
 
     initial begin
@@ -82,6 +83,12 @@ module example_program_tb;
             assert(pc === 0);
 
         wait(pc === 32'h680);
+
+`ifdef CONFIG_RISCV_PIPELINE
+        // Wait for some cycles to let the last instr. go to all the pipeline
+        // stages.
+        `WAIT_INSTR_C(clk, 20);
+`endif // CONFIG_RISCV_PIPELINE
 
 `ifdef CONFIG_RISCV_MULTICYCLE
         // if using a multi-cycle CPU, the instruction at address X won't have
