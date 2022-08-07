@@ -62,7 +62,33 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
 );
     alu_src_e alu_src_a, alu_src_b;
     wire [3:0] alu_flags;
+    wire rwe_m, rwe_w;
     mem_dt_e dt;
+
+    wire stall, flush;
+    wire [31:0] i_d, i_e, i_m, i_w;
+    res_src_e rs_e;
+    pc_src_e pcs_e;
+    fw_type_e fw_rd2;
+    fw_type_e fw_rd1;
+
+    hazard_ctrl hc(
+        i_d[`A1],
+        i_d[`A2],
+        i_e[`A1],
+        i_e[`A2],
+        i_e[`A3],
+        i_m[`A3],
+        i_w[`A3],
+        rwe_m,
+        rwe_w,
+        rs_e,
+        pcs_e,
+        fw_rd1,
+        fw_rd2,
+        stall,
+        flush
+    );
 
     datapath dp(
         instr,
@@ -74,10 +100,22 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
         alu_src_b,
         res_src,
         pc_src,
+        stall,
+        flush,
+        fw_rd1,
+        fw_rd2,
         pc,
         m_addr,
         alu_flags,
         mem_wd_data,
+        i_d,
+        i_e,
+        i_m,
+        i_w,
+        rwe_m,
+        rwe_w,
+        rs_e,
+        pcs_e,
         rst,
         clk
     );
@@ -96,6 +134,10 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
         dt
     );
 
+    mem_dt_e dt_m;
+    wire m_we_m;
+
+    mem_pipeline mdp(flush, stall, dt, mem_we, dt_m, m_we_m, clk, rst);
 
     //
     // Data memory logic (normal and test modes)
@@ -109,8 +151,9 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
 
     assign d_addr       = (tm == 1'b0 ? m_addr : tm_d_addr);
     assign d_wd         = (tm == 1'b0 ? mem_wd_data : tm_d_wd);
-    assign d_we         = (tm == 1'b0 ? mem_we : tm_d_we);
-    assign d_dt         = (tm == 1'b0 ? dt : tm_d_dt);
+    assign d_we         = (tm == 1'b0 ? m_we_m : tm_d_we);
+
+    assign d_dt         = (tm == 1'b0 ? dt_m : tm_d_dt);
 
     assign mem_rd_data  = (tm == 1'b0 ? d_rd : 32'h00);
 

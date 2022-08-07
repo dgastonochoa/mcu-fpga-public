@@ -1,4 +1,5 @@
 `include "riscv/controller.svh"
+`include "riscv/hazard_ctrl.svh"
 
 /**
  * Instruction field accessors
@@ -11,73 +12,12 @@
 `define A2 24:20
 `define A3 11:7
 
-typedef enum logic [3:0]
-{
-    FORW_NO         = 4'd0,
-    FORW_ALU_OUT_M  = 4'd1,
-    FORW_ALU_OUT_W  = 4'd2
-} forward_type_e;
-
-module forward_dec(
-    input  wire [4:0]      rf_src_e,
-    input  wire [4:0]      rf_dst_m,
-    input  wire [4:0]      rf_dst_w,
-    input  wire            rf_we_m,
-    input  wire            rf_we_w,
-    output forward_type_e  fw_t
-);
-    wire nz, fw_alu_out_m, fw_alu_out_w;
-
-    assign nz           = (rf_src_e != 5'd0);
-    assign fw_alu_out_m = rf_we_m & (rf_src_e == rf_dst_m);
-    assign fw_alu_out_w = rf_we_w & (rf_src_e == rf_dst_w);
-
-    wire [2:0] flags;
-
-    assign flags = {nz, fw_alu_out_m, fw_alu_out_w};
-
-    always_comb begin
-        case (flags)
-        3'b110:  fw_t = FORW_ALU_OUT_M;
-        3'b101:  fw_t = FORW_ALU_OUT_W;
-        3'b111:  fw_t = FORW_ALU_OUT_M;
-        default: fw_t = FORW_NO;
-        endcase
-    end
-endmodule
-
-module hazard_ctrl(
-    input  wire [4:0]       a1_d,
-    input  wire [4:0]       a2_d,
-    input  wire [4:0]       a1_e,
-    input  wire [4:0]       a2_e,
-    input  wire [4:0]       a3_e,
-    input  wire [4:0]       a3_m,
-    input  wire [4:0]       a3_w,
-    input  wire             rf_we_m,
-    input  wire             rf_we_w,
-    input  res_src_e        result_src_e,
-    input  pc_src_e         ps_e,
-    output forward_type_e   fw_type_a,
-    output forward_type_e   fw_type_b,
-    output logic            stall,
-    output wire             flush
-);
-    forward_dec fda(a1_e, a3_m, a3_w, rf_we_m, rf_we_w, fw_type_a);
-    forward_dec fdb(a2_e, a3_m, a3_w, rf_we_m, rf_we_w, fw_type_b);
-
-    assign stall =
-        (result_src_e == RES_SRC_MEM) && ((a3_e == a1_d) || (a3_e == a2_d));
-
-    assign flush = ps_e != PC_SRC_PLUS_4;
-endmodule
-
 module forward_mux(
-    input  forward_type_e          fw_t,
-    input  wire           [31:0]   rf_rd,
-    input  wire           [31:0]   alu_out_m,
-    input  wire           [31:0]   wd3_w,
-    output logic          [31:0]   rd
+    input  fw_type_e        fw_t,
+    input  wire      [31:0] rf_rd,
+    input  wire      [31:0] alu_out_m,
+    input  wire      [31:0] wd3_w,
+    output logic     [31:0] rd
 );
     always_comb begin
         case (fw_t)
@@ -89,7 +29,7 @@ module forward_mux(
     end
 endmodule
 
-module alu_op_dec(
+module alu_op_mux(
     input  alu_src_e      oper_src,
     input  wire  [31:0]   rf_rd,
     input  wire  [31:0]   ext_imm,
@@ -106,46 +46,6 @@ module alu_op_dec(
         ALU_SRC_EXT_IMM: alu_oper = ext_imm;
         ALU_SRC_PC:      alu_oper = pc;
         default:         alu_oper = 32'hffffffff;
-        endcase
-    end
-endmodule
-
-module branch_dec(
-    input  wire     [6:0] op,
-    input  wire     [2:0] func3,
-    input  wire     [3:0] alu_flags,
-    output pc_src_e       pc_src
-);
-    wire alu_ov, alu_cout, alu_zero, alu_neg;
-    logic [3:0] pc_src_b_type;
-
-    assign {alu_neg, alu_zero, alu_cout, alu_ov} = alu_flags[3:0];
-
-    always_comb begin
-        case (func3)
-        3'b000: pc_src_b_type = alu_zero ? PC_SRC_PLUS_OFF : PC_SRC_PLUS_4;             // beq
-        3'b001: pc_src_b_type = alu_zero ? PC_SRC_PLUS_4 : PC_SRC_PLUS_OFF;             // bne
-        3'b100: pc_src_b_type = (alu_neg ^ alu_ov) ? PC_SRC_PLUS_OFF : PC_SRC_PLUS_4;   // blt
-        3'b101: pc_src_b_type = (alu_neg ^ alu_ov) ? PC_SRC_PLUS_4 : PC_SRC_PLUS_OFF;   // bge
-        3'b110: pc_src_b_type = alu_cout ? PC_SRC_PLUS_4 : PC_SRC_PLUS_OFF;             // bltu
-        3'b111: pc_src_b_type = alu_cout ? PC_SRC_PLUS_OFF : PC_SRC_PLUS_4;             // bgeu
-        default: pc_src_b_type = PC_SRC_NONE;
-        endcase
-    end
-
-    always_comb begin
-        case (op)
-        OP_B_TYPE:   pc_src = pc_src_b_type;
-        OP_J_TYPE:   pc_src = PC_SRC_PLUS_OFF;
-        OP_JALR:     pc_src = PC_SRC_REG_PLUS_OFF;
-        OP_AUIPC:    pc_src = PC_SRC_PLUS_4;
-        OP_LUI:      pc_src = PC_SRC_PLUS_4;
-        OP_I_TYPE_L: pc_src = PC_SRC_PLUS_4;
-        OP_I_TYPE:   pc_src = PC_SRC_PLUS_4;
-        OP_S_TYPE:   pc_src = PC_SRC_PLUS_4;
-        OP_R_TYPE:   pc_src = PC_SRC_PLUS_4;
-        0:           pc_src = PC_SRC_PLUS_4; // TODO why is this needed
-        default:     pc_src = PC_SRC_NONE;
         endcase
     end
 endmodule
@@ -172,26 +72,36 @@ endmodule
  *
  */
 module datapath(
-    input   wire [31:0] i,
+    input  wire      [31:0] i,
+    input  wire      [31:0] mem_rd,
+    input  wire             rf_we,
+    input  imm_src_e        imm_src,
+    input  alu_op_e         alu_ctrl,
+    input  alu_src_e        alu_src_a,
+    input  alu_src_e        alu_src_b,
+    input  res_src_e        result_src,
+    input  pc_src_e         pc_src,
+    input  wire             stall,
+    input  wire             flush,
+    input  fw_type_e        fw_rd1,
+    input  fw_type_e        fw_rd2,
 
-    input   wire [31:0] mem_rd,
-    input   wire        rf_we,
+    output  wire     [31:0] pc,
+    output  wire     [31:0] m_addr,
+    output  wire     [3:0]  alu_flags,
+    output  wire     [31:0] write_data,
 
-    input   imm_src_e   imm_src,
-    input   alu_op_e    alu_ctrl,
-    input   alu_src_e   alu_src_a,
-    input   alu_src_e   alu_src_b,
-    input   res_src_e   result_src,
-    input   pc_src_e    pc_src,
+    output  wire     [31:0] i_d,
+    output  wire     [31:0] i_e,
+    output  wire     [31:0] i_m,
+    output  wire     [31:0] i_w,
+    output  wire            rwe_m,
+    output  wire            rwe_w,
+    output  res_src_e       rs_e,
+    output  pc_src_e        pcs_e,
 
-    output  wire [31:0] pc,
-
-    output  wire [31:0] m_addr,
-    output  wire [3:0]  alu_flags,
-    output  wire [31:0] write_data,
-
-    input   wire        rst,
-    input   wire        clk
+    input   wire            rst,
+    input   wire            clk
 );
     //
     // Controller pipelined signals
@@ -202,15 +112,14 @@ module datapath(
     alu_op_e  ac_d,   ac_e,   ac_m,   ac_w;
     alu_src_e as_a_d, as_a_e, as_a_m, as_a_w;
     alu_src_e as_b_d, as_b_e, as_b_m, as_b_w;
-    res_src_e rs_d,   rs_e,   rs_m,   rs_w;
+    res_src_e rs_d,           rs_m,   rs_w;
     pc_src_e  ps_d,   ps_e,   ps_m,   ps_w;
-    wire      rwe_d,  rwe_e,  rwe_m,  rwe_w;
+    wire      rwe_d,  rwe_e;
 
 
     //
     // Fetch
     //
-    wire stall;
     wire [31:0] pc_plus_4_f, pc_plus_off_e, pc_reg_plus_off_e;
     logic [31:0] pc_next;
 
@@ -231,8 +140,7 @@ module datapath(
     //
     // Decode
     //
-    wire flush;
-    wire [31:0] pc_d, i_d, pc_plus_4_d, rd1_d, rd2_d, ext_imm_d;
+    wire [31:0] pc_d, pc_plus_4_d, rd1_d, rd2_d, ext_imm_d;
     wire [4:0] a3_w;
     logic [31:0] wd3;
 
@@ -263,15 +171,14 @@ module datapath(
     // Execute
     //
     wire [31:0] rd1_e_aux, rd2_e_aux, rd1_e, rd2_e;
-    wire [31:0] pc_e, ext_imm_e, pc_plus_4_e, i_e;
+    wire [31:0] pc_e, ext_imm_e, pc_plus_4_e;
     wire [31:0] alu_op_a_e, alu_op_b_e, alu_out_e;
-    pc_src_e pcs_e;
 
     clear_dff #(.N(CTRL_LEN)) dff_c_e(
         {is_d, ac_d, as_a_d, as_b_d, rs_d, ps_d, rwe_d},
-        ~stall,
+        1'b1,
         {is_e, ac_e, as_a_e, as_b_e, rs_e, ps_e, rwe_e},
-        flush,
+        stall | flush,
         clk,
         rst
     );
@@ -285,12 +192,12 @@ module datapath(
         rst
     );
 
-    alu_op_dec aod_a(as_a_e, rd1_e, ext_imm_e, pc_e, alu_op_a_e);
-    alu_op_dec aod_b(as_b_e, rd2_e, ext_imm_e, pc_e, alu_op_b_e);
+    alu_op_mux aod_a(as_a_e, rd1_e, ext_imm_e, pc_e, alu_op_a_e);
+    alu_op_mux aod_b(as_b_e, rd2_e, ext_imm_e, pc_e, alu_op_b_e);
 
     alu alu0(alu_op_a_e, alu_op_b_e, ac_e, alu_out_e, alu_flags);
 
-    branch_dec bd(i_e[`OP], i_e[`F3], alu_flags, pcs_e);
+    branch_pc_src_dec bpsd(i_e[`OP], i_e[`F3], alu_flags, pcs_e);
 
     assign pc_plus_off_e = pc_e + ext_imm_e;
     assign pc_reg_plus_off_e = rd1_e + ext_imm_e;
@@ -299,7 +206,7 @@ module datapath(
     //
     // Mem. read/write
     //
-    wire [31:0] alu_out_m, write_data_m, pc_plus_4_m, ext_imm_m, i_m;
+    wire [31:0] alu_out_m, write_data_m, pc_plus_4_m, ext_imm_m;
     logic [31:0] exec_out_m;
 
     dff #(.N(CTRL_LEN)) dff_c_m(
@@ -335,8 +242,6 @@ module datapath(
     //
     // Write register
     //
-    wire [31:0] i_w;
-
     dff #(.N(CTRL_LEN)) dff_c_w(
         {is_m, ac_m, as_a_m, as_b_m, rs_m, ps_m, rwe_m},
         1'b1,
@@ -354,32 +259,8 @@ module datapath(
     );
 
 
-    //
-    // Hazard controller
-    //
-    forward_type_e forward_rd2;
-    forward_type_e forward_rd1;
-
-    hazard_ctrl hc(
-        i_d[`A1],
-        i_d[`A2],
-        i_e[`A1],
-        i_e[`A2],
-        i_e[`A3],
-        i_m[`A3],
-        i_w[`A3],
-        rwe_m,
-        rwe_w,
-        rs_e,
-        pcs_e,
-        forward_rd1,
-        forward_rd2,
-        stall,
-        flush
-    );
-
     // TODO alu_out_m: Sometimes it will be necessary to forward from the
     // extender
-    forward_mux fm_a(forward_rd1, rd1_e_aux, exec_out_m, wd3, rd1_e);
-    forward_mux fm_b(forward_rd2, rd2_e_aux, exec_out_m, wd3, rd2_e);
+    forward_mux fm_a(fw_rd1, rd1_e_aux, exec_out_m, wd3, rd1_e);
+    forward_mux fm_b(fw_rd2, rd2_e_aux, exec_out_m, wd3, rd2_e);
 endmodule

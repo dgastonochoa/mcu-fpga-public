@@ -1,3 +1,5 @@
+`include "mem.svh"
+
 `include "riscv/datapath.svh"
 `include "riscv/controller.svh"
 
@@ -53,6 +55,8 @@ module controller(
     wire alu_ov, alu_cout, alu_zero, alu_neg;
     logic [3:0] pc_src_b_type;
 
+    // TODO replace this and the pc_src columns below by branch_pc_src_dec in
+    // controller_common
     always_comb begin
         case (func3)
         3'b000: pc_src_b_type = alu_zero ? PC_SRC_PLUS_OFF : PC_SRC_PLUS_4;             // beq

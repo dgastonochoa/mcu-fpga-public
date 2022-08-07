@@ -154,7 +154,9 @@ riscv_src :=  $(SRCRV)/datapath_pipeline.sv 		\
 			  $(SRCRV)/datapath_utils.sv			\
 			  $(SRCRV)/controller_common.sv			\
 			  $(SRCRV)/controller_singlecycle.sv	\
-			  $(SRCRV)/riscv_singlecycle.sv
+			  $(SRCRV)/mem_pipeline.sv				\
+			  $(SRCRV)/hazard_ctrl.sv				\
+			  $(SRCRV)/riscv_pipeline.sv
 endif
 
 
