@@ -76,18 +76,29 @@ module riscv_single_all_instr_top_tb;
 
     integer i = 0;
 
-    wire __pr_finished;
+    wire __pr_finished, after_20, si_busy, si_en;
     wire [2:0] __msc_cs;
-    wire [31:0] __pc;
+    wire [31:0] __pc, tm_d_addr;
 
     assign __pr_finished = dut.pr_finished;
+    assign after_20 = dut.after_20;
     assign __msc_cs = dut.msc.cs;
     assign __pc = dut.pc;
+    assign si_busy = dut.msc.si_busy;
+    assign si_en = dut.msc.si_en;
+    assign tm_d_addr = dut.tm_d_addr;
 
 
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, riscv_single_all_instr_top_tb);
+
+        assert(`MEM_INSTR[0] === 32'h6c000113);
+        assert(`MEM_INSTR[1] === 32'h02500293);
+        assert(`MEM_INSTR[2] === 32'h00328313);
+        assert(`MEM_INSTR[415] === 32'h1e612c23);
+        assert(`MEM_INSTR[416] === 32'h000001ef);
+        assert(`MEM_INSTR[417] === 32'h000001ef);
 
         // Reset
         #5  btnC = 1;
@@ -101,9 +112,12 @@ module riscv_single_all_instr_top_tb;
         // finished executing when PC === X. Wait for PC to be X + 4 to be sure
         // the instruction was executed.
         wait(dut.pc === 32'h684);
-`elsif CONFIG_RISCV_SINGLECYCLE
-        wait(dut.pc === 32'h680);
+`else
+        wait(dut.after_20 == 1'b1);
 `endif // CONFIG_RISCV_MULTICYCLE
+
+        assert(led[0] === 1'b1);
+        assert(led[1] === 1'b1);
 
         assert(`MEM_DATA[`DATA_IDX + 0] === 37);
         assert(`MEM_DATA[`DATA_IDX + 1] === 40);
@@ -232,6 +246,7 @@ module riscv_single_all_instr_top_tb;
         assert(`MEM_DATA[`DATA_IDX + 124] === 6);
         assert(`MEM_DATA[`DATA_IDX + 125] === 6);
         assert(`MEM_DATA[`DATA_IDX + 126] === 6);
+
 
         //
         // SPI sends all the results

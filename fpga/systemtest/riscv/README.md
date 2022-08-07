@@ -26,6 +26,7 @@ the required constrains file for the project.
 It's recommended to do this before executing the system tests on the physical FPGA.
  - Execute `CONFIG_RISCV_SINGLECYCLE=y make` for the single-cycle RISC-V tests
  - Execute `CONFIG_RISCV_MULTICYCLE=y make` for the multicycle-cycle RISC-V tests
+ - Execute `CONFIG_RISCV_PIPELINE=y make` for the pipeline-cycle RISC-V tests
 
 
 # How to execute these tests in the physical FPGA

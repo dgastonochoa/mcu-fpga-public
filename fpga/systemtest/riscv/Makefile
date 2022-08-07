@@ -24,6 +24,8 @@ ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
 DEFS += -DIVERILOG -DCONFIG_RISCV_SINGLECYCLE
 else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
 DEFS += -DIVERILOG -DCONFIG_RISCV_MULTICYCLE
+else ifeq ($(CONFIG_RISCV_PIPELINE),y)
+DEFS += -DIVERILOG -DCONFIG_RISCV_PIPELINE
 endif
 
 #
@@ -51,6 +53,13 @@ else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
 src_files += $(SRC)/riscv/riscv_multicycle.sv		\
 			 $(SRC)/riscv/controller_multicycle.sv	\
 			 $(SRC)/riscv/datapath_multicycle.sv
+else ifeq ($(CONFIG_RISCV_PIPELINE),y)
+src_files += $(SRC)/riscv/datapath_pipeline.sv		\
+			 $(SRC)/riscv/controller_common.sv		\
+			 $(SRC)/riscv/controller_singlecycle.sv	\
+			 $(SRC)/riscv/mem_pipeline.sv			\
+			 $(SRC)/riscv/hazard_ctrl.sv			\
+			 $(SRC)/riscv/riscv_pipeline.sv
 endif
 
 

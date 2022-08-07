@@ -146,7 +146,7 @@ module riscv_single_all_instr_top(
 
 `ifdef CONFIG_RISCV_MULTICYCLE
     localparam LAST_PC = 32'h684;
-`elsif CONFIG_RISCV_SINGLECYCLE
+`else
     localparam LAST_PC = 32'h680;
 `endif
 
@@ -159,8 +159,26 @@ module riscv_single_all_instr_top(
             pr_finished <= 1'b1;
     end
 
-    assign LED[0] = pr_finished;
+`ifdef CONFIG_RISCV_PIPELINE
+    reg [7:0] cnt;
+    wire after_20;
 
+    always @(posedge clk_1khz, posedge rst) begin
+        if (rst)
+            cnt <= 8'h00;
+        else if (pr_finished == 1'b1)
+            cnt <= (cnt == 8'd20 ? cnt : cnt + 1);
+    end
+
+    assign after_20 = cnt == 8'd20;
+
+    `define FINISHED after_20
+`else
+    `define FINISHED pr_finished
+`endif // CONFIG_RISCV_PIPELINE
+
+    assign LED[0] = pr_finished;
+    assign LED[1] = after_20;
 
     //
     // Memory send controller
@@ -170,7 +188,7 @@ module riscv_single_all_instr_top(
 
     mem_send_ctrl #(.START_ADDR(`FIRST_ADDR_TO_SEND),
                     .END_ADDR(`LAST_ADDR_TO_SEND)) msc(
-        si_busy, tm_d_addr, tm, si_en, clk_1khz, ~pr_finished);
+        si_busy, tm_d_addr, tm, si_en, clk_1khz, ~`FINISHED);
 
 
     //
