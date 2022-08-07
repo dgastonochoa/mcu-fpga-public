@@ -9,13 +9,19 @@
  *                  1 = S-Type instruction
  *
  * @param alu_ctrl Operation that the ALU will perform. See alu.vh.
- * @param alu_src ALU's second operand source. See datapath.vh.
+ * @param alu_src_a ALU's first operand source. See datapath.vh.
+ * @param alu_src_b ALU's second operand source. See datapath.vh.
  * @param result_src Source of the result to be written in the reg. file.
  *                   See datapath.vh.
  *
+ * @param pc_src Program counter src. Determines which value will be used to
+ *               update the program counter for the next cycle.
+ *
+ * @param pc Program counter.
  * @param alu_out ALU output.
+ * @param alu_flags Flags produced by the ALU
  * @param write_data Data to be written in memory.
- * @param rst Reset.
+ * @param rst Async. reset.
  * @param clk Clock signal
  */
 module datapath(

@@ -192,6 +192,34 @@ module en_next_pc_r_dec(
     end
 endmodule
 
+/**
+ * Outputs the CPU control signals based on the received instruction
+ * and flags.
+ *
+ * @param instr Instruction
+ * @param alu_zero ALU zero flag
+ * @param reg_we Register file write enable
+ * @param mem_we Memory write enable
+ * @param alu_src_a ALU's first operand source (register, immediate...)
+ * @param alu_src_b ALU's second operand source (register, immediate...)
+ *
+ * @param res_src Source of the result to be written in the register file.
+ *                (alu's output, memory etc.).
+ *
+ * @param imm_src Indicates the type of instr. with regards to how
+ *                its immediate is stored.
+ *
+ * @param rf_wd_src Register file write data source
+ * @param alu_ctrl Operation to be performed by the ALU
+ * @param dt Memory data type to be read/write
+ * @param en_ir Enable (or not) the instruction register
+ * @param en_npc Enable (or not) the next PC register
+ * @param en_oldpc_r Enable (or not) the old PC register
+ * @param m_addr_src Source of the memory address to be used
+ * @param clk Clock signal
+ * @param rst Async. reset
+ *
+ */
 module controller_multicycle(
     input   wire         [31:0] instr,
     input   wire         [3:0]  alu_flags,

@@ -1,3 +1,16 @@
+/**
+ * Pipeline for the memory control signals.
+ *
+ * @param flush Hazard controller flush signal
+ * @param stall Hazard controller stall signal
+ * @param dt Memory data type, fetch stage.
+ * @param m_we Memory write enable, fetch stage.
+ * @param dt_m Memory data type, memory stage.
+ * @param m_we_m Memory write enable, memory stage.
+ * @param clk Clock signal
+ * @param rst Async. reset.
+ *
+ */
 module mem_pipeline(
     input  wire     flush,
     input  wire     stall,

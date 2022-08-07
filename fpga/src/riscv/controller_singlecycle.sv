@@ -11,18 +11,19 @@
  * @param alu_zero ALU zero flag
  * @param reg_we Register file write enable
  * @param mem_we Memory write enable
- * @param alu_src ALU's second operand source (register, immediate...)
+ * @param alu_src_a ALU's first operand source (register, immediate...)
+ * @param alu_src_b ALU's second operand source (register, immediate...)
  *
- * @param result_src Source of the result to be written in the register file.
- * (alu's output, memory etc.). When it states that the result source is memory,
- * this param. will contain expected data type as well (byte word etc.). Thus,
- * this field must be properly set both when reading and when writing to memory.
+ * @param res_src Source of the result to be written in the register file.
+ *                (alu's output, memory etc.).
  *
  * @param pc_src Source of the next program counter (+4, +offset...)
  * @param imm_src Indicates the type of instr. with regards to how
  *                its immediate is stored
  *
  * @param alu_ctrl Operation to be performed by the ALU
+ * @param dt Memory data type to be read/write
+ *
  */
 module controller(
     input   wire [31:0] instr,

@@ -1,3 +1,7 @@
+/**
+ * Seven segment decoder. Gets the segments to be enabled given a input number.
+ *
+ */
 module seven_seg_decoder(
     input   wire    [3:0] digit,
     output  logic   [6:0] segs
@@ -25,6 +29,20 @@ module seven_seg_decoder(
     end
 endmodule
 
+/**
+ * Controller for a 4-digit seven-segment display. The number will be displayed
+ * in hex. format. This controller will enable the first anode and display the
+ * first digit, then disable this first, enable the second and display the
+ * second number, and so on. This must be done quick enough so a human eye do
+ * not see any digit blinking, therefore the clock signal must be quick enough.
+ *
+ * @param num Number to display
+ * @param anode_en Anode (digit) to be enabled.
+ * @param segs Segments to enable to display the current digit.
+ * @param clk Clock signal.
+ * @param rst Async. reset.
+ *
+ */
 module seven_seg_ctrl(
     input   wire    [15:0] num,
     output  logic   [3:0]  anode_en,
@@ -32,7 +50,6 @@ module seven_seg_ctrl(
     input   wire           clk,
     input   wire           rst
 );
-
     wire [3:0] d0, d1, d2, d3;
 
     assign d0 = num[3:0];

@@ -51,6 +51,11 @@ module alu_dec(
     end
 endmodule
 
+/**
+ * Infers the required PC source from the instruction represented by @param{op} and
+ * @param{func3}, and from @param{alu_flags}.
+ *
+ */
 module branch_pc_src_dec(
     input  wire     [6:0] op,
     input  wire     [2:0] func3,

@@ -1,6 +1,10 @@
 `include "riscv/datapath.svh"
 `include "riscv/hazard_ctrl.svh"
 
+/**
+ * Decodes the type of forwarding required given the inputs.
+ *
+ */
 module forward_dec(
     input  wire [4:0]      rf_src_e,
     input  wire [4:0]      rf_dst_m,
@@ -29,6 +33,27 @@ module forward_dec(
     end
 endmodule
 
+/**
+ * Hazard controller.
+ *
+ * @param a1_d Register file address 1, decode stage
+ * @param a2_d Register file address 2, decode stage
+ * @param a1_e Register file address 1, execute stage
+ * @param a2_e Register file address 2, execute stage
+ * @param a3_e Register file address 3, execute stage
+ * @param a3_m Register file address 3, memory stage
+ * @param a3_w Register file address 3, writeback stage
+ * @param rf_we_m Register file write enable, memory stage.
+ * @param rf_we_w Register file write enable, writeback stage.
+ * @param result_src_e Result source, execute state.
+ * @param ps_e PC source, execute state.
+ * @param fw_type_a Decoded forward type for the register read value 1.
+ * @param fw_type_2 Decoded forward type for the register read value 2.
+ * @param stall Stall signal (indicates the pipeline must be stalled).
+ * @param flush Flush signal (used in conjunction with 'stall'; indicates
+ *              whether or not certain pipeline registers need to be cleared).
+ *
+ */
 module hazard_ctrl(
     input  wire [4:0]       a1_d,
     input  wire [4:0]       a2_d,
@@ -41,8 +66,8 @@ module hazard_ctrl(
     input  wire             rf_we_w,
     input  res_src_e        result_src_e,
     input  pc_src_e         ps_e,
-    output fw_type_e   fw_type_a,
-    output fw_type_e   fw_type_b,
+    output fw_type_e        fw_type_a,
+    output fw_type_e        fw_type_b,
     output logic            stall,
     output wire             flush
 );

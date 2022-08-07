@@ -35,6 +35,10 @@ module dff #(parameter N = 32) (
     end
 endmodule
 
+/**
+ * D flip-flop with sync. clear (set to zero).
+ *
+ */
 module clear_dff #(parameter N = 32) (
     input  wire [N-1:0] d,
     input  wire         en,

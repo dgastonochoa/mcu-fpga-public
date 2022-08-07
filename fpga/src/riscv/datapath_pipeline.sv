@@ -12,6 +12,18 @@
 `define A2 24:20
 `define A3 11:7
 
+/**
+ * Outputs the proper register read value from the inputs,
+ * given a forward type.
+ *
+ * @param fw_t Forward type.
+ * @param rf_rd Register read value
+ * @param alu_out_m ALU output from the memory stage
+ * @param wd3_w Writeback value from the writeback stage.
+ * @param rd Register read value. It will be one of the above three depending on
+ *           the value of @param{fw_t}
+ *
+ */
 module forward_mux(
     input  fw_type_e        fw_t,
     input  wire      [31:0] rf_rd,
@@ -29,6 +41,17 @@ module forward_mux(
     end
 endmodule
 
+/**
+ * Outputs the proper ALU operator from the inputs, given a operator source.
+ *
+ * @param oper_src ALU operator source
+ * @param rf_rd Register read value
+ * @param ext_imm Extended immediate
+ * @param pc Program counter
+ * @param alu_oper ALU operator. It will be one of the above three depending on
+ *                 the value of @param{oper_src}
+ *
+ */
 module alu_op_mux(
     input  alu_src_e      oper_src,
     input  wire  [31:0]   rf_rd,
@@ -51,9 +74,10 @@ module alu_op_mux(
 endmodule
 
 /**
- * CPU datapath.
+ * CPU datapath. The control signals receivec correspond to the fetch stage.
+ * They will be properly propagated through the pipeline.
  *
- * @param i Instruction to be executed.
+ * @param instr Instruction to be executed.
  * @param mem_rd Data read from memory.
  * @param rf_we Register write enable. Synchronous (pos. edge)
  * @param imm_src Type of immediate depending on the instruction.
@@ -61,15 +85,41 @@ endmodule
  *                  1 = S-Type instruction
  *
  * @param alu_ctrl Operation that the ALU will perform. See alu.vh.
- * @param alu_src ALU's second operand source. See datapath.vh.
+ * @param alu_src_a ALU's first operand source. See datapath.vh.
+ * @param alu_src_b ALU's second operand source. See datapath.vh.
  * @param result_src Source of the result to be written in the reg. file.
  *                   See datapath.vh.
  *
- * @param alu_out ALU output.
- * @param write_data Data to be written in memory.
- * @param rst Reset.
- * @param clk Clock signal
+ * @param pc_src Program counter src. Determines which value will be used to
+ *               update the program counter for the next cycle.
  *
+ * @param stall Hazard controller stall signal
+ * @param flush Hazard controller flush signal
+ *
+ * @param fw_rd1 Forward type for the register read value 1. Forwarding is used
+ *               to prevent RAW hazards.
+ *
+ * @param fw_rd2 Same as @param{fw_rd1} but for the register read value 2.
+ * @param pc Program counter.
+ * @param m_addr Memory address to be accessed.
+ *
+ * @param alu_flags Flags produced by the ALU. UNUSED: the ALU produces useful
+ *                  flags at the execute state. They can't be sent to the
+ *                  singlecycle controller (which is expected to be use with
+ *                  this datapath) because the latter will be generating the
+ *                  control signals for the instruction in the fetch stage.
+ *
+ * @param write_data Data to be written in memory.
+ * @param i_d Instruction in the decode stage.
+ * @param i_e Instruction in the execute stage.
+ * @param i_m Instruction in the memory stage.
+ * @param i_w Instruction in the writeback stage.
+ * @param rwe_m Register write-enable, memory stage.
+ * @param rwe_w Register write-enable, write-back stage.
+ * @param rs_e Result source, execute stage.
+ * @param pcs_e PC source, execute stage.
+ * @param rst Async. reset.
+ * @param clk Clock signal
  */
 module datapath(
     input  wire      [31:0] i,
