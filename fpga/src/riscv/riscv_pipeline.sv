@@ -164,7 +164,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     // from an offset that is far enough from the instructions. This can be
     // avoided if the offset from which the data is written is changed from
     // multicycle to singlecycle/pipeline tests
-    mem #(.N(768)) data_mem(d_addr, d_wd, d_we, d_dt, d_rd, d_err, clk);
+    mem #(.N(128)) data_mem(d_addr, d_wd, d_we, d_dt, d_rd, d_err, clk);
 
 
     //

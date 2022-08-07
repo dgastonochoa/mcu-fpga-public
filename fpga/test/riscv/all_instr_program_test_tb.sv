@@ -9,22 +9,31 @@
     `define VCD "example_program_tb.vcd"
 `endif
 
-/**
- * Address from which the data will be written. It is added to the 'sp' register
- * (x2) in 'all_instr_program_test_instr_mem.txt' (first instruction). The
- * test program is expected to write all data using this register as base.
- *
- * Therefore it is expected tha the first instruction of the test program sets
- * the 'sp' register to this value, and all store instructions use 'sp' as base.
- *
- */
-`define DATA_OFFS   1728
+`ifdef CONFIG_RISCV_MULTICYCLE
+    /**
+     * Address from which the data will be written. It is added to the 'sp' register
+     * (x2) in 'all_instr_program_test_instr_mem.txt' (first instruction). The
+     * test program is expected to write all data using this register as base.
+     *
+     * Therefore it is expected tha the first instruction of the test program sets
+     * the 'sp' register to this value, and all store instructions use 'sp' as base.
+     *
+     */
+    `define DATA_OFFS   1728
 
-/**
- * The memory will be checked by accessing it in terms of words.
- *
- */
-`define DATA_IDX    (`DATA_OFFS / 4)
+    /**
+    * The memory will be checked by accessing it in terms of words.
+    *
+    */
+    `define DATA_IDX    (`DATA_OFFS / 4)
+
+    `define MEM_MAP_FILE "./riscv/mem_maps/all_instr_program_test_instr_mem_shared_instr_data_mem.txt"
+
+`else
+    `define MEM_MAP_FILE "./riscv/mem_maps/all_instr_program_test_instr_mem_separ_instr_data_mem.txt"
+
+    `define DATA_IDX    0
+`endif // CONFIG_RISCV_MULTICYCLE
 
 module example_program_tb;
     reg clk = 0, rst;
@@ -64,13 +73,18 @@ module example_program_tb;
         $dumpvars(1, example_program_tb);
 
         $readmemh(
-            "./riscv/mem_maps/all_instr_program_test_instr_mem.txt",
+            `MEM_MAP_FILE,
             `MEM_INSTR,
             0,
             417
         );
 
+`ifdef CONFIG_RISCV_MULTICYCLE
         assert(`GET_MEM_I(0) === 32'h6c000113);
+`else
+        assert(`GET_MEM_I(0) === 32'h00000113);
+`endif // CONFIG_RISCV_MULTICYCLE
+
         assert(`GET_MEM_I(1) === 32'h02500293);
         assert(`GET_MEM_I(2) === 32'h00328313);
         assert(`GET_MEM_I(415) === 32'h1e612c23);

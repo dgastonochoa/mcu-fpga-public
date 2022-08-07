@@ -21,7 +21,13 @@
         # STACK POINTER INITIALIZATION FOR TESTS (Uncomment when
         # generating the program for the FPGA test)
         #
-        addi    x2, x0, 1728             # setup stack pointer
+
+        # Stack pointer for mixed instruction/data memory:
+        # addi    x2, x0, 1728             # setup stack pointer
+
+        # Stack pointer for separated instruction/data memory:
+        addi    x2, x0, 0                # setup stack pointer
+
 
         #
         # addi, sw, jal

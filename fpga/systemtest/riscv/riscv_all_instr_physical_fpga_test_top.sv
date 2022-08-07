@@ -3,23 +3,7 @@
 `include "errno.svh"
 `include "riscv/datapath.svh"
 
-`ifdef IVERILOG
-    `define CLK_PWIDTH 32'd1
-    `define DEBOUNCE_FILTER_WAIT_CLK 1
-`else
-    // 100e6 / 1e3 = 100 kHz; 1e3 / 2 = 5e2 -> pulse width = 5e2
-    `define CLK_PWIDTH 32'd500
-    `define DEBOUNCE_FILTER_WAIT_CLK 100
-`endif
-
-`define FIRST_ADDR_TO_SEND 32'd1728
-
-/**
- * Last address the SPI master must send.
- *
- */
-`define LAST_ADDR_TO_SEND (32'h1f8 + `FIRST_ADDR_TO_SEND)
-
+`include "riscv_all_instr_physical_fpga_test.svh"
 
 module mem_send_ctrl #(parameter START_ADDR = 0, parameter END_ADDR = 12) (
     input   wire         si_busy,
@@ -171,14 +155,14 @@ module riscv_single_all_instr_top(
     end
 
     assign after_20 = cnt == 8'd20;
+    assign LED[0] = after_20;
+    assign LED[1] = pr_finished;
 
-    `define FINISHED after_20
 `else
-    `define FINISHED pr_finished
+    assign LED[0] = pr_finished;
+
 `endif // CONFIG_RISCV_PIPELINE
 
-    assign LED[0] = pr_finished;
-    assign LED[1] = after_20;
 
     //
     // Memory send controller
@@ -186,9 +170,9 @@ module riscv_single_all_instr_top(
     wire si_busy;
     wire si_en;
 
-    mem_send_ctrl #(.START_ADDR(`FIRST_ADDR_TO_SEND),
-                    .END_ADDR(`LAST_ADDR_TO_SEND)) msc(
-        si_busy, tm_d_addr, tm, si_en, clk_1khz, ~`FINISHED);
+    mem_send_ctrl #(.START_ADDR(`DATA_START_ADDR),
+                    .END_ADDR(`DATA_END_ADDR)) msc(
+        si_busy, tm_d_addr, tm, si_en, clk_1khz, ~`FINISH_SIGNAL);
 
 
     //

@@ -22,10 +22,13 @@ DEFS := -DCONFIG_ENABLE_MEM_DEFAULT_VALS
 
 ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
 DEFS += -DIVERILOG -DCONFIG_RISCV_SINGLECYCLE
+INC += -I./include/singlecycle
 else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
 DEFS += -DIVERILOG -DCONFIG_RISCV_MULTICYCLE
+INC += -I./include/multicycle
 else ifeq ($(CONFIG_RISCV_PIPELINE),y)
 DEFS += -DIVERILOG -DCONFIG_RISCV_PIPELINE
+INC += -I./include/pipeline
 endif
 
 #
@@ -68,25 +71,25 @@ all: tests wavedumps
 #
 # Execute tests without generating wavedumps
 #
-tests: $(PREFIX)/mem_send_ctrl_tb.xv $(PREFIX)/mem_send_ctrl_with_spi_tb.xv $(PREFIX)/riscv_single_all_instr_top_tb.xv
+tests: $(PREFIX)/mem_send_ctrl_tb.xv $(PREFIX)/mem_send_ctrl_with_spi_tb.xv $(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.xv
 
-$(PREFIX)/mem_send_ctrl_tb.xv: mem_send_ctrl_tb.sv riscv_single_all_instr_top.sv $(src_files) | dirs
+$(PREFIX)/mem_send_ctrl_tb.xv: mem_send_ctrl_tb.sv riscv_all_instr_physical_fpga_test_top.sv $(src_files) | dirs
 
-$(PREFIX)/mem_send_ctrl_with_spi_tb.xv: mem_send_ctrl_with_spi_tb.sv riscv_single_all_instr_top.sv $(src_files) | dirs
+$(PREFIX)/mem_send_ctrl_with_spi_tb.xv: mem_send_ctrl_with_spi_tb.sv riscv_all_instr_physical_fpga_test_top.sv $(src_files) | dirs
 
-$(PREFIX)/riscv_single_all_instr_top_tb.xv: riscv_single_all_instr_top_tb.sv riscv_single_all_instr_top.sv $(src_files) | dirs
+$(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.xv: riscv_all_instr_physical_fpga_test_top_tb.sv riscv_all_instr_physical_fpga_test_top.sv $(src_files) | dirs
 
 
 #
 # Wavedumps only
 #
-wavedumps: $(PREFIX)/mem_send_ctrl_tb.vcd $(PREFIX)/mem_send_ctrl_with_spi_tb.vcd $(PREFIX)/riscv_single_all_instr_top_tb.vcd
+wavedumps: $(PREFIX)/mem_send_ctrl_tb.vcd $(PREFIX)/mem_send_ctrl_with_spi_tb.vcd $(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.vcd
 
 $(PREFIX)/mem_send_ctrl_tb.vcd: $(PREFIX)/mem_send_ctrl_tb.xv
 
 $(PREFIX)/mem_send_ctrl_with_spi_tb.vcd: $(PREFIX)/mem_send_ctrl_with_spi_tb.xv
 
-$(PREFIX)/riscv_single_all_instr_top_tb.vcd: $(PREFIX)/riscv_single_all_instr_top_tb.xv
+$(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.vcd: $(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.xv
 
 
 .PHONY: dirs

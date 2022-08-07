@@ -1,27 +1,29 @@
-`timescale 1ns/100ps
+`timescale 1ns/1ns
+
+`include "riscv_all_instr_physical_fpga_test.svh"
+`include "riscv_test_utils.svh"
 
 `ifndef VCD
     `define VCD "riscv_single_all_instr_top_tb.vcd"
 `endif
 
-`include "riscv_test_utils.svh"
+`ifdef CONFIG_RISCV_MULTICYCLE
+    /**
+     * The memory will be checked by accessing it in terms of words.
+     *
+     */
+    `define DATA_IDX    (`DATA_START_ADDR / 4)
 
-/**
- * Address from which the data will be written. It is added to the 'sp' register
- * (x2) in 'all_instr_program_test_instr_mem.txt' (first instruction). The
- * test program is expected to write all data using this register as base.
- *
- * Therefore it is expected tha the first instruction of the test program sets
- * the 'sp' register to this value, and all store instructions use 'sp' as base.
- *
- */
-`define DATA_OFFS   1728
+    /**
+     * Expected first instruction (set the sp to `DATA_OFFS)
+     *
+     */
+    `define FIRST_INSTR 32'h6c000113
 
-/**
- * The memory will be checked by accessing it in terms of words.
- *
- */
-`define DATA_IDX    (`DATA_OFFS / 4)
+`else
+    `define DATA_IDX    0
+    `define FIRST_INSTR 32'h00000113
+`endif // CONFIG_RISCV_MULTICYCLE
 
 module riscv_single_all_instr_top_tb;
     reg clk = 0;
@@ -74,31 +76,16 @@ module riscv_single_all_instr_top_tb;
     end
 
 
-    integer i = 0;
-
-    wire __pr_finished, after_20, si_busy, si_en;
-    wire [2:0] __msc_cs;
-    wire [31:0] __pc, tm_d_addr;
-
-    assign __pr_finished = dut.pr_finished;
-    assign after_20 = dut.after_20;
-    assign __msc_cs = dut.msc.cs;
-    assign __pc = dut.pc;
-    assign si_busy = dut.msc.si_busy;
-    assign si_en = dut.msc.si_en;
-    assign tm_d_addr = dut.tm_d_addr;
-
-
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, riscv_single_all_instr_top_tb);
 
-        assert(`MEM_INSTR[0] === 32'h6c000113);
-        assert(`MEM_INSTR[1] === 32'h02500293);
-        assert(`MEM_INSTR[2] === 32'h00328313);
-        assert(`MEM_INSTR[415] === 32'h1e612c23);
-        assert(`MEM_INSTR[416] === 32'h000001ef);
-        assert(`MEM_INSTR[417] === 32'h000001ef);
+        assert(`GET_MEM_I(0) === `FIRST_INSTR);
+        assert(`GET_MEM_I(1) === 32'h02500293);
+        assert(`GET_MEM_I(2) === 32'h00328313);
+        assert(`GET_MEM_I(415) === 32'h1e612c23);
+        assert(`GET_MEM_I(416) === 32'h000001ef);
+        assert(`GET_MEM_I(417) === 32'h000001ef);
 
         // Reset
         #5  btnC = 1;
@@ -107,17 +94,11 @@ module riscv_single_all_instr_top_tb;
         //
         // Program finishes correctly
         //
-`ifdef CONFIG_RISCV_MULTICYCLE
-        // if using a multi-cycle CPU, the instruction at address X won't have
-        // finished executing when PC === X. Wait for PC to be X + 4 to be sure
-        // the instruction was executed.
-        wait(dut.pc === 32'h684);
-`else
-        wait(dut.after_20 == 1'b1);
-`endif // CONFIG_RISCV_MULTICYCLE
+        wait(led[0] == 1'b1);
 
-        assert(led[0] === 1'b1);
+`ifdef CONFIG_RISCV_PIPELINE
         assert(led[1] === 1'b1);
+`endif // CONFIG_RISCV_MULTICYCLE
 
         assert(`MEM_DATA[`DATA_IDX + 0] === 37);
         assert(`MEM_DATA[`DATA_IDX + 1] === 40);
