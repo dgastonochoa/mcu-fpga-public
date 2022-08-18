@@ -4,7 +4,7 @@ PREFIX ?= ./build
 
 SRC := ../src
 SRCRV := $(SRC)/riscv
-INC := -I../include -I./riscv
+INC := -I../include -I./riscv -I.
 
 TSRCRV := ./riscv
 TESTUTILS := ./test-utils

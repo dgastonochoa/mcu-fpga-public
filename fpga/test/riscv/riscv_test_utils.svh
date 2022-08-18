@@ -6,11 +6,7 @@
  *
  */
 
-/**
- * Waits for 'n' clock cycles.
- *
- */
-`define WAIT_CLKS(clk, n)           repeat(n) @(posedge clk); #1
+`include "test_utils.svh"
 
 
 `ifdef CONFIG_RISCV_SINGLECYCLE

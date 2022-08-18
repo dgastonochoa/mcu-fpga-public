@@ -1,5 +1,7 @@
 `timescale 10ps/1ps
 
+`include "test_utils.svh"
+
 `ifndef VCD
     `define VCD "spi_master_ctrl_tb.vcd"
 `endif
@@ -13,7 +15,7 @@ module spi_master_ctrl_tb;
 
     wire sck, en_sck;
 
-    clk_div #(.POL(POL), .WAIT_CLKS(PWIDTH)) cd0(sck, clk, rst | ~en_sck);
+    clk_div #(.POL(POL), .WAIT_CLKS(WAIT_CLKS)) cd0(sck, clk, rst | ~en_sck);
 
     always #(`CLK_P / 2) clk = ~clk;
 
@@ -42,57 +44,77 @@ module spi_master_ctrl_tb;
 
 
         //
-        // Enable (initialization) sequence works
+        // Send 1 byte works
         //
-        @(posedge clk);
-        en = 1;
-        #4  en = 0;
-        @(negedge ss);
-        #1  assert(en_sck === 1'b0);
-        @(posedge en_sck);
-        #1  assert(ss === 1'b0);
+        `WAIT_CLKS(clk, 2) en = 1;
+        `WAIT_CLKS(clk, 1) en = 0;
+                           assert(ss === 1'b0);
+                           assert(en_sck === 1'b0);
+        `WAIT_CLKS(clk, 1) assert(en_sck === 1'b1);
+                           assert(sck === 1'b1);
 
-
-        //
-        // Disable sequence works
-        //
-        for (i = 0; i < 8; i = i + 1) begin
-            @(posedge sck);
-        end
-        @(sck, posedge ss, negedge en_sck);
-        #1  assert(ss === 1'b1);
-            assert(en_sck === 1'b0);
-
-
-        for (i = 0; i < 24; i = i + 1) begin
-            @(posedge clk);
-            assert(ss === 1'b1);
-            assert(en_sck === 1'b0);
+        i = 0;
+        repeat(16) begin
+            `WAIT_CLKS(clk, WAIT_CLKS) assert(sck === i);
+                                       assert(en_sck === 1'b1);
+                                       assert(ss === 1'b0);
+                                       i = (i == 0 ? 1 : 0);
         end
 
+        // (*) -1 because one of the WAIT_CLKS cycles has been already waited in
+        // the last iteration of the above loop
+        `WAIT_CLKS(clk, WAIT_CLKS - 1) assert(ss === 1'b1);
+                                       assert(en_sck === 1'b0);
+
+        repeat(8) begin
+            `WAIT_CLKS(clk, 1) assert(ss === 1'b1);
+                               assert(en_sck === 1'b0);
+        end
+
 
         //
-        // Send 8*x bits works
+        // Send 2 consecutive bytes works
         //
-        #4  en = 1;
-        @(negedge ss);
-        #1  assert(en_sck === 1'b0);
-        @(posedge en_sck);
-        #1  assert(ss === 1'b0);
 
-        for (i = 0; i < 24; i = i + 1) begin
-            @(posedge sck);
-        end
-        @(posedge clk);
-        en = 0;
-        #(3*`CLK_P) assert(en_sck === 1'b0);
-                    assert(ss === 1'b1);
+        // First byte
+        `WAIT_CLKS(clk, 2) en = 1;
+        `WAIT_CLKS(clk, 1) assert(ss === 1'b0);
+                           assert(en_sck === 1'b0);
+        `WAIT_CLKS(clk, 1) assert(en_sck === 1'b1);
+                           assert(sck === 1'b1);
 
-        for (i = 0; i < 24; i = i + 1) begin
-            @(posedge clk);
-            assert(en_sck === 1'b0);
-            assert(ss === 1'b1);
+        i = 0;
+        repeat(16) begin
+            `WAIT_CLKS(clk, WAIT_CLKS) assert(sck === i);
+                                       assert(en_sck === 1'b1);
+                                       assert(ss === 1'b0);
+                                       i = (i == 0 ? 1 : 0);
         end
+
+        // See (*) for an explanation of the -1
+        `WAIT_CLKS(clk, WAIT_CLKS - 1) assert(ss === 1'b1);
+                                       assert(en_sck === 1'b0);
+
+        // Second byte
+        `WAIT_CLKS(clk, 1) assert(ss === 1'b0);
+                           assert(en_sck === 1'b0);
+
+        `WAIT_CLKS(clk, 1) assert(en_sck === 1'b1);
+                           assert(sck === 1'b1);
+
+        i = 0;
+        repeat(16) begin
+            `WAIT_CLKS(clk, WAIT_CLKS) assert(sck === i);
+                                       assert(en_sck === 1'b1);
+                                       assert(ss === 1'b0);
+                                       i = (i == 0 ? 1 : 0);
+        end
+
+        // See (*) for an explanation of the -1
+        `WAIT_CLKS(clk, WAIT_CLKS - 1) assert(ss === 1'b1);
+                                       assert(en_sck === 1'b0);
+
+
 
         #32 $finish;
     end

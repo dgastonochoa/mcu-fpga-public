@@ -75,9 +75,9 @@ module spi_master_ctrl(
     //
     // Synchronize async. variables
     //
-    wire en_sync, s_sync;
+    wire s_sync;
 
-    cell_sync_n #(.N(2)) c_sync0(clk, rst, {en, s}, {en_sync, s_sync});
+    cell_sync_n #(.N(1)) c_sync0(clk, rst, s, s_sync);
 
 
     //
@@ -92,7 +92,7 @@ module spi_master_ctrl(
             cs <= IDLE;
         end else begin
             case (cs)
-            IDLE:    cs <= (en_sync ? SELECT : IDLE);
+            IDLE:    cs <= (en ? SELECT : IDLE);
             SELECT:  cs <= GEN_CLK;
             GEN_CLK: cs <= (s_sync ? IDLE : GEN_CLK);
             endcase
@@ -192,11 +192,11 @@ endmodule
  * @param ss SPI ss
  * @param sck SPI sck
  * @param wd Word to be sent
- * @param en_sync Enable.
+ * @param en Enable.
  * @param clk
  * @param rst
  *
- * @todo @param{en_sync} is named that way to inidicate it must be synchronous
+ * @todo @param{en} is named that way to inidicate it must be synchronous
  * with respect to @param{clk}, but this is always assumed. Rename it to 'en'
  *
  */
@@ -207,7 +207,7 @@ module spi_master_w #(parameter SCK_WIDTH_CLKS = 4)(
     output wire        sck,
 
     input  wire [31:0] wd,
-    input  wire        en_sync,
+    input  wire        en,
     output logic       busy,
     input  wire        clk,
     input  wire        rst
@@ -232,7 +232,7 @@ module spi_master_w #(parameter SCK_WIDTH_CLKS = 4)(
             cs <= IDLE;
         end else begin
             case (cs)
-            IDLE:       cs <= (en_sync ? B3_SEND : IDLE);
+            IDLE:       cs <= (en ? B3_SEND : IDLE);
             B3_SEND:    cs <= (m_busy ? B3_WAIT : B3_SEND);
             B3_WAIT:    cs <= (m_busy ? B3_WAIT : B2_SEND);
             B2_SEND:    cs <= (m_busy ? B2_WAIT : B2_SEND);
