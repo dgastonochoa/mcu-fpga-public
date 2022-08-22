@@ -1,3 +1,4 @@
+`include "riscv/datapath.svh"
 `include "riscv/controller.svh"
 `include "riscv/hazard_ctrl.svh"
 
