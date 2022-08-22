@@ -61,10 +61,10 @@ module riscv_single_all_instr_top_tb;
             word <= 0;
         end else begin
             #1 case (cnt)
-            3'd0: word[31:24] <= s_rd;
-            3'd1: word[23:16] <= s_rd;
-            3'd2: word[15:8]  <= s_rd;
-            3'd3: word[7:0]   <= s_rd;
+            3'd0: word[7:0]   <= s_rd;
+            3'd1: word[15:8]  <= s_rd;
+            3'd2: word[23:16] <= s_rd;
+            3'd3: word[31:24] <= s_rd;
             endcase
             cnt <= (cnt == 3'd3 ? 3'd0 : cnt + 1);
 
@@ -75,7 +75,6 @@ module riscv_single_all_instr_top_tb;
         end
     end
 
-
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, riscv_single_all_instr_top_tb);
@@ -84,21 +83,17 @@ module riscv_single_all_instr_top_tb;
         assert(`GET_MEM_I(1) === 32'h02500293);
         assert(`GET_MEM_I(2) === 32'h00328313);
         assert(`GET_MEM_I(415) === 32'h1e612c23);
-        assert(`GET_MEM_I(416) === 32'h000001ef);
-        assert(`GET_MEM_I(417) === 32'h000001ef);
+        assert(`GET_MEM_I(416) === 32'h800005b7);
+        assert(`GET_MEM_I(417) === 32'h00200633);
+        assert(`GET_MEM_I(447) === 32'hffc10113);
+        assert(`GET_MEM_I(448) === 32'h00012083);
+        assert(`GET_MEM_I(449) === 32'h00008067);
 
         // Reset
         #5  btnC = 1;
         #20 btnC = 0;
 
-        //
-        // Program finishes correctly
-        //
-        wait(led[0] == 1'b1);
-
-`ifdef CONFIG_RISCV_PIPELINE
-        assert(led[1] === 1'b1);
-`endif // CONFIG_RISCV_MULTICYCLE
+        `WAIT_CLKS(clk, 1000);
 
         assert(`MEM_DATA[`DATA_IDX + 0] === 37);
         assert(`MEM_DATA[`DATA_IDX + 1] === 40);
@@ -229,11 +224,14 @@ module riscv_single_all_instr_top_tb;
         assert(`MEM_DATA[`DATA_IDX + 126] === 6);
 
 
+
+
+
         //
         // SPI sends all the results
         //
-        wait(dut.msc.cs === 3'd4);
-        #100;
+        `WAIT_CLKS(clk, 100000);
+
         assert(res[0] === 37);
         assert(res[1] === 40);
         assert(res[2] === 24);

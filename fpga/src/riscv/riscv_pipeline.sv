@@ -156,7 +156,7 @@ module riscv #(parameter DEFAULT_INSTR = 0, parameter SPI_SCK_WIDTH_CLKS = 4) (
     wire [31:0] m_data_rd;
     errno_e m_err;
 
-    mem #(.N(128)) data_mem(
+    mem #(.N(256)) data_mem(
         dec_m_addr, m_wd, dec_m_we, dt_m, m_data_rd, m_err, clk);
 
 

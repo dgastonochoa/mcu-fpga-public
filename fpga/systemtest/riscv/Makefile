@@ -8,7 +8,7 @@ SRC = ../../src
 INC = -I../../include -I.
 
 # TODO remove this dependency when possible
-INC += -I../../test/riscv
+INC += -I../../test/riscv -I../../test
 
 VV := iverilog
 VVP := vvp
@@ -45,6 +45,7 @@ src_files := $(SRC)/spi.sv 							\
 			 $(SRC)/alu.sv 							\
 			 $(SRC)/legacy/utils/debounce_filter.v	\
 			 $(SRC)/riscv/datapath_utils.sv			\
+			 $(SRC)/riscv/io.sv						\
 			 $(SRC)/riscv/controller_common.sv
 
 ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)

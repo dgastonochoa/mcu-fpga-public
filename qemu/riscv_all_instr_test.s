@@ -576,6 +576,15 @@ tj:     sw      x3, (2*4)(x2)   # sp[2] = 24
         bgeu    x6, x9, .FAIL
         sw      x6, (126*4)(sp) # sp[126] = 6
 
+        #
+        # Send results
+        #
+        lui     a1, 0x80000     # set SPI base addr.
+        add     a2, x0, sp      # set start address
+        addi    a3, sp, 126*4   # set end address
+        addi    sp, sp, (127*4) # set sp to the last written address
+        jal     .SM             # send all written memory
+
 #
 # Finish program (uncomment when generating the FPGA
 # program)
@@ -589,3 +598,44 @@ tj:     sw      x3, (2*4)(x2)   # sp[2] = 24
 #
 # .FAIL:  nop
 # halt:   wfi                     # enter the infinite loop
+
+
+#
+# Memory-mapped I/Os subroutines
+#
+# a0 = [7:0] = byte
+# a1 = SPI base addr.
+.SB:    sw      a0, 0(a1)       # write data to be send
+        addi    t0, x0, 0x04    # set send flag
+        sw      t0, 4(a1)       # trigger send
+.L111:  lw      t0, 4(a1)       # read status
+        andi    t0, t0, 0x2     # get busy flag
+        bne     t0, x0, .L111   # if busy != 0 keep polling
+        jr      ra              # return
+
+# a0 = word
+# a1 = SPI base addr.
+.SW:    addi    s0, x0, 3       # load iterator
+        addi    t1, x0, 1       # used tu sub. 1
+        sw      ra, 0(sp)       # push ra
+        addi    sp, sp, 4       # sp = sp + 4
+.L22:   jal     .SB             # send byte
+        srli    a0, a0, 8       # right shift to next byte
+        sub     s0, s0, t1      # sub. 1 to iterator
+        bge     s0, x0, .L22    # if it. > 0, repeat
+        addi    sp, sp, -4      # restore sp
+        lw      ra, 0(sp)       # restore ra
+        jr      ra              # return
+
+# a1 = SPI base addr.
+# a2 = start addr.
+# a3 = end addr.
+.SM:    sw      ra, 0(sp)       # push ra
+        addi    sp, sp, 4       # sp = sp + 4
+.L33:   lw      a0, 0(a2)       # load word
+        jal     .SW             # send word
+        addi    a2, a2, 4       # base addr. += 4
+        bge     a3, a2, .L33    # if end addr. >= base addr. keep sending
+        addi    sp, sp, -4      # restore sp
+        lw      ra, 0(sp)       # restore ra
+        jr      ra              # return
