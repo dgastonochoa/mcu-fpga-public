@@ -15,8 +15,8 @@
  * @param pc_src For debugging purposes. @see{datapath.svh}
  * @param instr For debugging purposes. Instruction being processed.
  * @param alu_out For debugging purposes. ALU result.
- * @param mem_rd_data For debugging purposes. Data read from mem. (if any)
- * @param mem_wd_data For debugging purposes. Data written to mem. (if any)
+ * @param m_rd For debugging purposes. Data read from mem. (if any)
+ * @param m_wd For debugging purposes. Data written to mem. (if any)
  * @param pc For debugging purposes. Program counter.
  *
  * @param tm Test-mode signal. Enables test mode, which disconnects the data
@@ -33,7 +33,7 @@
  * @param rst Reset.
  * @param clk Clock.
  */
-module riscv #(parameter DEFAULT_INSTR = 0) (
+module riscv #(parameter DEFAULT_INSTR = 0, parameter SPI_SCK_WIDTH_CLKS = 4) (
     // Signals exposed for debugging purposes
     output  wire        reg_we,
     output  wire        mem_we,
@@ -44,18 +44,15 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
     output  pc_src_e    pc_src,
     output  wire [31:0] instr,
     output  wire [31:0] m_addr,
-    output  wire [31:0] mem_rd_data,
-    output  wire [31:0] mem_wd_data,
+    output  wire [31:0] m_rd,
+    output  wire [31:0] m_wd,
     output  wire [31:0] pc,
     ///////
 
-    input   wire        tm,
-    input   wire [31:0] tm_d_addr,
-    input   wire [31:0] tm_d_wd,
-    input   wire        tm_d_we,
-    input   mem_dt_e    tm_d_dt,
-    output  wire [31:0] tm_d_rd,
-    output  errno_e     tm_d_err,
+    output  wire        mosi,
+    output  wire        miso,
+    output  wire        ss,
+    output  wire        sck,
 
     input   wire        rst,
     input   wire        clk
@@ -92,7 +89,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
 
     datapath dp(
         instr,
-        mem_rd_data,
+        m_rd,
         reg_we,
         imm_src,
         alu_op,
@@ -107,7 +104,7 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
         pc,
         m_addr,
         alu_flags,
-        mem_wd_data,
+        m_wd,
         i_d,
         i_e,
         i_m,
@@ -139,32 +136,57 @@ module riscv #(parameter DEFAULT_INSTR = 0) (
 
     mem_pipeline mdp(flush, stall, dt, mem_we, dt_m, m_we_m, clk, rst);
 
-    //
-    // Data memory logic (normal and test modes)
-    //
-    wire [31:0] d_addr, d_wd;
-    wire d_we;
-    mem_dt_e d_dt;
+    wire [31:0] dec_m_addr;
+    wire [7:0] io_addr;
+    wire [3:0] io_en, io_we, rd_src;
+    wire dec_m_we;
 
-    wire [31:0] d_rd;
-    errno_e d_err;
+    mem_map_io_dec mmid(
+        m_addr,
+        m_we_m,
+        dec_m_addr,
+        dec_m_we,
+        io_en,
+        io_we,
+        io_addr,
+        rd_src
+    );
 
-    assign d_addr       = (tm == 1'b0 ? m_addr : tm_d_addr);
-    assign d_wd         = (tm == 1'b0 ? mem_wd_data : tm_d_wd);
-    assign d_we         = (tm == 1'b0 ? m_we_m : tm_d_we);
 
-    assign d_dt         = (tm == 1'b0 ? dt_m : tm_d_dt);
+    wire [31:0] m_data_rd;
+    errno_e m_err;
 
-    assign mem_rd_data  = (tm == 1'b0 ? d_rd : 32'h00);
+    mem #(.N(128)) data_mem(
+        dec_m_addr, m_wd, dec_m_we, dt_m, m_data_rd, m_err, clk);
 
-    assign tm_d_rd      = (tm == 1'b0 ? 32'h00 : d_rd);
-    assign tm_d_err     = (tm == 1'b0 ? ENONE : d_err);
 
-    // TODO this requires to be 768 because riscv_multicycle requires to write
-    // from an offset that is far enough from the instructions. This can be
-    // avoided if the offset from which the data is written is changed from
-    // multicycle to singlecycle/pipeline tests
-    mem #(.N(128)) data_mem(d_addr, d_wd, d_we, d_dt, d_rd, d_err, clk);
+    wire spi_rdy, spi_busy, spi_en;
+    wire [7:0] spi_rd, spi_wd;
+
+    spi_master #(.SCK_WIDTH_CLKS(SPI_SCK_WIDTH_CLKS)) spim(
+        miso, spi_wd, mosi, ss, spi_rd, spi_rdy, spi_busy, sck, spi_en, rst, clk);
+
+
+    wire [31:0] si_rd;
+
+    mem_map_spi mms(
+        io_en[0],
+        io_we[0],
+        m_wd,
+        io_addr,
+        si_rd,
+
+        spi_rdy,
+        spi_busy,
+        spi_rd,
+        spi_en,
+        spi_wd,
+
+        clk,
+        rst
+    );
+
+    mux4to1 m41(m_data_rd, si_rd, 32'h00, 32'h00, rd_src[1:0], m_rd);
 
 
     //
@@ -194,24 +216,18 @@ module riscv_legacy(
     output  pc_src_e    pc_src,
     output  wire [31:0] instr,
     output  wire [31:0] alu_out,
-    output  wire [31:0] mem_rd_data,
-    output  wire [31:0] mem_wd_data,
+    output  wire [31:0] m_rd,
+    output  wire [31:0] m_wd,
     output  wire [31:0] pc,
     ///////
 
     input   wire        rst,
     input   wire        clk
 );
-    wire tm, tm_d_we;
-    wire [31:0] tm_d_addr, tm_d_wd, tm_d_rd;
-    mem_dt_e tm_d_dt;
-    errno_e tm_d_err;
-
-    assign tm = 1'b0;
-    assign tm_d_addr = 32'h00;
-    assign tm_d_wd = 32'h00;
-    assign tm_d_we = 1'b0;
-    assign tm_d_dt = MEM_DT_WORD;
+    wire mosi;
+    wire miso;
+    wire ss;
+    wire sck;
 
     riscv rv(
         reg_we,
@@ -223,18 +239,13 @@ module riscv_legacy(
         pc_src,
         instr,
         alu_out,
-        mem_rd_data,
-        mem_wd_data,
+        m_rd,
+        m_wd,
         pc,
-
-        tm,
-        tm_d_addr,
-        tm_d_wd,
-        tm_d_we,
-        tm_d_dt,
-        tm_d_rd,
-        tm_d_err,
-
+        mosi,
+        miso,
+        ss,
+        sck,
         rst,
         clk
     );

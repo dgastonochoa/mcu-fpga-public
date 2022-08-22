@@ -52,6 +52,8 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 			   $(RISCV_TEST_DIR)/lh_tb.xv						\
 			   $(RISCV_TEST_DIR)/lbu_tb.xv						\
 			   $(RISCV_TEST_DIR)/lhu_tb.xv						\
+		 	   $(RISCV_TEST_DIR)/sw_lw_spi_tb.xv				\
+		 	   $(RISCV_TEST_DIR)/sw_lw_spi_loop_tb.xv			\
 		 	   $(RISCV_TEST_DIR)/sw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sb_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/sh_tb.xv						\
@@ -75,6 +77,8 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/andi_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/lui_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/auipc_tb.xv					\
+		 	   $(RISCV_TEST_DIR)/mem_map_spi_tb.xv				\
+		 	   $(RISCV_TEST_DIR)/mem_map_io_dec_tb.xv			\
 			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv
 
 
@@ -136,15 +140,17 @@ common_src := $(SRC)/alu.sv 	\
 			  $(SRC)/utils.sv	\
 			  $(SRC)/spi.sv
 
+riscv_src := $(SRCRV)/io.sv
+
 ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
-riscv_src :=  $(SRCRV)/datapath_singlecycle.sv 		\
+riscv_src +=  $(SRCRV)/datapath_singlecycle.sv 		\
 			  $(SRCRV)/datapath_utils.sv	 		\
 			  $(SRCRV)/riscv_singlecycle.sv 		\
 			  $(SRCRV)/controller_singlecycle.sv	\
 			  $(SRCRV)/controller_common.sv
 
 else ifeq ($(CONFIG_RISCV_MULTICYCLE),y)
-riscv_src :=  $(SRCRV)/datapath_multicycle.sv 		\
+riscv_src +=  $(SRCRV)/datapath_multicycle.sv 		\
 			  $(SRCRV)/datapath_utils.sv	 		\
 			  $(SRCRV)/riscv_multicycle.sv 			\
 			  $(SRCRV)/controller_multicycle.sv		\
@@ -152,7 +158,7 @@ riscv_src :=  $(SRCRV)/datapath_multicycle.sv 		\
 
 else ifeq ($(CONFIG_RISCV_PIPELINE),y)
 # RISC-V pipeline version can re-use a lot of the singlecycle logic
-riscv_src :=  $(SRCRV)/datapath_pipeline.sv 		\
+riscv_src +=  $(SRCRV)/datapath_pipeline.sv 		\
 			  $(SRCRV)/datapath_utils.sv			\
 			  $(SRCRV)/controller_common.sv			\
 			  $(SRCRV)/controller_singlecycle.sv	\
