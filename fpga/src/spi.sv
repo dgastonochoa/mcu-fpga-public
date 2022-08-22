@@ -157,11 +157,6 @@ module spi_master #(parameter SCK_WIDTH_CLKS = 8'd4) (
         sck, clk, rst | ~en_sck);
 
 
-    // TODO should busy and rdy be directly those in sipo and piso, or should
-    // they be high/low as a function of ss. Possibly ss. In case of multi-slave,
-    // there is no problem in not wiring it, master is still busy generating the
-    // sck signal.
-
     // TODO data lines are left in the level of the last bit sent. To fix it,
     // (if required) do `mosi & en_sck` or `mosi | ss`.
     //
@@ -169,7 +164,9 @@ module spi_master #(parameter SCK_WIDTH_CLKS = 8'd4) (
     //
     // Receiver
     //
-    sipo_reg sr0(miso, rd, rdy, rst, sck);
+    wire r_rdy;
+
+    sipo_reg sr0(miso, rd, r_rdy, rst, sck);
 
 
     //
@@ -179,8 +176,9 @@ module spi_master #(parameter SCK_WIDTH_CLKS = 8'd4) (
 
     piso_reg pr0(wd, mosi, p_busy, rst, sck);
 
-    // TODO busy flag is not necessary, ss is enough
+
     assign busy = ~ss;
+    assign rdy = r_rdy & ~busy;
 endmodule
 
 /**
