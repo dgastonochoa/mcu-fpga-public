@@ -172,49 +172,6 @@ wavedumps: $(tests_waves) $(riscv_tests_waves)
 
 all: test wavedumps
 
-__tmp_tests := $(RISCV_TEST_DIR)/lw_tb.xv.vcd						\
-			   $(RISCV_TEST_DIR)/lb_tb.xv.vcd						\
-			   $(RISCV_TEST_DIR)/lh_tb.xv.vcd						\
-			   $(RISCV_TEST_DIR)/lbu_tb.xv.vcd						\
-			   $(RISCV_TEST_DIR)/lhu_tb.xv.vcd						\
-			   $(RISCV_TEST_DIR)/sw_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/sb_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/sh_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/or_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/and_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/sub_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/xor_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/sll_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/srl_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/sra_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/slt_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/sltu_tb.xv.vcd						\
-			   $(RISCV_TEST_DIR)/pipeline_jal_tb.xv.vcd				\
-		 	   $(RISCV_TEST_DIR)/addi_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/slli_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/slti_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/sltiu_tb.xv.vcd					\
-		 	   $(RISCV_TEST_DIR)/xori_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/srli_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/srai_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/ori_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/andi_tb.xv.vcd						\
-			   $(RISCV_TEST_DIR)/pipeline_jalr_tb.xv.vcd			\
-			   $(RISCV_TEST_DIR)/lui_tb.xv.vcd						\
-		 	   $(RISCV_TEST_DIR)/auipc_tb.xv.vcd					\
-			   $(RISCV_TEST_DIR)/pipeline_beq_tb.xv.vcd				\
-		 	   $(RISCV_TEST_DIR)/pipeline_bne_tb.xv.vcd				\
-		 	   $(RISCV_TEST_DIR)/pipeline_blt_tb.xv.vcd				\
-		 	   $(RISCV_TEST_DIR)/pipeline_bge_tb.xv.vcd				\
-		 	   $(RISCV_TEST_DIR)/pipeline_bltu_tb.xv.vcd			\
-		 	   $(RISCV_TEST_DIR)/pipeline_bgeu_tb.xv.vcd			\
-		 	   $(RISCV_TEST_DIR)/raw_hazards_tb.xv.vcd			 	\
-		 	   $(RISCV_TEST_DIR)/lw_hazards_tb.xv.vcd			 	\
-			   $(RISCV_TEST_DIR)/ctrl_hazards_tb.xv.vcd				\
-			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv
-
-_tmp_tests: $(__tmp_tests)
-
 $(tests): | dirs
 
 $(riscv_tests): | dirs
@@ -223,7 +180,6 @@ $(wavedumps): | dirs
 
 
 $(PREFIX)/%.xv: %.sv $(common_src)
-	@echo ASDASDASD
 	$(VV) -o $@ -g2012 -DSEED=$(RANDOM) $(IFLAGS) $(INC) -Wall -Wno-timescale -DVCD="\"$@.vcd\"" $^ $(PREFIX)/.include_timestamp.sv
 
 $(RISCV_TEST_DIR)/%.xv: $(TSRCRV)/%.sv $(common_src) $(riscv_src) $(RISCV_TEST_DIR)/.config_timestamp.sv $(PREFIX)/.include_timestamp.sv
