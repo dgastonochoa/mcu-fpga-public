@@ -15,7 +15,7 @@ module spi_master_ctrl_tb;
 
     wire sck, en_sck;
 
-    clk_div #(.POL(POL), .WAIT_CLKS(WAIT_CLKS)) cd0(sck, clk, rst | ~en_sck);
+    clk_div #(.POL(POL), .PWIDTH(WAIT_CLKS)) cd0(sck, clk, rst | ~en_sck);
 
     always #(`CLK_P / 2) clk = ~clk;
 

@@ -12,7 +12,7 @@ module utils_clk_div_tb;
     reg clk = 0, rst = 0;
     wire div_clk;
 
-    clk_div #(.POL(POL), .WAIT_CLKS(PWIDTH)) dut(div_clk, clk, rst);
+    clk_div #(.POL(POL), .PWIDTH(WAIT_CLKS)) dut(div_clk, clk, rst);
 
     always #(`CLK_P / 2) clk = ~clk;
 
