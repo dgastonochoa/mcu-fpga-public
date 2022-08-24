@@ -82,12 +82,9 @@ module riscv_single_all_instr_top_tb;
         assert(`GET_MEM_I(0) === `FIRST_INSTR);
         assert(`GET_MEM_I(1) === 32'h02500293);
         assert(`GET_MEM_I(2) === 32'h00328313);
-        assert(`GET_MEM_I(415) === 32'h1e612c23);
-        assert(`GET_MEM_I(416) === 32'h800005b7);
-        assert(`GET_MEM_I(417) === 32'h00200633);
-        assert(`GET_MEM_I(447) === 32'hffc10113);
-        assert(`GET_MEM_I(448) === 32'h00012083);
-        assert(`GET_MEM_I(449) === 32'h00008067);
+        assert(`GET_MEM_I(455) === 32'hffc10113);
+        assert(`GET_MEM_I(456) === 32'h00012083);
+        assert(`GET_MEM_I(457) === 32'h00008067);
 
         // Reset
         #5  btnC = 1;
@@ -223,6 +220,7 @@ module riscv_single_all_instr_top_tb;
         assert(`MEM_DATA[`DATA_IDX + 125] === 6);
         assert(`MEM_DATA[`DATA_IDX + 126] === 6);
 
+        assert(led[0] === 1'b1);
 
 
 
@@ -359,6 +357,9 @@ module riscv_single_all_instr_top_tb;
         assert(res[124] === 6);
         assert(res[125] === 6);
         assert(res[126] === 6);
+
+        assert(led[0] === 1'b0);
+        assert(led[1] === 1'b1);
 
         #18 $finish;
     end

@@ -76,7 +76,7 @@ module example_program_tb;
             `MEM_MAP_FILE,
             `MEM_INSTR,
             0,
-            417
+            457
         );
 
 `ifdef CONFIG_RISCV_MULTICYCLE
@@ -87,9 +87,9 @@ module example_program_tb;
 
         assert(`GET_MEM_I(1) === 32'h02500293);
         assert(`GET_MEM_I(2) === 32'h00328313);
-        assert(`GET_MEM_I(415) === 32'h1e612c23);
-        assert(`GET_MEM_I(416) === 32'h000001ef);
-        assert(`GET_MEM_I(417) === 32'h000001ef);
+        assert(`GET_MEM_I(455) === 32'hffc10113);
+        assert(`GET_MEM_I(456) === 32'h00012083);
+        assert(`GET_MEM_I(457) === 32'h00008067);
 
         // Reset
         #2  rst = 1;

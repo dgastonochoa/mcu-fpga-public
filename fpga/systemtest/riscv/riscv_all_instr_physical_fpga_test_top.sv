@@ -56,6 +56,8 @@ module riscv_single_all_instr_top(
         ss,
         sck,
 
+        LED,
+
         rst,
         clk_1khz
     );

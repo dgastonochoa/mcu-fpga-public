@@ -35,6 +35,11 @@ endmodule
  *        0x8000007c
  * ...
  *
+ *
+ * @todo Modify this module to use n bits as base and m as offset, so all
+ *       mem_map devices use offsets 0..((2^m)-1), instead of each one having
+ *       different offsets, as happens with SPI (starting offset 0x00) and
+ *       LED (starting offset 0x40)
  */
 module mem_map_io_dec(
     input  wire [31:0] m_addr,

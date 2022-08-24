@@ -577,6 +577,14 @@ tj:     sw      x3, (2*4)(x2)   # sp[2] = 24
         sw      x6, (126*4)(sp) # sp[126] = 6
 
         #
+        # Turn LED on to indicate success
+        #
+        lui     a1, 0x80000     # set LED base addr. (1)
+        addi    a1, a1, 0x40    # set LED base addr. (2)
+        addi    a2, x0, 1       # value to turn on LED 0
+        sw      a2, 0(a1)       # turn on LED
+
+        #
         # Send results
         #
         lui     a1, 0x80000     # set SPI base addr.
@@ -584,6 +592,11 @@ tj:     sw      x3, (2*4)(x2)   # sp[2] = 24
         addi    a3, sp, 126*4   # set end address
         addi    sp, sp, (127*4) # set sp to the last written address
         jal     .SM             # send all written memory
+
+        lui     a1, 0x80000     # set LED base addr. (1)
+        addi    a1, a1, 0x40    # set LED base addr. (2)
+        addi    a2, x0, 2       # value to turn on LED 1
+        sw      a2, 0(a1)       # turn on LED
 
 #
 # Finish program (uncomment when generating the FPGA
