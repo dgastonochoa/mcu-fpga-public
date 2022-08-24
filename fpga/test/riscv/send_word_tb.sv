@@ -31,6 +31,8 @@ module sw_spi_loop_tb;
     wire [31:0] pc, m_addr, wdata;
     wire [31:0] instr, mem_rd_data, m_wd;
 
+    wire [15:0] leds;
+
     riscv dut(
         reg_we,
         mem_we,
@@ -48,6 +50,8 @@ module sw_spi_loop_tb;
         miso,
         ss,
         sck,
+
+        leds,
 
         rst,
         clk

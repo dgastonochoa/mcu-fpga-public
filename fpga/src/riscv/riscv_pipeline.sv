@@ -54,6 +54,8 @@ module riscv #(parameter DEFAULT_INSTR = 0, parameter SPI_SCK_WIDTH_CLKS = 4) (
     output  wire        ss,
     output  wire        sck,
 
+    output  wire [15:0] leds,
+
     input   wire        rst,
     input   wire        clk
 );
@@ -186,7 +188,21 @@ module riscv #(parameter DEFAULT_INSTR = 0, parameter SPI_SCK_WIDTH_CLKS = 4) (
         rst
     );
 
-    mux4to1 m41(m_data_rd, si_rd, 32'h00, 32'h00, rd_src[1:0], m_rd);
+
+    wire [31:0] led_rd;
+
+    mem_map_led mml(
+        io_en[1],
+        io_we[1],
+        m_wd,
+        io_addr,
+        led_rd,
+        leds,
+        clk,
+        rst
+    );
+
+    mux4to1 m41(m_data_rd, si_rd, led_rd, 32'h00, rd_src[1:0], m_rd);
 
 
     //
@@ -224,10 +240,9 @@ module riscv_legacy(
     input   wire        rst,
     input   wire        clk
 );
-    wire mosi;
-    wire miso;
-    wire ss;
-    wire sck;
+    wire mosi, miso, ss, sck;
+
+    wire [15:0] leds;
 
     riscv rv(
         reg_we,
@@ -246,6 +261,7 @@ module riscv_legacy(
         miso,
         ss,
         sck,
+        leds,
         rst,
         clk
     );

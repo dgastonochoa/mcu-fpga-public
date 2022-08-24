@@ -101,3 +101,26 @@ module mem_map_spi(
         endcase
     end
 endmodule
+
+module mem_map_led (
+    input  wire          en,
+    input  wire          we,
+    input  wire  [31:0]  wd,
+    input  wire  [7:0]   addr,
+    output logic [31:0]  rd,
+
+    output wire  [15:0]  leds,
+
+    input  wire          clk,
+    input  wire          rst
+);
+    dff #(.N(16)) out_s_dff(
+        wd[15:0], addr == 8'h40 && (we & en), leds, clk, rst);
+
+    always_comb begin
+        case (addr)
+        8'h00:   rd = {{16{1'b0}}, leds};
+        default: rd = 32'hffffffff;
+        endcase
+    end
+endmodule

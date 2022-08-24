@@ -78,6 +78,7 @@ riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/lui_tb.xv						\
 		 	   $(RISCV_TEST_DIR)/auipc_tb.xv					\
 		 	   $(RISCV_TEST_DIR)/mem_map_spi_tb.xv				\
+		 	   $(RISCV_TEST_DIR)/mem_map_led_tb.xv				\
 		 	   $(RISCV_TEST_DIR)/mem_map_io_dec_tb.xv			\
 			   $(RISCV_TEST_DIR)/all_instr_program_test_tb.xv
 
