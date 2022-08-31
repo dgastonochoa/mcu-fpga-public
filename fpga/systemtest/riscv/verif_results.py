@@ -24,10 +24,11 @@ def verify_results(path):
 
     words = []
     for i in range(0, len(lines) - 3, 4):
-        b3 = int(lines[i], 16)
-        b2 = int(lines[i + 1], 16)
-        b1 = int(lines[i + 2], 16)
-        b0 = int(lines[i + 3], 16)
+        b0 = int(lines[i], 16)
+        b1 = int(lines[i + 1], 16)
+        b2 = int(lines[i + 2], 16)
+        b3 = int(lines[i + 3], 16)
+
         word = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
         words.append(word)
 
