@@ -45,10 +45,10 @@ module xor_tb;
         $dumpfile(`VCD);
         $dumpvars(1, xor_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'b00;
-        dut.rv.dp.rf._reg[5] = 32'b101010;
-        dut.rv.dp.rf._reg[6] = 32'b010101;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[4] = 32'b00;
+        dut.rv.c.dp.rf._reg[5] = 32'b101010;
+        dut.rv.c.dp.rf._reg[6] = 32'b010101;
 
         `SET_MEM_I(0, 32'h0062c033); // xor     x0, x5, x6
         `SET_MEM_I(1, 32'h0062c233); // xor     x4, x5, x6
@@ -59,10 +59,10 @@ module xor_tb;
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[0] === 32'h00);
-        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'b111111);
-        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'b101010);
-        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'b0);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.c.dp.rf._reg[0] === 32'h00);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'b111111);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'b101010);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'b0);
 
         #5;
         $finish;

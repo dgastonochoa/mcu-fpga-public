@@ -59,34 +59,34 @@ module jal_tb;
         #2  rst = 0;
         assert(pc === 0);
         `WAIT_CLKS(clk, `J_I_CYC)   assert(pc === 12);
-                                    assert(dut.rv.dp.rf._reg[1] === 4);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 4);
 
         `WAIT_CLKS(clk, `R_I_CYC)   assert(pc === 16);
-                                    assert(dut.rv.dp.rf._reg[1] === 4);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 4);
         `WAIT_CLKS(clk, `R_I_CYC)   assert(pc === 20);
-                                    assert(dut.rv.dp.rf._reg[1] === 4);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 4);
         `WAIT_CLKS(clk, `R_I_CYC)   assert(pc === 24);
-                                    assert(dut.rv.dp.rf._reg[1] === 4);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 4);
         `WAIT_CLKS(clk, `R_I_CYC)   assert(pc === 28);
-                                    assert(dut.rv.dp.rf._reg[1] === 4);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 4);
 
         `WAIT_CLKS(clk, `R_I_CYC)   assert(pc === 20);
-                                    assert(dut.rv.dp.rf._reg[1] === 32);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 32);
 
         // Modify first instr. to jump to itself
         `SET_MEM_I(0, 32'h000000ef);
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_CLKS(clk, `J_I_CYC)   assert(pc === 0);
-                                    assert(dut.rv.dp.rf._reg[1] === 4);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 4);
         `WAIT_CLKS(clk, `J_I_CYC)   assert(pc === 0);
-                                    assert(dut.rv.dp.rf._reg[1] === 4);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 4);
         `WAIT_CLKS(clk, `J_I_CYC)   assert(pc === 0);
-                                    assert(dut.rv.dp.rf._reg[1] === 4);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 4);
         `WAIT_CLKS(clk, `J_I_CYC)   assert(pc === 0);
-                                    assert(dut.rv.dp.rf._reg[1] === 4);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 4);
         `WAIT_CLKS(clk, `J_I_CYC)   assert(pc === 0);
-                                    assert(dut.rv.dp.rf._reg[1] === 4);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 4);
 
         #5 $finish;
     end

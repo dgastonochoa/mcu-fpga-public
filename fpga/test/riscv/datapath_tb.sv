@@ -45,10 +45,10 @@ module datapath_tb;
         $dumpfile(`VCD);
         $dumpvars(1, datapath_tb);
 
-        dut.rv.dp.rf._reg[9] = (`DATA_START_IDX * 4) + 8;
-        dut.rv.dp.rf._reg[4] = 32'd0;
-        dut.rv.dp.rf._reg[5] = 32'hfffffffe;
-        dut.rv.dp.rf._reg[6] = 32'd0;
+        dut.rv.c.dp.rf._reg[9] = (`DATA_START_IDX * 4) + 8;
+        dut.rv.c.dp.rf._reg[4] = 32'd0;
+        dut.rv.c.dp.rf._reg[5] = 32'hfffffffe;
+        dut.rv.c.dp.rf._reg[6] = 32'd0;
 
         `SET_MEM_D(1, 32'hdeadc0de);
         `SET_MEM_D(4, 32'h00);
@@ -65,7 +65,7 @@ module datapath_tb;
 
         // First instr. executed
         `WAIT_CLKS(clk, `L_I_CYC) assert(pc === 4);
-                                  assert(dut.rv.dp.rf._reg[6] === 32'hdeadc0de);
+                                  assert(dut.rv.c.dp.rf._reg[6] === 32'hdeadc0de);
 
         // Second instr. executed
         `WAIT_CLKS(clk, `S_I_CYC) assert(pc === 8);
@@ -73,7 +73,7 @@ module datapath_tb;
 
         // Third instr. executed
         `WAIT_CLKS(clk, `R_I_CYC) assert(pc === 12);
-                                  assert(dut.rv.dp.rf._reg[4] === 32'hfffffffe);
+                                  assert(dut.rv.c.dp.rf._reg[4] === 32'hfffffffe);
 
         // Fourth instr. executed, branched to
         // starting address.
@@ -81,7 +81,7 @@ module datapath_tb;
 
         // First instr. executed again.
         `WAIT_CLKS(clk, `L_I_CYC) assert(pc === 4);
-                                  assert(dut.rv.dp.rf._reg[6] === 32'hdeadc0de);
+                                  assert(dut.rv.c.dp.rf._reg[6] === 32'hdeadc0de);
 
         // Second instr. executed again.
         `WAIT_CLKS(clk, `S_I_CYC) assert(pc === 8);
@@ -89,7 +89,7 @@ module datapath_tb;
 
         // Third instr. executed again
         `WAIT_CLKS(clk, `R_I_CYC) assert(pc === 12);
-                                  assert(dut.rv.dp.rf._reg[4] === 32'hfffffffe);
+                                  assert(dut.rv.c.dp.rf._reg[4] === 32'hfffffffe);
 
         // Fourth instr. executed again, branched to
         // starting address.

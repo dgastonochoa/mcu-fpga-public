@@ -45,9 +45,9 @@ module pipeline_bge_tb;
         $dumpfile(`VCD);
         $dumpvars(1, pipeline_bge_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd04;
-        dut.rv.dp.rf._reg[5] = 32'hffffffff;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[4] = 32'd04;
+        dut.rv.c.dp.rf._reg[5] = 32'hffffffff;
 
 
         `SET_MEM_I(0, 32'h02405e63);  // .L0:    bge     x0, x4, .Lx

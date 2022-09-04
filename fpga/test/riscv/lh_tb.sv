@@ -47,9 +47,9 @@ module lh_tb;
         $dumpvars(1, lh_tb);
 
         // Set register init. vals
-        dut.rv.dp.rf._reg[0] = 32'd0;
-        dut.rv.dp.rf._reg[6] = 32'd0;
-        dut.rv.dp.rf._reg[9] = (`DATA_START_IDX * 4) + 8;
+        dut.rv.c.dp.rf._reg[0] = 32'd0;
+        dut.rv.c.dp.rf._reg[6] = 32'd0;
+        dut.rv.c.dp.rf._reg[9] = (`DATA_START_IDX * 4) + 8;
 
         // Set mem. init. vals
         `SET_MEM_D(1, 32'hdeadc0de);
@@ -67,10 +67,10 @@ module lh_tb;
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_CLKS(clk, `L_I_CYC) assert(dut.rv.dp.rf._reg[6] === 32'hffffc0de);
-        `WAIT_CLKS(clk, `L_I_CYC) assert(dut.rv.dp.rf._reg[6] === 32'hffffbeef);
-        `WAIT_CLKS(clk, `L_I_CYC) assert(dut.rv.dp.rf._reg[6] === 32'hffffc0de);
-        `WAIT_CLKS(clk, `L_I_CYC) assert(dut.rv.dp.rf._reg[0] === 32'h00000000);
+        `WAIT_CLKS(clk, `L_I_CYC) assert(dut.rv.c.dp.rf._reg[6] === 32'hffffc0de);
+        `WAIT_CLKS(clk, `L_I_CYC) assert(dut.rv.c.dp.rf._reg[6] === 32'hffffbeef);
+        `WAIT_CLKS(clk, `L_I_CYC) assert(dut.rv.c.dp.rf._reg[6] === 32'hffffc0de);
+        `WAIT_CLKS(clk, `L_I_CYC) assert(dut.rv.c.dp.rf._reg[0] === 32'h00000000);
 
         #20;
         $finish;

@@ -48,7 +48,7 @@ module addi_tb;
         //
         // init. x0 as 0
         //
-        dut.rv.dp.rf._reg[0] = 32'd0;
+        dut.rv.c.dp.rf._reg[0] = 32'd0;
 
         //
         // addi does not write on x0
@@ -81,16 +81,16 @@ module addi_tb;
         #2  rst = 0;
 
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[0] === 32'd00);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd10);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[5] === 32'd20);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd00);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === -10);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd00);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd10);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd20);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd00);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd40);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[0] === 32'd00);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'd10);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[5] === 32'd20);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'd00);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === -10);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'd00);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'd10);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'd20);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'd00);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'd40);
 
         $finish;
     end

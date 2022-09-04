@@ -58,49 +58,49 @@ module digital_design_and_computer_arch_test_tb;
 
         // addi    x2,x0,5
         #4  assert(pc === 4);
-            assert(dut.rv.dp.rf._reg[2] === 32'b0101);
+            assert(dut.rv.c.dp.rf._reg[2] === 32'b0101);
 
         // addi    x3,x0,12
         #20 assert(pc === 8);
-            assert(dut.rv.dp.rf._reg[3] === 32'b1100);
+            assert(dut.rv.c.dp.rf._reg[3] === 32'b1100);
 
         // addi    x7,x3,-9
         #20 assert(pc === 12);
-            assert(dut.rv.dp.rf._reg[7] === 32'b0011);
+            assert(dut.rv.c.dp.rf._reg[7] === 32'b0011);
 
         // or      x4,x7,x2
         #20 assert(pc === 16);
-            assert(dut.rv.dp.rf._reg[4] === 32'b0111);
+            assert(dut.rv.c.dp.rf._reg[4] === 32'b0111);
 
         // and     x5,x3,x4
         #20 assert(pc === 20);
-            assert(dut.rv.dp.rf._reg[5] === 32'b0100);
+            assert(dut.rv.c.dp.rf._reg[5] === 32'b0100);
 
         // add     x5,x5,x4
         #20 assert(pc === 24);
-            assert(dut.rv.dp.rf._reg[5] === 32'b1011);
+            assert(dut.rv.c.dp.rf._reg[5] === 32'b1011);
 
         // beq     x5,x7,0x48
         #20 assert(pc === 28);
 
         // slt     x4,x3,x4
         #20 assert(pc === 32);
-            assert(dut.rv.dp.rf._reg[4] === 32'b0000);
+            assert(dut.rv.c.dp.rf._reg[4] === 32'b0000);
 
         // beq     x4,x0,0x28
         #20 assert(pc === 40);
 
         // slt     x4,x7,x2
         #20 assert(pc === 44);
-            assert(dut.rv.dp.rf._reg[4] === 32'b0001);
+            assert(dut.rv.c.dp.rf._reg[4] === 32'b0001);
 
         // add     x7,x4,x5
         #20 assert(pc === 48);
-            assert(dut.rv.dp.rf._reg[7] === 32'b1100);
+            assert(dut.rv.c.dp.rf._reg[7] === 32'b1100);
 
         // sub     x7,x7,x2
         #20 assert(pc === 52);
-            assert(dut.rv.dp.rf._reg[7] === 32'b0111);
+            assert(dut.rv.c.dp.rf._reg[7] === 32'b0111);
 
         // sw      x7,84(x3)
         #20 assert(pc === 56);
@@ -108,19 +108,19 @@ module digital_design_and_computer_arch_test_tb;
 
         // lw      x2,96(x0)
         #20 assert(pc === 60);
-            assert(dut.rv.dp.rf._reg[2] === 32'b0111);
+            assert(dut.rv.c.dp.rf._reg[2] === 32'b0111);
 
         // add     x9,x2,x5
         #20 assert(pc === 64);
-            assert(dut.rv.dp.rf._reg[9] === 32'b10010);
+            assert(dut.rv.c.dp.rf._reg[9] === 32'b10010);
 
         // jal     x3,0x48
         #20 assert(pc === 32'd72);
-            assert(dut.rv.dp.rf._reg[3] === 68);
+            assert(dut.rv.c.dp.rf._reg[3] === 68);
 
         // add     x2,x2,x9
         #20 assert(pc === 32'd76);
-            assert(dut.rv.dp.rf._reg[2] === 32'd25);
+            assert(dut.rv.c.dp.rf._reg[2] === 32'd25);
 
         // sw      x2,32(x3)
         #20 assert(pc === 32'd80);

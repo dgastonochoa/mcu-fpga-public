@@ -45,16 +45,16 @@ module blt_tb;
         $dumpfile(`VCD);
         $dumpvars(1, blt_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd4;
-        dut.rv.dp.rf._reg[5] = 32'hffffffff;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[4] = 32'd4;
+        dut.rv.c.dp.rf._reg[5] = 32'hffffffff;
 
         // blt'ing these 2 regs. (a < b; a = big. neg. num., b = 2)
         // will produce the special case in which comparing two
         // signed numbers a and b, begin a less than b, won't cause
         // an ALU's neg flag, but an overflow.
-        dut.rv.dp.rf._reg[6] = 32'h80000000;
-        dut.rv.dp.rf._reg[7] = 32'h00000002;
+        dut.rv.c.dp.rf._reg[6] = 32'h80000000;
+        dut.rv.c.dp.rf._reg[7] = 32'h00000002;
 
 
         `SET_MEM_I(0, 32'h02024e63);

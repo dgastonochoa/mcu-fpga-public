@@ -45,10 +45,10 @@ module and_tb;
         $dumpfile(`VCD);
         $dumpvars(1, and_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd00;
-        dut.rv.dp.rf._reg[5] = 32'h01;
-        dut.rv.dp.rf._reg[6] = 32'hff;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[4] = 32'd00;
+        dut.rv.c.dp.rf._reg[5] = 32'h01;
+        dut.rv.c.dp.rf._reg[6] = 32'hff;
 
         `SET_MEM_I(0, 32'h00627033);  // and x0, x4, x6
         `SET_MEM_I(1, 32'h0062f233);  // and x4, x5, x6
@@ -58,9 +58,9 @@ module and_tb;
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[0] === 32'h00);
-        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'h01);
-        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'hff);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.c.dp.rf._reg[0] === 32'h00);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'h01);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'hff);
 
         #5;
         $finish;

@@ -56,8 +56,8 @@
     `define WAIT_INIT_CYCLES(clk)
 
 `elsif CONFIG_RISCV_PIPELINE
-    `define MEM_DATA                dut.rv.data_mem._mem._mem
-    `define MEM_INSTR               dut.rv.instr_mem._mem._mem
+    `define MEM_DATA                dut.rv.cm.data_mem._mem._mem
+    `define MEM_INSTR               dut.rv.cm.instr_mem._mem._mem
     `define DATA_START_IDX          0
     `define INSTR_START_IDX         0
 

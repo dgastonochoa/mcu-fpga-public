@@ -44,9 +44,9 @@ module sw_2_tb;
         $dumpfile(`VCD);
         $dumpvars(1, sw_2_tb);
 
-        dut.rv.dp.rf._reg[2] = 32'h00;
-        dut.rv.dp.rf._reg[5] = 32'h00;
-        dut.rv.dp.rf._reg[6] = 32'h00;
+        dut.rv.c.dp.rf._reg[2] = 32'h00;
+        dut.rv.c.dp.rf._reg[5] = 32'h00;
+        dut.rv.c.dp.rf._reg[6] = 32'h00;
 
         `MEM_DATA[8] = 32'hdeadc0de;
         `MEM_DATA[9] = 32'hdeadbeef;
@@ -63,9 +63,9 @@ module sw_2_tb;
         #2  rst = 1;
         #2  rst = 0;
 
-        `WAIT_CLKS(clk, 20) assert(dut.rv.dp.rf._reg[2] === 32'd32);
-                            assert(dut.rv.dp.rf._reg[5] === 32'd37);
-                            assert(dut.rv.dp.rf._reg[6] === 32'd40);
+        `WAIT_CLKS(clk, 20) assert(dut.rv.c.dp.rf._reg[2] === 32'd32);
+                            assert(dut.rv.c.dp.rf._reg[5] === 32'd37);
+                            assert(dut.rv.c.dp.rf._reg[6] === 32'd40);
                             assert(`MEM_DATA[8] === 32'd37);
                             assert(`MEM_DATA[9] === 32'd40);
 

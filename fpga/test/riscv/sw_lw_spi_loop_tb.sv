@@ -57,18 +57,18 @@ module sw_spi_loop_tb;
         clk
     );
 
-    `__GET_REG_SP(dut.dp.rf);
-    `__GET_REG_RA(dut.dp.rf);
-    `__GET_REG_A0(dut.dp.rf);
-    `__GET_REG_A1(dut.dp.rf);
-    `__GET_REG_A2(dut.dp.rf);
-    `__GET_REG_A3(dut.dp.rf);
-    `__GET_REG_S0(dut.dp.rf);
-    `__GET_REG_T0(dut.dp.rf);
+    `__GET_REG_SP(dut.c.dp.rf);
+    `__GET_REG_RA(dut.c.dp.rf);
+    `__GET_REG_A0(dut.c.dp.rf);
+    `__GET_REG_A1(dut.c.dp.rf);
+    `__GET_REG_A2(dut.c.dp.rf);
+    `__GET_REG_A3(dut.c.dp.rf);
+    `__GET_REG_S0(dut.c.dp.rf);
+    `__GET_REG_T0(dut.c.dp.rf);
 
     wire [32:0] stack_0;
 
-    assign stack_0 = dut.data_mem._mem._mem[8];
+    assign stack_0 = dut.cm.data_mem._mem._mem[8];
 
     integer i = 0;
 
@@ -76,57 +76,57 @@ module sw_spi_loop_tb;
         $dumpfile(`VCD);
         $dumpvars(1, sw_spi_loop_tb);
 
-        dut.dp.rf._reg[11] = 32'h80000000;
+        dut.c.dp.rf._reg[11] = 32'h80000000;
 
-        dut.data_mem._mem._mem[0] = 32'hdeadc0de;
-        dut.data_mem._mem._mem[1] = 32'hdeadbeef;
-        dut.data_mem._mem._mem[2] = 32'hc001c0de;
-        dut.data_mem._mem._mem[3] = 32'hc001beef;
+        dut.cm.data_mem._mem._mem[0] = 32'hdeadc0de;
+        dut.cm.data_mem._mem._mem[1] = 32'hdeadbeef;
+        dut.cm.data_mem._mem._mem[2] = 32'hc001c0de;
+        dut.cm.data_mem._mem._mem[3] = 32'hc001beef;
 
 
-        dut.instr_mem._mem._mem[0] = 32'h00000613; //         addi    a2, x0, 0   # set start address
-        dut.instr_mem._mem._mem[1] = 32'h00c00693; //         addi    a3, x0, 12  # set end address
-        dut.instr_mem._mem._mem[2] = 32'h02000113; //         addi    sp, x0, 32  # init. sp
-        dut.instr_mem._mem._mem[3] = 32'h00002503; //         lw      a0, 0(x0)   # load mem[0] (debug)
-        dut.instr_mem._mem._mem[4] = 32'h050000ef; //         jal     .SM
-        dut.instr_mem._mem._mem[5] = 32'h000000ef; // .END:   jal     .END
+        dut.cm.instr_mem._mem._mem[0] = 32'h00000613;  //         addi    a2, x0, 0   # set start address
+        dut.cm.instr_mem._mem._mem[1] = 32'h00c00693;  //         addi    a3, x0, 12  # set end address
+        dut.cm.instr_mem._mem._mem[2] = 32'h02000113;  //         addi    sp, x0, 32  # init. sp
+        dut.cm.instr_mem._mem._mem[3] = 32'h00002503;  //         lw      a0, 0(x0)   # load mem[0] (debug)
+        dut.cm.instr_mem._mem._mem[4] = 32'h050000ef;  //         jal     .SM
+        dut.cm.instr_mem._mem._mem[5] = 32'h000000ef;  // .END:   jal     .END
 
-                                                    // # a0 = [7:0] = byte
-                                                    // # a1 = SPI base addr.
-        dut.instr_mem._mem._mem[6] = 32'h00a5a023;  // .SB:    sw      a0, 0(a1)    # write data to be send
-        dut.instr_mem._mem._mem[7] = 32'h00400293;  //         addi    t0, x0, 0x04 # set send flag
-        dut.instr_mem._mem._mem[8] = 32'h0055a223;  //         sw      t0, 4(a1)    # trigger send
-        dut.instr_mem._mem._mem[9] = 32'h0045a283;  // .L1:    lw      t0, 4(a1)    # read status
-        dut.instr_mem._mem._mem[10] = 32'h0022f293; //         andi    t0, t0, 0x2  # get busy flag
-        dut.instr_mem._mem._mem[11] = 32'hfe029ce3; //         bne     t0, x0, .L1  # if busy != 0 keep polling
-        dut.instr_mem._mem._mem[12] = 32'h00008067; //         jr      ra           # return
+                                                       // # a0 = [7:0] = byte
+                                                       // # a1 = SPI base addr.
+        dut.cm.instr_mem._mem._mem[6] = 32'h00a5a023;  // .SB:    sw      a0, 0(a1)    # write data to be send
+        dut.cm.instr_mem._mem._mem[7] = 32'h00400293;  //         addi    t0, x0, 0x04 # set send flag
+        dut.cm.instr_mem._mem._mem[8] = 32'h0055a223;  //         sw      t0, 4(a1)    # trigger send
+        dut.cm.instr_mem._mem._mem[9] = 32'h0045a283;  // .L1:    lw      t0, 4(a1)    # read status
+        dut.cm.instr_mem._mem._mem[10] = 32'h0022f293; //         andi    t0, t0, 0x2  # get busy flag
+        dut.cm.instr_mem._mem._mem[11] = 32'hfe029ce3; //         bne     t0, x0, .L1  # if busy != 0 keep polling
+        dut.cm.instr_mem._mem._mem[12] = 32'h00008067; //         jr      ra           # return
 
-                                                    // # a0 = word
-                                                    // # a1 = SPI base addr.
-        dut.instr_mem._mem._mem[13] = 32'h00300413; // .SW:    addi    s0, x0, 3   # load iterator
-        dut.instr_mem._mem._mem[14] = 32'h00100313; //         addi    t1, x0, 1   # used tu sub. 1
-        dut.instr_mem._mem._mem[15] = 32'h00112023; //         sw      ra, 0(sp)   # push ra
-        dut.instr_mem._mem._mem[16] = 32'h00410113; //         addi    sp, sp, 4   # sp = sp + 4
-        dut.instr_mem._mem._mem[17] = 32'hfd5ff0ef; // .L2:    jal     .SB         # send byte
-        dut.instr_mem._mem._mem[18] = 32'h00855513; //         srli    a0, a0, 8   # right shift to next byte
-        dut.instr_mem._mem._mem[19] = 32'h40640433; //         sub     s0, s0, t1  # sub. 1 to iterator
-        dut.instr_mem._mem._mem[20] = 32'hfe045ae3; //         bge     s0, x0, .L2 # if it. > 0, repeat
-        dut.instr_mem._mem._mem[21] = 32'hffc10113; //         addi    sp, sp, -4  # restore sp
-        dut.instr_mem._mem._mem[22] = 32'h00012083; //         lw      ra, 0(sp)   # restore ra
-        dut.instr_mem._mem._mem[23] = 32'h00008067; //         jr      ra          # return
+                                                       // # a0 = word
+                                                       // # a1 = SPI base addr.
+        dut.cm.instr_mem._mem._mem[13] = 32'h00300413; // .SW:    addi    s0, x0, 3   # load iterator
+        dut.cm.instr_mem._mem._mem[14] = 32'h00100313; //         addi    t1, x0, 1   # used tu sub. 1
+        dut.cm.instr_mem._mem._mem[15] = 32'h00112023; //         sw      ra, 0(sp)   # push ra
+        dut.cm.instr_mem._mem._mem[16] = 32'h00410113; //         addi    sp, sp, 4   # sp = sp + 4
+        dut.cm.instr_mem._mem._mem[17] = 32'hfd5ff0ef; // .L2:    jal     .SB         # send byte
+        dut.cm.instr_mem._mem._mem[18] = 32'h00855513; //         srli    a0, a0, 8   # right shift to next byte
+        dut.cm.instr_mem._mem._mem[19] = 32'h40640433; //         sub     s0, s0, t1  # sub. 1 to iterator
+        dut.cm.instr_mem._mem._mem[20] = 32'hfe045ae3; //         bge     s0, x0, .L2 # if it. > 0, repeat
+        dut.cm.instr_mem._mem._mem[21] = 32'hffc10113; //         addi    sp, sp, -4  # restore sp
+        dut.cm.instr_mem._mem._mem[22] = 32'h00012083; //         lw      ra, 0(sp)   # restore ra
+        dut.cm.instr_mem._mem._mem[23] = 32'h00008067; //         jr      ra          # return
 
-                                                    // # a1 = SPI base addr.
-                                                    // # a2 = start addr.
-                                                    // # a3 = end addr.
-        dut.instr_mem._mem._mem[24] = 32'h00112023; // .SM:    sw      ra, 0(sp)   # push ra
-        dut.instr_mem._mem._mem[25] = 32'h00410113; //         addi    sp, sp, 4   # sp = sp + 4
-        dut.instr_mem._mem._mem[26] = 32'h00062503; // .L3:    lw      a0, 0(a2)   # load word
-        dut.instr_mem._mem._mem[27] = 32'hfc9ff0ef; //         jal     .SW         # send word
-        dut.instr_mem._mem._mem[28] = 32'h00460613; //         addi    a2, a2, 4   # base addr. += 4
-        dut.instr_mem._mem._mem[29] = 32'hfec6dae3; //         bge     a3, a2, .L3 # if end addr. >= base addr. keep sending
-        dut.instr_mem._mem._mem[30] = 32'hffc10113; //         addi    sp, sp, -4  # restore sp
-        dut.instr_mem._mem._mem[31] = 32'h00012083; //         lw      ra, 0(sp)   # restore ra
-        dut.instr_mem._mem._mem[32] = 32'h00008067; //         jr      ra          # return
+                                                       // # a1 = SPI base addr.
+                                                       // # a2 = start addr.
+                                                       // # a3 = end addr.
+        dut.cm.instr_mem._mem._mem[24] = 32'h00112023; // .SM:    sw      ra, 0(sp)   # push ra
+        dut.cm.instr_mem._mem._mem[25] = 32'h00410113; //         addi    sp, sp, 4   # sp = sp + 4
+        dut.cm.instr_mem._mem._mem[26] = 32'h00062503; // .L3:    lw      a0, 0(a2)   # load word
+        dut.cm.instr_mem._mem._mem[27] = 32'hfc9ff0ef; //         jal     .SW         # send word
+        dut.cm.instr_mem._mem._mem[28] = 32'h00460613; //         addi    a2, a2, 4   # base addr. += 4
+        dut.cm.instr_mem._mem._mem[29] = 32'hfec6dae3; //         bge     a3, a2, .L3 # if end addr. >= base addr. keep sending
+        dut.cm.instr_mem._mem._mem[30] = 32'hffc10113; //         addi    sp, sp, -4  # restore sp
+        dut.cm.instr_mem._mem._mem[31] = 32'h00012083; //         lw      ra, 0(sp)   # restore ra
+        dut.cm.instr_mem._mem._mem[32] = 32'h00008067; //         jr      ra          # return
 
 
         // Reset and test

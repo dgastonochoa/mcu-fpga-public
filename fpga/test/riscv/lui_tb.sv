@@ -45,8 +45,8 @@ module lui_tb;
         $dumpfile(`VCD);
         $dumpvars(1, lui_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[1] = 32'd12;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[1] = 32'd12;
 
         `SET_MEM_I(0, 32'hfffff0b7);  // lui x1, 0xfffff
         `SET_MEM_I(1, 32'h000010b7);  // lui x1, 1
@@ -56,9 +56,9 @@ module lui_tb;
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_CLKS(clk, `U_I_CYC) assert(dut.rv.dp.rf._reg[1] === 32'hfffff000);
-        `WAIT_CLKS(clk, `U_I_CYC) assert(dut.rv.dp.rf._reg[1] === 32'h00001000);
-        `WAIT_CLKS(clk, `U_I_CYC) assert(dut.rv.dp.rf._reg[1] === 32'h00000000);
+        `WAIT_CLKS(clk, `U_I_CYC) assert(dut.rv.c.dp.rf._reg[1] === 32'hfffff000);
+        `WAIT_CLKS(clk, `U_I_CYC) assert(dut.rv.c.dp.rf._reg[1] === 32'h00001000);
+        `WAIT_CLKS(clk, `U_I_CYC) assert(dut.rv.c.dp.rf._reg[1] === 32'h00000000);
 
         #5;
         $finish;

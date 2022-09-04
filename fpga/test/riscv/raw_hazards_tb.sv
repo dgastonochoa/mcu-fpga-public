@@ -49,15 +49,15 @@ module raw_hazards_tb;
         //
         // Forwarding works for the next 3 instructions
         //
-        dut.rv.dp.rf._reg[1] = 32'hff;
-        dut.rv.dp.rf._reg[2] = 32'd0;
-        dut.rv.dp.rf._reg[3] = 32'd1;
-        dut.rv.dp.rf._reg[4] = 32'd1;
-        dut.rv.dp.rf._reg[5] = 32'd2;
-        dut.rv.dp.rf._reg[6] = 32'd13;
-        dut.rv.dp.rf._reg[7] = 32'd0;
-        dut.rv.dp.rf._reg[8] = 32'd0;
-        dut.rv.dp.rf._reg[9] = 32'd0;
+        dut.rv.c.dp.rf._reg[1] = 32'hff;
+        dut.rv.c.dp.rf._reg[2] = 32'd0;
+        dut.rv.c.dp.rf._reg[3] = 32'd1;
+        dut.rv.c.dp.rf._reg[4] = 32'd1;
+        dut.rv.c.dp.rf._reg[5] = 32'd2;
+        dut.rv.c.dp.rf._reg[6] = 32'd13;
+        dut.rv.c.dp.rf._reg[7] = 32'd0;
+        dut.rv.c.dp.rf._reg[8] = 32'd0;
+        dut.rv.c.dp.rf._reg[9] = 32'd0;
 
         `SET_MEM_I(0, 32'h00520433); // add x8, x4, x5  # x8 = 3
         `SET_MEM_I(1, 32'h40340133); // sub x2, x8, x3  # x2 = 2
@@ -67,10 +67,10 @@ module raw_hazards_tb;
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[8] === 32'd3);
-        `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[2] === 32'd2);
-        `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[9] === 32'hf);
-        `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[7] === 32'd3);
+        `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[8] === 32'd3);
+        `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[2] === 32'd2);
+        `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[9] === 32'hf);
+        `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[7] === 32'd3);
 
 
         //
@@ -78,11 +78,11 @@ module raw_hazards_tb;
         // instr[M].dst_reg == instr[W].dst_reg == instr[E].src_reg2
         //
         #2  rst = 1;
-            dut.rv.dp.rf._reg[1] = 32'hff;
-            dut.rv.dp.rf._reg[2] = 32'd2;
-            dut.rv.dp.rf._reg[3] = 32'd3;
-            dut.rv.dp.rf._reg[4] = 32'd4;
-            dut.rv.dp.rf._reg[5] = 32'hff;
+            dut.rv.c.dp.rf._reg[1] = 32'hff;
+            dut.rv.c.dp.rf._reg[2] = 32'd2;
+            dut.rv.c.dp.rf._reg[3] = 32'd3;
+            dut.rv.c.dp.rf._reg[4] = 32'd4;
+            dut.rv.c.dp.rf._reg[5] = 32'hff;
 
             `SET_MEM_I(0, 32'h003100b3); // add x1, x2, x3
             `SET_MEM_I(1, 32'h004180b3); // add x1, x3, x4
@@ -90,9 +90,9 @@ module raw_hazards_tb;
         #2  rst = 0;
 
             `WAIT_INIT_CYCLES(clk);
-            `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[1] === 32'd5);
-            `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[1] === 32'd7);
-            `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[5] === 32'd9);
+            `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[1] === 32'd5);
+            `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[1] === 32'd7);
+            `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[5] === 32'd9);
 
 
         //
@@ -100,11 +100,11 @@ module raw_hazards_tb;
         // instr[M].dst_reg == instr[W].dst_reg == instr[E].src_reg1
         //
         #2  rst = 1;
-            dut.rv.dp.rf._reg[1] = 32'hff;
-            dut.rv.dp.rf._reg[2] = 32'd2;
-            dut.rv.dp.rf._reg[3] = 32'd3;
-            dut.rv.dp.rf._reg[4] = 32'd4;
-            dut.rv.dp.rf._reg[5] = 32'hff;
+            dut.rv.c.dp.rf._reg[1] = 32'hff;
+            dut.rv.c.dp.rf._reg[2] = 32'd2;
+            dut.rv.c.dp.rf._reg[3] = 32'd3;
+            dut.rv.c.dp.rf._reg[4] = 32'd4;
+            dut.rv.c.dp.rf._reg[5] = 32'hff;
 
             `SET_MEM_I(0, 32'h003100b3); // add x1, x2, x3
             `SET_MEM_I(1, 32'h004180b3); // add x1, x3, x4
@@ -112,9 +112,9 @@ module raw_hazards_tb;
         #2  rst = 0;
 
             `WAIT_INIT_CYCLES(clk);
-            `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[1] === 32'd5);
-            `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[1] === 32'd7);
-            `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[5] === 32'd9);
+            `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[1] === 32'd5);
+            `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[1] === 32'd7);
+            `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[5] === 32'd9);
 
         #20;
         $finish;

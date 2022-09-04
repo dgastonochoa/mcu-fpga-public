@@ -45,9 +45,9 @@ module srai_tb;
         $dumpfile(`VCD);
         $dumpvars(1, srai_tb);
 
-        dut.rv.dp.rf._reg[4] = 32'b00;
-        dut.rv.dp.rf._reg[5] = 32'h08;
-        dut.rv.dp.rf._reg[7] = 32'hfffffff8;
+        dut.rv.c.dp.rf._reg[4] = 32'b00;
+        dut.rv.c.dp.rf._reg[5] = 32'h08;
+        dut.rv.c.dp.rf._reg[7] = 32'hfffffff8;
 
         `SET_MEM_I(0, 32'h4022d213);   // srai     x4, x5, 2
         `SET_MEM_I(1, 32'h4023d213);   // srai     x4, x7, 2
@@ -56,8 +56,8 @@ module srai_tb;
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'h02);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'hfffffffe);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'h02);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'hfffffffe);
 
         #5;
         $finish;

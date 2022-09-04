@@ -56,21 +56,21 @@ module mem_map_led_tb;
         $dumpfile(`VCD);
         $dumpvars(1, mem_map_led_tb);
 
-        dut.dp.rf._reg[11] = 32'h80000040;          // set a1 as the led periph. base
+        dut.c.dp.rf._reg[11] = 32'h80000040;          // set a1 as the led periph. base
 
-        dut.instr_mem._mem._mem[0]  = 32'h0aa00613; //         addi    a2, x0, 0xaa    # 1: load value to write in leds
-        dut.instr_mem._mem._mem[1]  = 32'h00c5a023; //         sw      a2, 0(a1)       # 2: write leds
-        dut.instr_mem._mem._mem[2]  = 32'h0005a683; //         lw      a3, 0(a1)       # 3: read leds back
-        dut.instr_mem._mem._mem[3]  = 32'h05500613; //         addi    a2, x0, 0x55    # repeat 1
-        dut.instr_mem._mem._mem[4]  = 32'h00c5a023; //         sw      a2, 0(a1)       # repeat 2
-        dut.instr_mem._mem._mem[5]  = 32'h0005a683; //         lw      a3, 0(a1)       # repeat 3
-        dut.instr_mem._mem._mem[6]  = 32'hfff00613; //         addi    a2, x0, -1      # load all 0xff's
-        dut.instr_mem._mem._mem[7]  = 32'h00c5a023; //         sw      a2, 0(a1)       # repeat 2
-        dut.instr_mem._mem._mem[8]  = 32'h0005a683; //         lw      a3, 0(a1)       # repeat 3
-        dut.instr_mem._mem._mem[9]  = 32'h00000613; //         addi    a2, x0, 0       # repeat 1
-        dut.instr_mem._mem._mem[10] = 32'h00c5a023; //         sw      a2, 0(a1)       # repeat 2
-        dut.instr_mem._mem._mem[11] = 32'h0005a683; //         lw      a3, 0(a1)       # repeat 3
-        dut.instr_mem._mem._mem[12] = 32'h000000ef; // .END:   jal     ra, .END        # loop for ever
+        dut.cm.instr_mem._mem._mem[0]  = 32'h0aa00613; //         addi    a2, x0, 0xaa    # 1: load value to write in leds
+        dut.cm.instr_mem._mem._mem[1]  = 32'h00c5a023; //         sw      a2, 0(a1)       # 2: write leds
+        dut.cm.instr_mem._mem._mem[2]  = 32'h0005a683; //         lw      a3, 0(a1)       # 3: read leds back
+        dut.cm.instr_mem._mem._mem[3]  = 32'h05500613; //         addi    a2, x0, 0x55    # repeat 1
+        dut.cm.instr_mem._mem._mem[4]  = 32'h00c5a023; //         sw      a2, 0(a1)       # repeat 2
+        dut.cm.instr_mem._mem._mem[5]  = 32'h0005a683; //         lw      a3, 0(a1)       # repeat 3
+        dut.cm.instr_mem._mem._mem[6]  = 32'hfff00613; //         addi    a2, x0, -1      # load all 0xff's
+        dut.cm.instr_mem._mem._mem[7]  = 32'h00c5a023; //         sw      a2, 0(a1)       # repeat 2
+        dut.cm.instr_mem._mem._mem[8]  = 32'h0005a683; //         lw      a3, 0(a1)       # repeat 3
+        dut.cm.instr_mem._mem._mem[9]  = 32'h00000613; //         addi    a2, x0, 0       # repeat 1
+        dut.cm.instr_mem._mem._mem[10] = 32'h00c5a023; //         sw      a2, 0(a1)       # repeat 2
+        dut.cm.instr_mem._mem._mem[11] = 32'h0005a683; //         lw      a3, 0(a1)       # repeat 3
+        dut.cm.instr_mem._mem._mem[12] = 32'h000000ef; // .END:   jal     ra, .END        # loop for ever
 
 
         // Reset and test

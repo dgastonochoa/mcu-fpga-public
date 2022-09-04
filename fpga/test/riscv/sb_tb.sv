@@ -46,10 +46,10 @@ module sw_tb;
         $dumpfile(`VCD);
         $dumpvars(1, sw_tb);
 
-        dut.rv.dp.rf._reg[9] = (`DATA_START_IDX * 4) + 32;
-        dut.rv.dp.rf._reg[6] = 32'hdeadc0de;
-        dut.rv.dp.rf._reg[7] = 32'hdeadbeef;
-        dut.rv.dp.rf._reg[8] = 32'hc001c0de;
+        dut.rv.c.dp.rf._reg[9] = (`DATA_START_IDX * 4) + 32;
+        dut.rv.c.dp.rf._reg[6] = 32'hdeadc0de;
+        dut.rv.c.dp.rf._reg[7] = 32'hdeadbeef;
+        dut.rv.c.dp.rf._reg[8] = 32'hc001c0de;
 
         `SET_MEM_D(5, 32'h00);
         `SET_MEM_D(10, 32'h00);

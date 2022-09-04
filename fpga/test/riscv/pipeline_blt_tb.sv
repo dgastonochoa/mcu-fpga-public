@@ -45,9 +45,9 @@ module pipeline_blt_tb;
         $dumpfile(`VCD);
         $dumpvars(1, pipeline_blt_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd04;
-        dut.rv.dp.rf._reg[5] = 32'hffffffff;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[4] = 32'd04;
+        dut.rv.c.dp.rf._reg[5] = 32'hffffffff;
 
 
         `SET_MEM_I(0, 32'h02024e63);  // .L0:    blt     x4, x0, .Lx

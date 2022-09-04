@@ -45,8 +45,8 @@ module beq_tb;
         $dumpfile(`VCD);
         $dumpvars(1, beq_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd01;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[4] = 32'd01;
 
         `SET_MEM_I(0, 32'h00400a63);    // beq x0, x4, 20;  pc = 20
         `SET_MEM_I(1, 32'h00000863);    // beq x0, x0, 16;  pc = 20

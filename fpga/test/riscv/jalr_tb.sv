@@ -48,9 +48,9 @@ module jalr_tb;
         //
         // init. x0 as 0
         //
-        dut.rv.dp.rf._reg[1] = 32'd0;
-        dut.rv.dp.rf._reg[3] = 32'd8;
-        dut.rv.dp.rf._reg[4] = 32'd4;
+        dut.rv.c.dp.rf._reg[1] = 32'd0;
+        dut.rv.c.dp.rf._reg[3] = 32'd8;
+        dut.rv.c.dp.rf._reg[4] = 32'd4;
 
         `SET_MEM_I(0, 32'h004180e7);   // jalr ra, x3, 4
         `SET_MEM_I(3, 32'hffc200e7);   // jalr ra, x4, -4
@@ -59,13 +59,13 @@ module jalr_tb;
         #2  rst = 1;
         #2  rst = 0;
             assert(pc === 32'd00);
-            assert(dut.rv.dp.rf._reg[1] === 32'd00);
+            assert(dut.rv.c.dp.rf._reg[1] === 32'd00);
 
         `WAIT_CLKS(clk, `R_I_CYC)   assert(pc === 32'd12);
-                                    assert(dut.rv.dp.rf._reg[1] === 32'd04);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 32'd04);
 
         `WAIT_CLKS(clk, `R_I_CYC)   assert(pc === 32'd00);
-                                    assert(dut.rv.dp.rf._reg[1] === 32'd16);
+                                    assert(dut.rv.c.dp.rf._reg[1] === 32'd16);
 
         $finish;
     end

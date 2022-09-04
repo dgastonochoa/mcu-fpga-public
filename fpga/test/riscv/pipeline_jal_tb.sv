@@ -45,13 +45,13 @@ module pipeline_jal_tb;
         $dumpfile(`VCD);
         $dumpvars(1, pipeline_jal_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[1] = 32'd00;
-        dut.rv.dp.rf._reg[2] = 32'd2;
-        dut.rv.dp.rf._reg[3] = 32'd3;
-        dut.rv.dp.rf._reg[4] = 32'd4;
-        dut.rv.dp.rf._reg[5] = 32'd5;
-        dut.rv.dp.rf._reg[6] = 32'd6;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[1] = 32'd00;
+        dut.rv.c.dp.rf._reg[2] = 32'd2;
+        dut.rv.c.dp.rf._reg[3] = 32'd3;
+        dut.rv.c.dp.rf._reg[4] = 32'd4;
+        dut.rv.c.dp.rf._reg[5] = 32'd5;
+        dut.rv.c.dp.rf._reg[6] = 32'd6;
 
         `SET_MEM_I(0, 32'h010000ef); // .L0:    jal     x1, .L1
         `SET_MEM_I(1, 32'h00510113); //         addi    x2, x2, 5
@@ -69,29 +69,29 @@ module pipeline_jal_tb;
             assert(pc === 32'd00);
 
         `WAIT_CLKS(clk, 3) assert(pc === 32'd16);
-        `WAIT_CLKS(clk, 2) assert(dut.rv.dp.rf._reg[1] === 32'd4);
+        `WAIT_CLKS(clk, 2) assert(dut.rv.c.dp.rf._reg[1] === 32'd4);
         `WAIT_CLKS(clk, 2) assert(pc === 32'd0);
-        `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[2] === 32'd2);
-                           assert(dut.rv.dp.rf._reg[3] === 32'd3);
-                           assert(dut.rv.dp.rf._reg[5] === 32'd15);
+        `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[2] === 32'd2);
+                           assert(dut.rv.c.dp.rf._reg[3] === 32'd3);
+                           assert(dut.rv.c.dp.rf._reg[5] === 32'd15);
 
 
         // This first wait must be only 2 because of the last wait in the
         // above section
         `WAIT_CLKS(clk, 2) assert(pc === 32'd16);
-        `WAIT_CLKS(clk, 2) assert(dut.rv.dp.rf._reg[1] === 32'd4);
+        `WAIT_CLKS(clk, 2) assert(dut.rv.c.dp.rf._reg[1] === 32'd4);
         `WAIT_CLKS(clk, 2) assert(pc === 32'd0);
-        `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[2] === 32'd2);
-                           assert(dut.rv.dp.rf._reg[3] === 32'd3);
-                           assert(dut.rv.dp.rf._reg[5] === 32'd25);
+        `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[2] === 32'd2);
+                           assert(dut.rv.c.dp.rf._reg[3] === 32'd3);
+                           assert(dut.rv.c.dp.rf._reg[5] === 32'd25);
 
         // Same as above
         `WAIT_CLKS(clk, 2) assert(pc === 32'd16);
-        `WAIT_CLKS(clk, 2) assert(dut.rv.dp.rf._reg[1] === 32'd4);
+        `WAIT_CLKS(clk, 2) assert(dut.rv.c.dp.rf._reg[1] === 32'd4);
         `WAIT_CLKS(clk, 2) assert(pc === 32'd0);
-        `WAIT_CLKS(clk, 1) assert(dut.rv.dp.rf._reg[2] === 32'd2);
-                           assert(dut.rv.dp.rf._reg[3] === 32'd3);
-                           assert(dut.rv.dp.rf._reg[5] === 32'd35);
+        `WAIT_CLKS(clk, 1) assert(dut.rv.c.dp.rf._reg[2] === 32'd2);
+                           assert(dut.rv.c.dp.rf._reg[3] === 32'd3);
+                           assert(dut.rv.c.dp.rf._reg[5] === 32'd35);
 
         #5;
         $finish;

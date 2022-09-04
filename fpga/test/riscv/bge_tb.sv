@@ -45,9 +45,9 @@ module bge_tb;
         $dumpfile(`VCD);
         $dumpvars(1, bge_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd04;
-        dut.rv.dp.rf._reg[5] = 32'hffffffff;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[4] = 32'd04;
+        dut.rv.c.dp.rf._reg[5] = 32'hffffffff;
 
 
         `SET_MEM_I(0, 32'h02405a63);  // bge     x0, x4, 52

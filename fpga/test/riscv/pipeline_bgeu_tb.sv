@@ -46,9 +46,9 @@ module pipeline_bgeu_tb;
         $dumpfile(`VCD);
         $dumpvars(1, pipeline_bgeu_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd04;
-        dut.rv.dp.rf._reg[5] = 32'hffffffff;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[4] = 32'd04;
+        dut.rv.c.dp.rf._reg[5] = 32'hffffffff;
 
         `SET_MEM_I(0, 32'h02407e63);  // .L0:    bgeu    x0, x4, .Lx
         `SET_MEM_I(1, 32'h00007263);  //         bgeu    x0, x0, .L2

@@ -45,11 +45,11 @@ module sra_tb;
         $dumpfile(`VCD);
         $dumpvars(1, sra_tb);
 
-        dut.rv.dp.rf._reg[4] = 32'b00;
-        dut.rv.dp.rf._reg[5] = 32'h08;
-        dut.rv.dp.rf._reg[6] = 32'd2;
-        dut.rv.dp.rf._reg[7] = 32'hfffffff8;
-        dut.rv.dp.rf._reg[8] = 32'd2;
+        dut.rv.c.dp.rf._reg[4] = 32'b00;
+        dut.rv.c.dp.rf._reg[5] = 32'h08;
+        dut.rv.c.dp.rf._reg[6] = 32'd2;
+        dut.rv.c.dp.rf._reg[7] = 32'hfffffff8;
+        dut.rv.c.dp.rf._reg[8] = 32'd2;
 
         `SET_MEM_I(0, 32'h4062d233);   // sra x4, x5, x6
         `SET_MEM_I(1, 32'h4083d233);   // sra x4, x7, x8
@@ -58,8 +58,8 @@ module sra_tb;
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'd8 >> 2);
-        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'hfffffffe);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'd8 >> 2);
+        `WAIT_CLKS(clk, `R_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'hfffffffe);
 
         #5;
         $finish;

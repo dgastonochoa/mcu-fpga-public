@@ -45,8 +45,8 @@ module bne_tb;
         $dumpfile(`VCD);
         $dumpvars(1, bne_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd04;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[4] = 32'd04;
 
         `SET_MEM_I(0, 32'h00001a63); // bne     x0, x0, .L1
         `SET_MEM_I(1, 32'h00401863); // bne     x0, x4, .L1

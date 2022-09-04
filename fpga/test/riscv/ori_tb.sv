@@ -45,10 +45,10 @@ module ori_tb;
         $dumpfile(`VCD);
         $dumpvars(1, ori_tb);
 
-        dut.rv.dp.rf._reg[0] = 32'd00;
-        dut.rv.dp.rf._reg[4] = 32'd00;
-        dut.rv.dp.rf._reg[5] = 32'h01;
-        dut.rv.dp.rf._reg[6] = 32'hfe;
+        dut.rv.c.dp.rf._reg[0] = 32'd00;
+        dut.rv.c.dp.rf._reg[4] = 32'd00;
+        dut.rv.c.dp.rf._reg[5] = 32'h01;
+        dut.rv.c.dp.rf._reg[6] = 32'hfe;
 
         `SET_MEM_I(0, 32'h0fe26013);  // ori x0, x4, 0xfe
         `SET_MEM_I(1, 32'h0002e213);  // ori x4, x5, 0x00
@@ -58,9 +58,9 @@ module ori_tb;
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_INIT_CYCLES(clk);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[0] === 32'h00);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'h01);
-        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.dp.rf._reg[4] === 32'hff);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[0] === 32'h00);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'h01);
+        `WAIT_CLKS(clk, `I_I_CYC) assert(dut.rv.c.dp.rf._reg[4] === 32'hff);
 
         #5;
         $finish;
