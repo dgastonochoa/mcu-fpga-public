@@ -141,7 +141,7 @@ common_src := $(SRC)/alu.sv 		\
 			  $(SRC)/test_utils.sv	\
 			  $(SRC)/spi.sv
 
-riscv_src := $(SRCRV)/io.sv
+riscv_src := $(SRCRV)/io.sv $(SRC)/mcu.sv
 
 ifeq ($(CONFIG_RISCV_SINGLECYCLE),y)
 riscv_src +=  $(SRCRV)/datapath_singlecycle.sv 		\
