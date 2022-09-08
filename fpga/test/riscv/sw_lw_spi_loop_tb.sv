@@ -23,6 +23,11 @@ module sw_spi_loop_tb;
     spi_slave spis(mosi, ss, s_wd, miso, s_rd, s_rdy, s_busy, rst, sck, clk);
 
 
+    wire  [31:0] res [255];
+
+    word_storage ws(s_rd, res, rst, s_rdy);
+
+
     wire [15:0] leds;
 
     mcu dut(mosi, miso, ss, sck, leds, rst, clk);
@@ -90,67 +95,13 @@ module sw_spi_loop_tb;
         #2  rst = 1;
         #2  rst = 0;
 
-        // NOTE: the following wait_clks have been extracted from studying the
-        // wave dump
+        // Wait 'enough' for the mcu to send all the words
+        `WAIT_CLKS(clk, 2000);
 
-        `WAIT_CLKS(clk, 10);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 1;
-                            assert(s_rd === 8'hde);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 2;
-                            assert(s_rd === 8'hc0);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 3;
-                            assert(s_rd === 8'had);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 4;
-                            assert(s_rd === 8'hde);
-
-        `WAIT_CLKS(clk, 20);
-
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 1;
-                            assert(s_rd === 8'hef);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 2;
-                            assert(s_rd === 8'hbe);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 3;
-                            assert(s_rd === 8'had);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 4;
-                            assert(s_rd === 8'hde);
-
-        `WAIT_CLKS(clk, 20);
-
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 1;
-                            assert(s_rd === 8'hde);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 2;
-                            assert(s_rd === 8'hc0);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 3;
-                            assert(s_rd === 8'h01);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 4;
-                            assert(s_rd === 8'hc0);
-
-        `WAIT_CLKS(clk, 20);
-
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 1;
-                            assert(s_rd === 8'hef);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 2;
-                            assert(s_rd === 8'hbe);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 3;
-                            assert(s_rd === 8'h01);
-
-        `WAIT_CLKS(clk, 90) assert(s_rdy === 1'b1); i = 4;
-                            assert(s_rd === 8'hc0);
+        assert(res[0] === 32'hdeadc0de);
+        assert(res[1] === 32'hdeadbeef);
+        assert(res[2] === 32'hc001c0de);
+        assert(res[3] === 32'hc001beef);
 
         #5;
         $finish;
