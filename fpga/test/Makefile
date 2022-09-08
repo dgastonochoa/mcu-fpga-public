@@ -44,7 +44,6 @@ tests := $(PREFIX)/mem_word_ops_tb.xv				\
 		 $(PREFIX)/utils_sipo_reg_tb.xv				\
 		 $(PREFIX)/spi_master_ctrl_tb.xv			\
 		 $(PREFIX)/spi_tb.xv						\
-		 $(PREFIX)/spi_master_w_tb.xv				\
 		 $(PREFIX)/spi_several_slaves_tb.xv
 
 riscv_tests := $(RISCV_TEST_DIR)/lw_tb.xv						\
