@@ -135,9 +135,10 @@ tests_waves := $(addsuffix .vcd,$(tests))
 riscv_tests_waves := $(addsuffix .vcd,$(riscv_tests))
 
 
-common_src := $(SRC)/alu.sv 	\
-			  $(SRC)/mem.sv 	\
-			  $(SRC)/utils.sv	\
+common_src := $(SRC)/alu.sv 		\
+			  $(SRC)/mem.sv 		\
+			  $(SRC)/utils.sv		\
+			  $(SRC)/test_utils.sv	\
 			  $(SRC)/spi.sv
 
 riscv_src := $(SRCRV)/io.sv

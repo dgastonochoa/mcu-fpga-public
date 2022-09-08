@@ -40,6 +40,7 @@ src_files := $(SRC)/spi.sv 							\
 			 $(SRC)/mem.sv 							\
 			 $(SRC)/utils.sv 						\
 			 $(SRC)/alu.sv 							\
+			 $(SRC)/test_utils.sv					\
 			 $(SRC)/legacy/utils/debounce_filter.v	\
 			 $(SRC)/riscv/datapath_utils.sv			\
 			 $(SRC)/riscv/io.sv						\

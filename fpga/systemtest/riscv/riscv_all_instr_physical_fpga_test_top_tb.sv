@@ -38,7 +38,6 @@ module riscv_all_instr_physical_fpga_test_top_tb;
     //
     // SPI slave
     //
-    reg [31:0] res [255];
     reg [7:0] s_wd = 8'd0;
     wire mosi, miso, ss, sck;
     wire s_busy, s_rdy;
@@ -48,29 +47,10 @@ module riscv_all_instr_physical_fpga_test_top_tb;
 
     spi_slave spis(mosi, ss, s_wd, miso, s_rd, s_rdy, s_busy, btnC, sck, clk);
 
-    reg [31:0] word, cnt2;
-    reg [3:0] cnt;
 
-    always @(posedge s_rdy, posedge btnC) begin
-        if (btnC) begin
-            cnt <= 0;
-            cnt2 <= 0;
-            word <= 0;
-        end else begin
-            #1 case (cnt)
-            3'd0: word[7:0]   <= s_rd;
-            3'd1: word[15:8]  <= s_rd;
-            3'd2: word[23:16] <= s_rd;
-            3'd3: word[31:24] <= s_rd;
-            endcase
-            cnt <= (cnt == 3'd3 ? 3'd0 : cnt + 1);
+    wire  [31:0] res [255];
 
-            if (cnt == 3'd3) begin
-                #1  res[cnt2] <= word;
-                cnt2 <= cnt2 + 1;
-            end
-        end
-    end
+    word_storage ws(s_rd, res, btnC, s_rdy);
 
     initial begin
         $dumpfile(`VCD);
