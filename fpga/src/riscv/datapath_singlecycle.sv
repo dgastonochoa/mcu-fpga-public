@@ -1,3 +1,5 @@
+`include "riscv/datapath.svh"
+
 /**
  * CPU datapath.
  *

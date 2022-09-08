@@ -1,6 +1,9 @@
 `timescale 10ps/1ps
 
 `include "alu.svh"
+`include "mem.svh"
+`include "errno.svh"
+
 `include "riscv/datapath.svh"
 
 `include "riscv_test_utils.svh"
@@ -15,49 +18,35 @@ module beq_tb;
     always #10 clk = ~clk;
 
 
-    wire reg_we, mem_we;
-    res_src_e res_src;
-    pc_src_e pc_src;
-    alu_src_e alu_src;
-    imm_src_e imm_src;
-    alu_op_e alu_ctrl;
+    wire [31:0] instr, d_rd, d_addr, d_wd, pc;
+    wire d_we;
+    mem_dt_e d_dt;
 
-    wire [31:0] pc, alu_out, wdata;
-    wire [31:0] instr, mem_rd_data, mem_wd_data;
+    cpu dut(instr, d_rd, d_addr, d_we, d_wd, d_dt, pc, rst, clk);
 
-    riscv_legacy dut(
-        reg_we,
-        mem_we,
-        imm_src,
-        alu_ctrl,
-        alu_src,
-        res_src, pc_src,
-        instr,
-        alu_out,
-        mem_rd_data,
-        mem_wd_data,
-        pc,
-        rst,
-        clk
-    );
+
+    errno_e  err;
+
+    cpu_mem cm(
+        pc, d_addr, d_wd, d_we, d_dt, instr, d_rd, err, clk);
 
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, beq_tb);
 
-        dut.rv.c.dp.rf._reg[0] = 32'd00;
-        dut.rv.c.dp.rf._reg[4] = 32'd01;
+        `CPU_SET_R(dut, 0, 32'd00);
+        `CPU_SET_R(dut, 4, 32'd01);
 
-        `SET_MEM_I(0, 32'h00400a63);    // beq x0, x4, 20;  pc = 20
-        `SET_MEM_I(1, 32'h00000863);    // beq x0, x0, 16;  pc = 20
-        `SET_MEM_I(2, 32'h00000013);    // nop
-        `SET_MEM_I(3, 32'h00000013);    // nop
-        `SET_MEM_I(4, 32'h00000013);    // nop
-        `SET_MEM_I(5, 32'h00400463);    // beq x0, x4, 8;   pc = 28
-        `SET_MEM_I(6, 32'hfe0004e3);    // beq x0, x0, -24; pc = 0
-        `SET_MEM_I(7, 32'h00000013);    // nop
-        `SET_MEM_I(8, 32'h00000013);    // nop
-        `SET_MEM_I(9, 32'h00000013);    // nop
+        `CPU_MEM_SET_I(cm,  0, 32'h00400a63);    // beq x0, x4, 20;  pc = 20
+        `CPU_MEM_SET_I(cm,  1, 32'h00000863);    // beq x0, x0, 16;  pc = 20
+        `CPU_MEM_SET_I(cm,  2, 32'h00000013);    // nop
+        `CPU_MEM_SET_I(cm,  3, 32'h00000013);    // nop
+        `CPU_MEM_SET_I(cm,  4, 32'h00000013);    // nop
+        `CPU_MEM_SET_I(cm,  5, 32'h00400463);    // beq x0, x4, 8;   pc = 28
+        `CPU_MEM_SET_I(cm,  6, 32'hfe0004e3);    // beq x0, x0, -24; pc = 0
+        `CPU_MEM_SET_I(cm,  7, 32'h00000013);    // nop
+        `CPU_MEM_SET_I(cm,  8, 32'h00000013);    // nop
+        `CPU_MEM_SET_I(cm,  9, 32'h00000013);    // nop
 
 
         // Reset and test

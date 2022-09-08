@@ -4,6 +4,8 @@
 `include "mem.svh"
 `include "errno.svh"
 
+`include "riscv/datapath.svh"
+
 `include "riscv_test_utils.svh"
 
 `ifndef VCD

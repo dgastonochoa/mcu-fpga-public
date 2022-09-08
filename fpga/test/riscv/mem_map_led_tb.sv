@@ -43,8 +43,11 @@ module mem_map_led_tb;
         #2  rst = 1;
         #2  rst = 0;
 
-        // TODO cycles...
+`ifdef CONFIG_RISCV_PIPELINE
         `WAIT_INIT_CYCLES(clk);
+`else
+        `WAIT_CLKS(clk, 1);
+`endif
 
         `WAIT_CLKS(clk, 1) assert(leds === 16'h00aa);
         `WAIT_CLKS(clk, 3) assert(leds === 16'h0055);
