@@ -14,7 +14,7 @@
      * Expected first instruction (set the sp to `DATA_OFFS)
      *
      */
-    `define FIRST_INSTR 32'h6c000113
+    `define FIRST_INSTR 32'h7f000113
 
 `else
     `define FIRST_INSTR 32'h00000113
@@ -67,7 +67,11 @@ module riscv_all_instr_physical_fpga_test_top_tb;
         #5  btnC = 1;
         #20 btnC = 0;
 
+`ifdef CONFIG_RISCV_MULTICYCLE
+        `WAIT_CLKS(clk, 4000);
+`else
         `WAIT_CLKS(clk, 1000);
+`endif
 
         assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 0) === 37);
         assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 1) === 40);
@@ -205,7 +209,11 @@ module riscv_all_instr_physical_fpga_test_top_tb;
         //
         // SPI sends all the results
         //
+`ifdef CONFIG_RISCV_MULTICYCLE
+        `WAIT_CLKS(clk, 400000);
+`else
         `WAIT_CLKS(clk, 100000);
+`endif
 
         assert(res[0] === 37);
         assert(res[1] === 40);

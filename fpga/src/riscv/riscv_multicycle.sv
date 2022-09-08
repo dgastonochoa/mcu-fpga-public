@@ -89,7 +89,8 @@ module cpu_mem #(parameter D_SIZE = 256,
 
     input  wire             clk
 );
-    mem #(.N(D_SIZE + I_SIZE)) m(addr, wd, we, dt, rd, err, clk);
+    mem #(.N(D_SIZE + I_SIZE), .INIT_VALS(INIT_VALS)) m(
+        addr, wd, we, dt, rd, err, clk);
 
     assign instr = rd;
 endmodule
