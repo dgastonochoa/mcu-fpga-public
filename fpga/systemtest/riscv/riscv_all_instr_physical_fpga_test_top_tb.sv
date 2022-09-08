@@ -1,7 +1,9 @@
 `timescale 1ns/1ns
 
 `include "riscv_all_instr_physical_fpga_test.svh"
-`include "riscv_test_utils.svh"
+
+`include "riscv/test/test_mcu.svh"
+`include "riscv/test/test_cpu_mem.svh"
 
 `ifndef VCD
     `define VCD "riscv_single_all_instr_top_tb.vcd"
@@ -9,23 +11,18 @@
 
 `ifdef CONFIG_RISCV_MULTICYCLE
     /**
-     * The memory will be checked by accessing it in terms of words.
-     *
-     */
-    `define DATA_IDX    (`DATA_START_ADDR / 4)
-
-    /**
      * Expected first instruction (set the sp to `DATA_OFFS)
      *
      */
     `define FIRST_INSTR 32'h6c000113
 
 `else
-    `define DATA_IDX    0
     `define FIRST_INSTR 32'h00000113
 `endif // CONFIG_RISCV_MULTICYCLE
 
-module riscv_single_all_instr_top_tb;
+`define WAIT_CLKS(clk, n)   repeat(n) @(posedge clk); #1
+
+module riscv_all_instr_physical_fpga_test_top_tb;
     reg clk = 0;
 
     always #5 clk = ~clk;
@@ -35,7 +32,7 @@ module riscv_single_all_instr_top_tb;
     wire [15:0] led;
     wire [7:0] ja;
 
-    riscv_single_all_instr_top dut(btnC, led, ja, clk);
+    riscv_all_instr_physical_fpga_test_top dut(btnC, led, ja, clk);
 
 
     //
@@ -77,14 +74,14 @@ module riscv_single_all_instr_top_tb;
 
     initial begin
         $dumpfile(`VCD);
-        $dumpvars(1, riscv_single_all_instr_top_tb);
+        $dumpvars(1, riscv_all_instr_physical_fpga_test_top_tb);
 
-        assert(`GET_MEM_I(0) === `FIRST_INSTR);
-        assert(`GET_MEM_I(1) === 32'h02500293);
-        assert(`GET_MEM_I(2) === 32'h00328313);
-        assert(`GET_MEM_I(455) === 32'hffc10113);
-        assert(`GET_MEM_I(456) === 32'h00012083);
-        assert(`GET_MEM_I(457) === 32'h00008067);
+        assert(`CPU_MEM_GET_I(`MCU_GET_M(dut.m), 0) === `FIRST_INSTR);
+        assert(`CPU_MEM_GET_I(`MCU_GET_M(dut.m), 1) === 32'h02500293);
+        assert(`CPU_MEM_GET_I(`MCU_GET_M(dut.m), 2) === 32'h00328313);
+        assert(`CPU_MEM_GET_I(`MCU_GET_M(dut.m), 455) === 32'hffc10113);
+        assert(`CPU_MEM_GET_I(`MCU_GET_M(dut.m), 456) === 32'h00012083);
+        assert(`CPU_MEM_GET_I(`MCU_GET_M(dut.m), 457) === 32'h00008067);
 
         // Reset
         #5  btnC = 1;
@@ -92,133 +89,133 @@ module riscv_single_all_instr_top_tb;
 
         `WAIT_CLKS(clk, 1000);
 
-        assert(`MEM_DATA[`DATA_IDX + 0] === 37);
-        assert(`MEM_DATA[`DATA_IDX + 1] === 40);
-        assert(`MEM_DATA[`DATA_IDX + 2] === 24);
-        assert(`MEM_DATA[`DATA_IDX + 3] === 32'habcdef12);
-        assert(`MEM_DATA[`DATA_IDX + 4] === 32'h12);
-        assert(`MEM_DATA[`DATA_IDX + 5] === 32'hef);
-        assert(`MEM_DATA[`DATA_IDX + 6] === 32'hcd);
-        assert(`MEM_DATA[`DATA_IDX + 7] === 32'hab);
-        assert(`MEM_DATA[`DATA_IDX + 8] === 32'hef12);
-        assert(`MEM_DATA[`DATA_IDX + 9] === 32'habcd);
-        assert(`MEM_DATA[`DATA_IDX + 10] === 32'habcdef12);
-        assert(`MEM_DATA[`DATA_IDX + 11] === 32'hxxxxef12);
-        assert(`MEM_DATA[`DATA_IDX + 12] === 32'hxxxxxx12);
-        assert(`MEM_DATA[`DATA_IDX + 13] === 32'h00000012);
-        assert(`MEM_DATA[`DATA_IDX + 14] === 32'hffffffef);
-        assert(`MEM_DATA[`DATA_IDX + 15] === 32'hffffffcd);
-        assert(`MEM_DATA[`DATA_IDX + 16] === 32'hffffffab);
-        assert(`MEM_DATA[`DATA_IDX + 17] === 32'hffffef12);
-        assert(`MEM_DATA[`DATA_IDX + 18] === 32'h7ffff000);
-        assert(`MEM_DATA[`DATA_IDX + 19] === 32'hcdef1200);
-        assert(`MEM_DATA[`DATA_IDX + 20] === 32'h9bde2400);
-        assert(`MEM_DATA[`DATA_IDX + 21] === 32'habcdef12);
-        assert(`MEM_DATA[`DATA_IDX + 22] === 32'h00);
-        assert(`MEM_DATA[`DATA_IDX + 23] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 24] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 25] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 26] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 27] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 28] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 29] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 30] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 31] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 32] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 33] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 34] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 35] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 36] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 37] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 38] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 39] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 40] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 41] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 42] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 43] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 44] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 45] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 46] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 47] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 48] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 49] === 32'hff);
-        assert(`MEM_DATA[`DATA_IDX + 50] === 32'h00);
-        assert(`MEM_DATA[`DATA_IDX + 51] === 32'h0fffff00);
-        assert(`MEM_DATA[`DATA_IDX + 52] === 32'h00fffff0);
-        assert(`MEM_DATA[`DATA_IDX + 53] === 32'hffffff00);
-        assert(`MEM_DATA[`DATA_IDX + 54] === 32'hfffffff0);
-        assert(`MEM_DATA[`DATA_IDX + 55] === 32'hf0);
-        assert(`MEM_DATA[`DATA_IDX + 56] === 32'hff);
-        assert(`MEM_DATA[`DATA_IDX + 57] === 32'hff);
-        assert(`MEM_DATA[`DATA_IDX + 58] === 32'hff);
-        assert(`MEM_DATA[`DATA_IDX + 59] === 32'h0f);
-        assert(`MEM_DATA[`DATA_IDX + 60] === 32'h00);
-        assert(`MEM_DATA[`DATA_IDX + 61] === 32'h04);
-        assert(`MEM_DATA[`DATA_IDX + 62] === 32'hcdef1200);
-        assert(`MEM_DATA[`DATA_IDX + 63] === 32'h9bde2400);
-        assert(`MEM_DATA[`DATA_IDX + 64] === 32'habcdef12);
-        assert(`MEM_DATA[`DATA_IDX + 65] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 66] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 67] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 68] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 69] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 70] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 71] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 72] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 73] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 74] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 75] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 76] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 77] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 78] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 79] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 80] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 81] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 82] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 83] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 84] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 85] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 86] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 87] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 88] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 89] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 90] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 91] === 32'hff);
-        assert(`MEM_DATA[`DATA_IDX + 92] === 32'h00);
-        assert(`MEM_DATA[`DATA_IDX + 93] === 32'h0fffff00);
-        assert(`MEM_DATA[`DATA_IDX + 94] === 32'h00fffff0);
-        assert(`MEM_DATA[`DATA_IDX + 95] === 32'hffffff00);
-        assert(`MEM_DATA[`DATA_IDX + 96] === 32'hfffffff0);
-        assert(`MEM_DATA[`DATA_IDX + 97] === 32'hf0);
-        assert(`MEM_DATA[`DATA_IDX + 98] === 32'hff);
-        assert(`MEM_DATA[`DATA_IDX + 99] === 32'hff);
-        assert(`MEM_DATA[`DATA_IDX + 100] === 32'hff);
-        assert(`MEM_DATA[`DATA_IDX + 101] === 32'h0f);
-        assert(`MEM_DATA[`DATA_IDX + 102] === 32'h00);
-        assert(`MEM_DATA[`DATA_IDX + 103] === 20);
-        assert(`MEM_DATA[`DATA_IDX + 104] === 25);
-        assert(`MEM_DATA[`DATA_IDX + 105] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 106] === -5);
-        assert(`MEM_DATA[`DATA_IDX + 107] === 20);
-        assert(`MEM_DATA[`DATA_IDX + 108] === 25);
-        assert(`MEM_DATA[`DATA_IDX + 109] === 0);
-        assert(`MEM_DATA[`DATA_IDX + 110] === -5);
-        assert(`MEM_DATA[`DATA_IDX + 111] === 20);
-        assert(`MEM_DATA[`DATA_IDX + 112] === -20);
-        assert(`MEM_DATA[`DATA_IDX + 113] === -5);
-        assert(`MEM_DATA[`DATA_IDX + 114] === 45);
-        assert(`MEM_DATA[`DATA_IDX + 115] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 116] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 117] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 118] === 1);
-        assert(`MEM_DATA[`DATA_IDX + 119] === 6);
-        assert(`MEM_DATA[`DATA_IDX + 120] === 6);
-        assert(`MEM_DATA[`DATA_IDX + 121] === 6);
-        assert(`MEM_DATA[`DATA_IDX + 122] === 6);
-        assert(`MEM_DATA[`DATA_IDX + 123] === 6);
-        assert(`MEM_DATA[`DATA_IDX + 124] === 6);
-        assert(`MEM_DATA[`DATA_IDX + 125] === 6);
-        assert(`MEM_DATA[`DATA_IDX + 126] === 6);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 0) === 37);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 1) === 40);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 2) === 24);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 3) === 32'habcdef12);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 4) === 32'h12);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 5) === 32'hef);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 6) === 32'hcd);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 7) === 32'hab);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 8) === 32'hef12);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 9) === 32'habcd);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 10) === 32'habcdef12);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 11) === 32'hxxxxef12);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 12) === 32'hxxxxxx12);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 13) === 32'h00000012);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 14) === 32'hffffffef);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 15) === 32'hffffffcd);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 16) === 32'hffffffab);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 17) === 32'hffffef12);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 18) === 32'h7ffff000);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 19) === 32'hcdef1200);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 20) === 32'h9bde2400);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 21) === 32'habcdef12);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 22) === 32'h00);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 23) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 24) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 25) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 26) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 27) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 28) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 29) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 30) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 31) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 32) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 33) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 34) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 35) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 36) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 37) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 38) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 39) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 40) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 41) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 42) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 43) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 44) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 45) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 46) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 47) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 48) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 49) === 32'hff);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 50) === 32'h00);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 51) === 32'h0fffff00);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 52) === 32'h00fffff0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 53) === 32'hffffff00);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 54) === 32'hfffffff0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 55) === 32'hf0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 56) === 32'hff);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 57) === 32'hff);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 58) === 32'hff);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 59) === 32'h0f);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 60) === 32'h00);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 61) === 32'h04);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 62) === 32'hcdef1200);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 63) === 32'h9bde2400);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 64) === 32'habcdef12);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 65) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 66) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 67) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 68) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 69) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 70) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 71) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 72) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 73) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 74) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 75) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 76) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 77) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 78) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 79) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 80) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 81) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 82) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 83) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 84) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 85) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 86) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 87) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 88) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 89) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 90) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 91) === 32'hff);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 92) === 32'h00);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 93) === 32'h0fffff00);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 94) === 32'h00fffff0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 95) === 32'hffffff00);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 96) === 32'hfffffff0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 97) === 32'hf0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 98) === 32'hff);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 99) === 32'hff);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 100) === 32'hff);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 101) === 32'h0f);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 102) === 32'h00);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 103) === 20);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 104) === 25);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 105) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 106) === -5);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 107) === 20);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 108) === 25);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 109) === 0);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 110) === -5);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 111) === 20);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 112) === -20);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 113) === -5);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 114) === 45);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 115) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 116) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 117) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 118) === 1);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 119) === 6);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 120) === 6);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 121) === 6);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 122) === 6);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 123) === 6);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 124) === 6);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 125) === 6);
+        assert(`CPU_MEM_GET_D(`MCU_GET_M(dut.m), 126) === 6);
 
         assert(led[0] === 1'b1);
 

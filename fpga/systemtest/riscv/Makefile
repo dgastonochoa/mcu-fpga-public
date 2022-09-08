@@ -7,9 +7,6 @@ SRC = ../../src
 #
 INC = -I../../include -I.
 
-# TODO remove this dependency when possible
-INC += -I../../test/riscv -I../../test
-
 VV := iverilog
 VVP := vvp
 
@@ -72,11 +69,7 @@ all: tests wavedumps
 #
 # Execute tests without generating wavedumps
 #
-tests: $(PREFIX)/mem_send_ctrl_tb.xv $(PREFIX)/mem_send_ctrl_with_spi_tb.xv $(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.xv
-
-$(PREFIX)/mem_send_ctrl_tb.xv: mem_send_ctrl_tb.sv riscv_all_instr_physical_fpga_test_top.sv $(src_files) | dirs
-
-$(PREFIX)/mem_send_ctrl_with_spi_tb.xv: mem_send_ctrl_with_spi_tb.sv riscv_all_instr_physical_fpga_test_top.sv $(src_files) | dirs
+tests: $(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.xv
 
 $(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.xv: riscv_all_instr_physical_fpga_test_top_tb.sv riscv_all_instr_physical_fpga_test_top.sv $(src_files) | dirs
 
@@ -84,11 +77,7 @@ $(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.xv: riscv_all_instr_physical
 #
 # Wavedumps only
 #
-wavedumps: $(PREFIX)/mem_send_ctrl_tb.vcd $(PREFIX)/mem_send_ctrl_with_spi_tb.vcd $(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.vcd
-
-$(PREFIX)/mem_send_ctrl_tb.vcd: $(PREFIX)/mem_send_ctrl_tb.xv
-
-$(PREFIX)/mem_send_ctrl_with_spi_tb.vcd: $(PREFIX)/mem_send_ctrl_with_spi_tb.xv
+wavedumps: $(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.vcd
 
 $(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.vcd: $(PREFIX)/riscv_all_instr_physical_fpga_test_top_tb.xv
 
