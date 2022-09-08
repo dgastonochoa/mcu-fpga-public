@@ -23,10 +23,10 @@
         #
 
         # Stack pointer for mixed instruction/data memory:
-        # addi    x2, x0, 1728             # setup stack pointer
+        addi    x2, x0, 2032               # setup stack pointer
 
-        # Stack pointer for separated instruction/data memory:
-        addi    x2, x0, 0                # setup stack pointer
+        # # Stack pointer for separated instruction/data memory:
+        # addi    x2, x0, 0                # setup stack pointer
 
 
         #

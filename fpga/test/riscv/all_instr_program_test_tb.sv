@@ -12,7 +12,7 @@
 
 `ifdef CONFIG_RISCV_MULTICYCLE
     `define MEM_MAP_FILE "./riscv/mem_maps/all_instr_program_test_instr_mem_shared_instr_data_mem.txt"
-    `define FIRST_INSTR (32'h6c000113)
+    `define FIRST_INSTR (32'h7f000113)
 `else
     `define MEM_MAP_FILE "./riscv/mem_maps/all_instr_program_test_instr_mem_separ_instr_data_mem.txt"
     `define FIRST_INSTR (32'h00000113)

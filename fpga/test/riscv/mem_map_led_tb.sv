@@ -49,10 +49,17 @@ module mem_map_led_tb;
         `WAIT_CLKS(clk, 1);
 `endif
 
+`ifndef CONFIG_RISCV_MULTICYCLE
         `WAIT_CLKS(clk, 1) assert(leds === 16'h00aa);
         `WAIT_CLKS(clk, 3) assert(leds === 16'h0055);
         `WAIT_CLKS(clk, 3) assert(leds === 16'hffff);
         `WAIT_CLKS(clk, 3) assert(leds === 16'h0000);
+`else
+        `WAIT_CLKS(clk, 8)  assert(leds === 16'h00aa);
+        `WAIT_CLKS(clk, 14) assert(leds === 16'h0055);
+        `WAIT_CLKS(clk, 14) assert(leds === 16'hffff);
+        `WAIT_CLKS(clk, 14) assert(leds === 16'h0000);
+`endif
 
         #5;
         $finish;

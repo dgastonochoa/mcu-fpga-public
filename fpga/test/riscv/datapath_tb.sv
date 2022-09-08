@@ -56,7 +56,7 @@ module datapath_tb;
 
         // Second instr. executed
         `WAIT_CLKS(clk, `S_I_CYC) assert(pc === 8);
-                                  assert(`CPU_MEM_GET_D(cm, `CPU_MEM_DATA_START_IDX + 4) === 32'hdeadc0de);
+                                  assert(`CPU_MEM_GET_D(cm, 4) === 32'hdeadc0de);
 
         // Third instr. executed
         `WAIT_CLKS(clk, `R_I_CYC) assert(pc === 12);
@@ -72,7 +72,7 @@ module datapath_tb;
 
         // Second instr. executed again.
         `WAIT_CLKS(clk, `S_I_CYC) assert(pc === 8);
-                                  assert(`CPU_MEM_GET_D(cm, `CPU_MEM_DATA_START_IDX + 4) === 32'hdeadc0de);
+                                  assert(`CPU_MEM_GET_D(cm, 4) === 32'hdeadc0de);
 
         // Third instr. executed again
         `WAIT_CLKS(clk, `R_I_CYC) assert(pc === 12);

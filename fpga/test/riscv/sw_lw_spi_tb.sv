@@ -51,7 +51,8 @@ module sw_spi_tb;
         #2  rst = 1;
         #2  rst = 0;
 
-        `WAIT_CLKS(clk, 100) assert(s_rdy === 1'b1);
+        // Wait 'enough' cycles for the program to finish
+        `WAIT_CLKS(clk, 200) assert(s_rdy === 1'b1);
                              assert(s_rd === 8'hde);
                              assert(`CPU_GET_R(`MCU_GET_C(dut), 4) === 8'haa);
 

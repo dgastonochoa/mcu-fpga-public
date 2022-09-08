@@ -47,10 +47,21 @@ module sw_spi_loop_tb;
         `CPU_MEM_SET_D(`MCU_GET_M(dut), 2, 32'hc001c0de);
         `CPU_MEM_SET_D(`MCU_GET_M(dut), 3, 32'hc001beef);
 
-
+`ifdef CONFIG_RISCV_MULTICYCLE
+        // Multicycle has shared memory, therefore place the sp in a safe place
+        // and make a2 and a3 point to the start and finish of the data (see
+        // CPU_MEM_DATA_START_IDX)
+        // TODO replace this by something that takes the values from registers
+        // set manually by this testbench
+        `CPU_MEM_SET_I(`MCU_GET_M(dut), 0, 32'h7f000613);  //         addi    a2, x0, 2032 # set start address
+        `CPU_MEM_SET_I(`MCU_GET_M(dut), 1, 32'h7fc00693);  //         addi    a3, x0, 2044 # set end address
+        `CPU_MEM_SET_I(`MCU_GET_M(dut), 2, 32'h20000113);  //         addi    sp, x0, 512  # init. sp
+`else
         `CPU_MEM_SET_I(`MCU_GET_M(dut), 0, 32'h00000613);  //         addi    a2, x0, 0   # set start address
         `CPU_MEM_SET_I(`MCU_GET_M(dut), 1, 32'h00c00693);  //         addi    a3, x0, 12  # set end address
         `CPU_MEM_SET_I(`MCU_GET_M(dut), 2, 32'h02000113);  //         addi    sp, x0, 32  # init. sp
+`endif // CONFIG_RISCV_MULTICYCLE
+
         `CPU_MEM_SET_I(`MCU_GET_M(dut), 3, 32'h00002503);  //         lw      a0, 0(x0)   # load mem[0] (debug)
         `CPU_MEM_SET_I(`MCU_GET_M(dut), 4, 32'h050000ef);  //         jal     .SM
         `CPU_MEM_SET_I(`MCU_GET_M(dut), 5, 32'h000000ef);  // .END:   jal     .END
