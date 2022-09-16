@@ -29,5 +29,10 @@ gdb: $(BUILDIR)/$(APP).elf
 	riscv64-unknown-elf-gdb $<
 
 .PHONY:
+debug: $(BUILDIR)/$(APP).elf
+	qemu-system-riscv32 -nographic -machine sifive_e -bios none -kernel $< -s -S &
+	riscv64-unknown-elf-gdb $< -x ./riscv_debug.gdb
+
+.PHONY:
 clean:
 	rm -rf $(BUILDIR)
