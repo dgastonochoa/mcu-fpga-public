@@ -101,6 +101,7 @@ module datapath_multicycle(
         RF_WD_SRC_PC:   reg_wd3 = pc;
         RF_WD_SRC_IMM:  reg_wd3 = ext_imm;
         RF_WD_SRC_NONE: reg_wd3 = 32'hffffffff;
+        default:        reg_wd3 = 32'hffffffff;
         endcase
     end
 

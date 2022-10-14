@@ -112,6 +112,7 @@ module datapath(
         ALU_SRC_REG_2:   alu_op_a = reg_rd2;
         ALU_SRC_EXT_IMM: alu_op_a = ext_imm;
         ALU_SRC_PC:      alu_op_a = pc;
+        default:         alu_op_a = 32'hffffffff;
         endcase
     end
 
@@ -121,6 +122,7 @@ module datapath(
         ALU_SRC_REG_2:   alu_op_b = reg_rd2;
         ALU_SRC_EXT_IMM: alu_op_b = ext_imm;
         ALU_SRC_PC:      alu_op_b = pc;
+        default:         alu_op_b = 32'hffffffff;
         endcase
     end
 

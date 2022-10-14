@@ -108,6 +108,7 @@ module spi_master_ctrl(
         IDLE:    {ss, en_sck} = {1'b1, 1'b0};
         SELECT:  {ss, en_sck} = {1'b0, 1'b0};
         GEN_CLK: {ss, en_sck} = {1'b0, 1'b1};
+        default: {ss, en_sck} = {1'b1, 1'b0};
         endcase
     end
 endmodule

@@ -58,13 +58,43 @@ module alu (
             res = {{31{1'b0}}, ~co};
         end
 
-        ALU_OP_AND: res = a & b;
-        ALU_OP_OR: res = a | b;
-        ALU_OP_XOR: res = a ^ b;
-        ALU_OP_SLL: res = a << b;
-        ALU_OP_SRL: res = a >> b;
-        ALU_OP_SRA: res = signed_a >>> b;
-        default: res = 32'hffffffff;
+        ALU_OP_AND: begin
+            b_op = 32'h0;
+            cin = 1'b0;
+            res = a & b;
+        end
+
+        ALU_OP_OR: begin
+            b_op = 32'h0;
+            cin = 1'b0;
+            res = a | b;
+        end
+
+        ALU_OP_XOR: begin
+            b_op = 32'h0;
+            cin = 1'b0;
+            res = a ^ b;
+        end
+
+        ALU_OP_SLL: begin
+            b_op = 32'h0;
+            cin = 1'b0;
+            res = a << b;
+        end
+
+        ALU_OP_SRL: begin
+            b_op = 32'h0;
+            cin = 1'b0;
+            res = a >> b;
+        end
+
+        ALU_OP_SRA: begin
+            b_op = 32'h0;
+            cin = 1'b0;
+            res = signed_a >>> b;
+        end
+
+        default: {b_op, cin, res} = {32'h0, 1'b0, 32'hffffffff};
         endcase
     end
 

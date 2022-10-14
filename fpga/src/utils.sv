@@ -30,6 +30,7 @@ module mux4to1 #(parameter N = 32) (
         2'b01: out = in1;
         2'b10: out = in2;
         2'b11: out = in3;
+        default: out = 0;
         endcase
     end
 endmodule
@@ -263,6 +264,7 @@ module piso_reg(
         START:  {busy, out_data} = {1'b1, msb};
         SEND:   {busy, out_data} = {1'b1, cb};
         FINISH: {busy, out_data} = {1'b0, cb};
+        default: {busy, out_data} = 2'b0;
         endcase
     end
 endmodule
