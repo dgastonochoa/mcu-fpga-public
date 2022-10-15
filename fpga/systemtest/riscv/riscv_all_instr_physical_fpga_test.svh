@@ -29,7 +29,28 @@
          */
         `define DEBOUNCE_FILTER_WAIT_CLK 100
     `elsif CONFIG_RISCV_MULTICYCLE
-        // TODO
+        /**
+         * Main clock width in pulses of the fpga input clock (CLK100MHZ)
+         *
+         * 1 * 2 = 2; 100e6 / 2 = 50 MHz
+         */
+        `define CLK_PWIDTH 1
+
+        /**
+         * 1560 * 2 = 3120; 50 MHz / 3120 ~ 16 kHz
+         *
+         * Note: the SPI reader curently prints the data as it reads through a
+         * UART, which works at 115200 bps. It seems that the SPI data rate
+         * needs to be way lower than that for the UART to work.
+         *
+         */
+        `define SPI_SCK_PWIDTH 1560
+
+        /**
+         * Cycle to wait by the debounce filter.
+         *
+         */
+        `define DEBOUNCE_FILTER_WAIT_CLK 100
     `elsif CONFIG_RISCV_PIPELINE
         // TODO
     `endif
