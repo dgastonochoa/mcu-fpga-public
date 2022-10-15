@@ -20,9 +20,9 @@ module riscv_all_instr_physical_fpga_test_top(
     //
     // Clock generation
     //
-    wire clk_1khz;
+    wire clk;
 
-    clk_div #(.POL(1'd0), .PWIDTH(`CLK_PWIDTH)) cd(clk_1khz, CLK100MHZ, rst);
+    clk_div #(.POL(1'd0), .PWIDTH(`CLK_PWIDTH)) cd(clk, CLK100MHZ, rst);
 
 
     //
@@ -30,7 +30,8 @@ module riscv_all_instr_physical_fpga_test_top(
     //
     wire mosi, miso, ss, sck;
 
-    mcu #(.DEFAULT_INSTR(1)) m(mosi, miso, ss, sck, LED, rst, clk_1khz);
+    mcu #(.DEFAULT_INSTR(1), .SPI_SCK_WIDTH_CLKS(`SPI_SCK_PWIDTH)) m(
+        mosi, miso, ss, sck, LED, rst, clk);
 
     assign JA[3] = mosi;
     assign JA[2] = miso;

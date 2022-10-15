@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import argparse
 
@@ -32,13 +32,14 @@ def verify_results(path):
         word = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
         words.append(word)
 
-    assert(len(exp_res) == len(words)), '{} - {}'.format(len(exp_res), len(words))
+    assert len(exp_res) == len(words), 'Unexpected number of words. Expected: {}, found: {}'.format(
+        len(exp_res), len(words))
 
     for i in range(0, len(words)):
         val = exp_res[i]
         if (val < 0):
             val = twos(val)
-        assert(val == words[i]), '{}: {} == {}'.format(i, val, words[i])
+        assert val == words[i], '{}: {} == {}'.format(i, val, words[i])
 
 
 if __name__ == '__main__':
