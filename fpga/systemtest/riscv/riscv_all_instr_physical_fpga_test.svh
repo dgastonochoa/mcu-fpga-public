@@ -4,6 +4,7 @@
 `ifdef IVERILOG
     `define CLK_PWIDTH 32'd1
     `define DEBOUNCE_FILTER_WAIT_CLK 1
+    `define SPI_SCK_PWIDTH 4
 `else
     `ifdef CONFIG_RISCV_SINGLECYCLE
         /**
