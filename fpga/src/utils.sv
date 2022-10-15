@@ -85,25 +85,32 @@ endmodule
  *
  */
 module clk_div #(parameter POL = 1'd0, parameter PWIDTH = 8'd4) (
-    output  reg         div_clk,
+    output  wire        div_clk,
     input   wire        clk,
     input   wire        rst
 );
     reg [31:0] timer;
+    reg div_clk_r;
 
     always @(posedge clk or posedge rst) begin
         if (rst) begin
-            div_clk <= POL;
+            div_clk_r <= POL;
             timer <= 0;
         end else begin
             if (timer < (PWIDTH - 1)) begin
                 timer <= timer + 1;
             end else begin
                 timer <= 0;
-                div_clk = ~div_clk;
+                div_clk_r = ~div_clk_r;
             end
         end
     end
+
+`ifndef IVERILOG
+    BUFG bufg0(.O(div_clk), .I(div_clk_r));
+`else
+    assign div_clk = div_clk_r;
+`endif
 endmodule
 
 /**
