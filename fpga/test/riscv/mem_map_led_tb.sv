@@ -14,15 +14,16 @@ module mem_map_led_tb;
 
 
     wire mosi, miso, ss, sck;
+    wire [7:0] gpios;
     wire [15:0] leds;
 
-    mcu dut(mosi, miso, ss, sck, leds, rst, clk);
+    mcu dut(mosi, miso, ss, sck, gpios, leds, rst, clk);
 
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, mem_map_led_tb);
 
-        `CPU_SET_R(dut.c, 11, 32'h80000040);               // set a1 as the led periph. base
+        `CPU_SET_R(`MCU_GET_C(dut), 11, 32'h80000040);     // set a1 as the led periph. base
 
         `CPU_MEM_SET_W(`MCU_GET_M(dut), 0,  32'h0aa00613); //         addi    a2, x0, 0xaa    # 1: load value to write in leds
         `CPU_MEM_SET_W(`MCU_GET_M(dut), 1,  32'h00c5a023); //         sw      a2, 0(a1)       # 2: write leds

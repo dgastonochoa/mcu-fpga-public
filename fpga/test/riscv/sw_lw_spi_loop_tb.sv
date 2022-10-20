@@ -32,8 +32,9 @@ module sw_spi_loop_tb;
 
 
     wire [15:0] leds;
+    wire [7:0] gpios;
 
-    mcu dut(mosi, miso, ss, sck, leds, rst, clk);
+    mcu dut(mosi, miso, ss, sck, leds, gpios, rst, clk);
 
     integer i = 0;
 

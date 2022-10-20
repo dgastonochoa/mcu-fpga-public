@@ -6,6 +6,7 @@ module mcu #(parameter DEFAULT_INSTR = 0, parameter SPI_SCK_WIDTH_CLKS = 4) (
     output  wire        miso,
     output  wire        ss,
     output  wire        sck,
+    input   wire [7:0]  gpios,
 
     output  wire [15:0] leds,
 
@@ -102,5 +103,19 @@ module mcu #(parameter DEFAULT_INSTR = 0, parameter SPI_SCK_WIDTH_CLKS = 4) (
         rst
     );
 
-    mux4to1 m41(m_data_rd, si_rd, led_rd, 32'h00, rd_src[1:0], m_rd);
+
+    wire [31:0] gpios_rd;
+
+    mem_map_gpios mmg(
+        io_en[2],
+        io_we[2],
+        m_wd,
+        io_addr,
+        gpios,
+        gpios_rd,
+        clk,
+        rst
+    );
+
+    mux4to1 m41(m_data_rd, si_rd, led_rd, gpios_rd, rd_src[1:0], m_rd);
 endmodule
