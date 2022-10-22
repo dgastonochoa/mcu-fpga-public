@@ -85,7 +85,7 @@ module datapath(
         RES_SRC_PC_PLUS_4:  reg_wr_data = pc_plus_4;
         RES_SRC_EXT_IMM:    reg_wr_data = ext_imm;
         RES_SRC_MEM:        reg_wr_data = read_data;
-        default:            reg_wr_data = 32'hx;
+        default:            reg_wr_data = 32'hffffffff;
         endcase
     end
 
