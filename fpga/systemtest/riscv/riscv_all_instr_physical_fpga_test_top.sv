@@ -7,9 +7,12 @@
 
 module riscv_all_instr_physical_fpga_test_top(
     input   wire        btnC,
-    output  wire [15:0] LED,
-    output  wire [7:0]  JA,
+    input   wire [3:0]  JA1,
     input   wire [7:0]  JB,
+
+    output  wire [15:0] LED,
+    output  wire [3:0]  JA,
+
     input   wire        CLK100MHZ
 );
     wire rst;
@@ -38,8 +41,8 @@ module riscv_all_instr_physical_fpga_test_top(
     mcu #(.DEFAULT_INSTR(1), .SPI_SCK_WIDTH_CLKS(`SPI_SCK_PWIDTH)) m(
         mosi, miso, ss, sck, JB_db, LED, rst, clk);
 
+    assign miso  = JA1[0];
     assign JA[3] = mosi;
-    assign JA[2] = miso;
     assign JA[1] = ss;
     assign JA[0] = sck;
 endmodule

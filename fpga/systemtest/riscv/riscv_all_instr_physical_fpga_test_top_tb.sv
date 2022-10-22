@@ -5,6 +5,7 @@
 `include "riscv/mem_map.svh"
 
 `include "riscv/test/test_mcu.svh"
+`include "riscv/test/test_cpu.svh"
 `include "riscv/test/test_cpu_mem.svh"
 
 `ifndef VCD
@@ -20,11 +21,13 @@ module riscv_all_instr_physical_fpga_test_top_tb;
 
 
     reg btnC = 0;
+    reg [7:0] pmod = 0;
+    wire [3:0] ja1;
+
+    wire [3:0] ja;
     wire [15:0] led;
-    wire [7:0] ja;
 
-    riscv_all_instr_physical_fpga_test_top dut(btnC, led, ja, clk);
-
+    riscv_all_instr_physical_fpga_test_top dut(btnC, ja1, pmod, led, ja, clk);
 
     //
     // SPI slave
@@ -34,7 +37,10 @@ module riscv_all_instr_physical_fpga_test_top_tb;
     wire s_busy, s_rdy;
     wire [7:0] s_rd;
 
-    assign {mosi, miso, ss, sck} = ja[3:0];
+    assign sck = ja[0];
+    assign ss = ja[1];
+    assign mosi = ja[3];
+    assign ja1[0] = miso;
 
     spi_slave spis(mosi, ss, s_wd, miso, s_rd, s_rdy, s_busy, btnC, sck, clk);
 

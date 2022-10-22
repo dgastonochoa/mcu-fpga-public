@@ -3,7 +3,7 @@
 
 module mcu #(parameter DEFAULT_INSTR = 0, parameter SPI_SCK_WIDTH_CLKS = 4) (
     output  wire        mosi,
-    output  wire        miso,
+    input   wire        miso,
     output  wire        ss,
     output  wire        sck,
     input   wire [7:0]  gpios,
