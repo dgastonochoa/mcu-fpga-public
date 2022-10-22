@@ -135,4 +135,44 @@
     wire [31:0] t6;             \
     assign t6 = cpu.dp.rf._reg[31]
 
+`define DECL_REG_PC(cpu)        \
+    wire [31:0] pc;             \
+    assign pc = cpu.pc
+
+`define DECL_REG_ALL(cpu)   \
+    `DECL_REG_X0(cpu);      \
+    `DECL_REG_RA(cpu);      \
+    `DECL_REG_SP(cpu);      \
+    `DECL_REG_GP(cpu);      \
+    `DECL_REG_TP(cpu);      \
+    `DECL_REG_T0(cpu);      \
+    `DECL_REG_T1(cpu);      \
+    `DECL_REG_T2(cpu);      \
+    `DECL_REG_S0(cpu);      \
+    `DECL_REG_S1(cpu);      \
+    `DECL_REG_A0(cpu);      \
+    `DECL_REG_A1(cpu);      \
+    `DECL_REG_A2(cpu);      \
+    `DECL_REG_A3(cpu);      \
+    `DECL_REG_A4(cpu);      \
+    `DECL_REG_A5(cpu);      \
+    `DECL_REG_A6(cpu);      \
+    `DECL_REG_A7(cpu);      \
+    `DECL_REG_S2(cpu);      \
+    `DECL_REG_S3(cpu);      \
+    `DECL_REG_S4(cpu);      \
+    `DECL_REG_S5(cpu);      \
+    `DECL_REG_S6(cpu);      \
+    `DECL_REG_S7(cpu);      \
+    `DECL_REG_S8(cpu);      \
+    `DECL_REG_S9(cpu);      \
+    `DECL_REG_S10(cpu);     \
+    `DECL_REG_S11(cpu);     \
+    `DECL_REG_T3(cpu);      \
+    `DECL_REG_T4(cpu);      \
+    `DECL_REG_T5(cpu);      \
+    `DECL_REG_T6(cpu);      \
+    `DECL_REG_PC(cpu)
+
+
 `endif // TEST_CPU_SVH
