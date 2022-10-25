@@ -236,11 +236,14 @@ $(RISCV_TEST_DIR)/.config_timestamp.sv: .config | dirs
 # files change, because iverilog does not have a -MMD option to generate
 # a dependencies file, as gcc does. Note: this list could be split into common
 # and RISC-V sources.
-include_deps := ../include/alu.svh 				\
-				../include/errno.svh			\
-				../include/mem.svh				\
-				../include/riscv/datapath.svh	\
-				../include/riscv/controller.svh	\
+include_deps := ../include/alu.svh 						\
+				../include/errno.svh					\
+				../include/mem.svh						\
+				../include/riscv/datapath.svh			\
+				../include/riscv/controller.svh			\
+				../include/riscv/test/test_mcu.svh		\
+				../include/riscv/test/test_cpu.svh		\
+				../include/riscv/test/test_cpu_mem.svh	\
 				./riscv/riscv_test_utils.svh
 
 $(PREFIX)/.include_timestamp.sv: $(include_deps)
