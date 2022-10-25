@@ -4,6 +4,8 @@
 `include "mem.svh"
 `include "errno.svh"
 
+`include "riscv/mem_map.svh"
+
 `include "riscv_test_utils.svh"
 
 `ifndef VCD
@@ -29,26 +31,28 @@ module lh_tb;
         pc, d_addr, d_wd, d_we, d_dt, instr, d_rd, err, clk);
 
 
+
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, lh_tb);
 
-        // Set register init. vals
+        // Set SP and other registers
+        `CPU_SET_R(dut, `CPU_R_SP, (`SEC_DATA_W * 4) + 4);
         `CPU_SET_R(dut, 0, 32'd0);
         `CPU_SET_R(dut, 6, 32'd0);
-        `CPU_SET_R(dut, 9, (`CPU_MEM_DATA_START_IDX * 4) + 8);
 
         // Set mem. init. vals
-        `CPU_MEM_SET_D(cm, 1, 32'hdeadc0de);
-        `CPU_MEM_SET_D(cm, 2, 32'hdeadbeef);
-        `CPU_MEM_SET_D(cm, 3, 32'hc001c0de);
+        `CPU_MEM_SET_D(cm, `SEC_DATA_W + 0, 32'hdeadc0de);
+        `CPU_MEM_SET_D(cm, `SEC_DATA_W + 1, 32'hdeadbeef);
+        `CPU_MEM_SET_D(cm, `SEC_DATA_W + 2, 32'hc001c0de);
 
         // Load words with different addresses
         // Last instr. is to try to load word into x0
-        `CPU_MEM_SET_I(cm, 0, 32'hffc49303);  // lb x6, -4(x9)
-        `CPU_MEM_SET_I(cm, 1, 32'h00049303);  // lb x6, 0(x9)
-        `CPU_MEM_SET_I(cm, 2, 32'h00449303);  // lb x6, 4(x9)
-        `CPU_MEM_SET_I(cm, 3, 32'h00449003);  // lb x0, 4(x9)
+        `CPU_MEM_SET_I(cm, 0, 32'hffc11303);  // lh x6, -4(sp)
+        `CPU_MEM_SET_I(cm, 1, 32'h00011303);  // lh x6, 0(sp)
+        `CPU_MEM_SET_I(cm, 2, 32'h00411303);  // lh x6, 4(sp)
+        `CPU_MEM_SET_I(cm, 3, 32'h00411003);  // lh x0, 4(sp)
+
 
         // Reset and test
         #2  rst = 1;

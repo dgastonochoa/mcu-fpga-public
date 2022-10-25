@@ -2,6 +2,8 @@
 `include "mem.svh"
 `include "synth.svh"
 
+`include "riscv/mem_map.svh"
+
 module cpu(
     input  wire     [31:0]  instr,
     input  wire     [31:0]  m_rd,
@@ -115,8 +117,12 @@ module cpu_mem #(parameter D_SIZE = 256,
 
     input  wire             clk
 );
+    wire [31:0] real_d_addr;
+
+    assign real_d_addr = d_addr - (`SEC_DATA_W * 4);
+
     mem #(.N(D_SIZE)) dm(
-        d_addr, d_wd, d_we, d_dt, d_rd, err, clk);
+        real_d_addr, d_wd, d_we, d_dt, d_rd, err, clk);
 
 
     mem_dt_e dt_instr;

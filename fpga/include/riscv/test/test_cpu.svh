@@ -1,6 +1,8 @@
 `ifndef TEST_CPU_SVH
 `define TEST_CPU_SVH
 
+`define CPU_R_SP            2
+
 `define CPU_GET_R(cpu, idx)     cpu.dp.rf._reg[idx]
 `define CPU_SET_R(cpu, idx, d)  cpu.dp.rf._reg[idx] = d
 

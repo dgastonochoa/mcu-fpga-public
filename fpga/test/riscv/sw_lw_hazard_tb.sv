@@ -4,6 +4,8 @@
 `include "mem.svh"
 `include "errno.svh"
 
+`include "riscv/mem_map.svh"
+
 `include "riscv_test_utils.svh"
 
 `ifndef VCD
@@ -28,11 +30,13 @@ module sw_lw_hazard_tb;
     cpu_mem cm(
         pc, d_addr, d_wd, d_we, d_dt, instr, d_rd, err, clk);
 
+
     initial begin
         $dumpfile(`VCD);
         $dumpvars(1, sw_lw_hazard_tb);
 
-        `CPU_SET_R(dut, 2, 32'h00);
+        `CPU_SET_R(dut, 2, (`SEC_DATA_W * 4));
+        `CPU_SET_R(dut, 4, 32'h00);
         `CPU_SET_R(dut, 5, 32'h00);
         `CPU_SET_R(dut, 6, 32'h00);
 
@@ -40,10 +44,10 @@ module sw_lw_hazard_tb;
         `CPU_MEM_SET_D(cm, 1, 32'hdeadbeef);
 
 
-        `CPU_MEM_SET_I(cm, 0, 32'h02000113); //         addi    x2, x0, 32
-        `CPU_MEM_SET_I(cm, 1, 32'h00202023); //         sw      x2, (0)(x0)
-        `CPU_MEM_SET_I(cm, 2, 32'h00002183); //         lw      x3, (0)(x0)
-        `CPU_MEM_SET_I(cm, 3, 32'h00302223); //         sw      x3, (4)(x0)
+        `CPU_MEM_SET_I(cm, 0, 32'h02000213); //         addi    x4, x0, 32
+        `CPU_MEM_SET_I(cm, 1, 32'h00412023); //         sw      x4, (0x0)(sp)
+        `CPU_MEM_SET_I(cm, 2, 32'h00012183); //         lw      x3, (0x0)(sp)
+        `CPU_MEM_SET_I(cm, 3, 32'h00312223); //         sw      x3, (0x4)(sp)
         `CPU_MEM_SET_I(cm, 4, 32'h0000006f); // .L0:    jal     x0, .L0
 
 
@@ -51,10 +55,10 @@ module sw_lw_hazard_tb;
         #2  rst = 1;
         #2  rst = 0;
 
-        `WAIT_CLKS(clk, 20) assert(`CPU_GET_R(dut, 2) === 32'd32);
+        `WAIT_CLKS(clk, 20) assert(`CPU_GET_R(dut, 4) === 32'd32);
                             assert(`CPU_GET_R(dut, 3) === 32'd32);
-                            assert(`CPU_MEM_GET_D(cm, 0) === 32'd32);
-                            assert(`CPU_MEM_GET_D(cm, 1) === 32'd32);
+                            assert(`CPU_MEM_GET_D(cm, `SEC_DATA_W + 0) === 32'd32);
+                            assert(`CPU_MEM_GET_D(cm, `SEC_DATA_W + 1) === 32'd32);
 
         #5;
         $finish;

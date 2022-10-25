@@ -5,6 +5,7 @@
 `include "errno.svh"
 
 `include "riscv/datapath.svh"
+`include "riscv/mem_map.svh"
 
 `include "riscv_test_utils.svh"
 
@@ -40,28 +41,21 @@ module sw_spi_loop_tb;
         $dumpfile(`VCD);
         $dumpvars(1, sw_spi_loop_tb);
 
-        dut.c.dp.rf._reg[11] = 32'h80000000;
+        `CPU_SET_R(`MCU_GET_C(dut), 2, (`SEC_DATA_W * 4));
+        `CPU_SET_R(`MCU_GET_C(dut), 11, 32'h80000000);
+        `CPU_SET_R(`MCU_GET_C(dut), 12, (`SEC_DATA_W + 10) * 4);
+        `CPU_SET_R(`MCU_GET_C(dut), 13, (`SEC_DATA_W + 13) * 4);
 
-        `CPU_MEM_SET_D(`MCU_GET_M(dut), 0, 32'hdeadc0de);
-        `CPU_MEM_SET_D(`MCU_GET_M(dut), 1, 32'hdeadbeef);
-        `CPU_MEM_SET_D(`MCU_GET_M(dut), 2, 32'hc001c0de);
-        `CPU_MEM_SET_D(`MCU_GET_M(dut), 3, 32'hc001beef);
+        `CPU_MEM_SET_D(`MCU_GET_M(dut), `SEC_DATA_W + 10, 32'hdeadc0de);
+        `CPU_MEM_SET_D(`MCU_GET_M(dut), `SEC_DATA_W + 11, 32'hdeadbeef);
+        `CPU_MEM_SET_D(`MCU_GET_M(dut), `SEC_DATA_W + 12, 32'hc001c0de);
+        `CPU_MEM_SET_D(`MCU_GET_M(dut), `SEC_DATA_W + 13, 32'hc001beef);
 
-`ifdef CONFIG_RISCV_MULTICYCLE
-        // Multicycle has shared memory, therefore place the sp in a safe place
-        // and make a2 and a3 point to the start and finish of the data (see
-        // CPU_MEM_DATA_START_IDX)
-        // TODO replace this by something that takes the values from registers
-        // set manually by this testbench
-        `CPU_MEM_SET_I(`MCU_GET_M(dut), 0, 32'h7f000613);  //         addi    a2, x0, 2032 # set start address
-        `CPU_MEM_SET_I(`MCU_GET_M(dut), 1, 32'h7fc00693);  //         addi    a3, x0, 2044 # set end address
-        `CPU_MEM_SET_I(`MCU_GET_M(dut), 2, 32'h20000113);  //         addi    sp, x0, 512  # init. sp
-`else
-        `CPU_MEM_SET_I(`MCU_GET_M(dut), 0, 32'h00000613);  //         addi    a2, x0, 0   # set start address
-        `CPU_MEM_SET_I(`MCU_GET_M(dut), 1, 32'h00c00693);  //         addi    a3, x0, 12  # set end address
-        `CPU_MEM_SET_I(`MCU_GET_M(dut), 2, 32'h02000113);  //         addi    sp, x0, 32  # init. sp
-`endif // CONFIG_RISCV_MULTICYCLE
-
+        // TODO nop instructions at the beginning for legacy reasons,
+        // delete them
+        `CPU_MEM_SET_I(`MCU_GET_M(dut), 0, 32'h00000013);  //         addi    x0, x0, 0   # nop
+        `CPU_MEM_SET_I(`MCU_GET_M(dut), 1, 32'h00000013);  //         addi    x0, x0, 0   # nop
+        `CPU_MEM_SET_I(`MCU_GET_M(dut), 2, 32'h00000013);  //         addi    x0, x0, 0   # nop
         `CPU_MEM_SET_I(`MCU_GET_M(dut), 3, 32'h00002503);  //         lw      a0, 0(x0)   # load mem[0] (debug)
         `CPU_MEM_SET_I(`MCU_GET_M(dut), 4, 32'h050000ef);  //         jal     .SM
         `CPU_MEM_SET_I(`MCU_GET_M(dut), 5, 32'h000000ef);  // .END:   jal     .END
