@@ -44,24 +44,24 @@ module blt_tb;
         `CPU_SET_R(dut, 7, 32'h00000002);
 
 
-        `CPU_MEM_SET_I(cm,  0, 32'h02024e63);
-        `CPU_MEM_SET_I(cm,  1, 32'h02004c63);
-        `CPU_MEM_SET_I(cm,  2, 32'h00404863);
-        `CPU_MEM_SET_I(cm,  3, 32'h00000013);
-        `CPU_MEM_SET_I(cm,  4, 32'h00000013);
-        `CPU_MEM_SET_I(cm,  5, 32'h00000013);
-        `CPU_MEM_SET_I(cm,  6, 32'h02504263);
-        `CPU_MEM_SET_I(cm,  7, 32'h0002c863);
-        `CPU_MEM_SET_I(cm,  8, 32'h00000013);
-        `CPU_MEM_SET_I(cm,  9, 32'h00000013);
-        `CPU_MEM_SET_I(cm,  10, 32'h00000013);
-        `CPU_MEM_SET_I(cm,  11, 32'h00024863);
-        `CPU_MEM_SET_I(cm,  12, 32'h0002c463);
-        `CPU_MEM_SET_I(cm,  13, 32'h00000013);
-        `CPU_MEM_SET_I(cm,  14, 32'hfc7344e3);
-        `CPU_MEM_SET_I(cm,  15, 32'h00000013);
-        `CPU_MEM_SET_I(cm,  16, 32'h00000013);
-        `CPU_MEM_SET_I(cm,  17, 32'h00000013);
+        `CPU_MEM_SET_W(cm,  0, 32'h02024e63);
+        `CPU_MEM_SET_W(cm,  1, 32'h02004c63);
+        `CPU_MEM_SET_W(cm,  2, 32'h00404863);
+        `CPU_MEM_SET_W(cm,  3, 32'h00000013);
+        `CPU_MEM_SET_W(cm,  4, 32'h00000013);
+        `CPU_MEM_SET_W(cm,  5, 32'h00000013);
+        `CPU_MEM_SET_W(cm,  6, 32'h02504263);
+        `CPU_MEM_SET_W(cm,  7, 32'h0002c863);
+        `CPU_MEM_SET_W(cm,  8, 32'h00000013);
+        `CPU_MEM_SET_W(cm,  9, 32'h00000013);
+        `CPU_MEM_SET_W(cm,  10, 32'h00000013);
+        `CPU_MEM_SET_W(cm,  11, 32'h00024863);
+        `CPU_MEM_SET_W(cm,  12, 32'h0002c463);
+        `CPU_MEM_SET_W(cm,  13, 32'h00000013);
+        `CPU_MEM_SET_W(cm,  14, 32'hfc7344e3);
+        `CPU_MEM_SET_W(cm,  15, 32'h00000013);
+        `CPU_MEM_SET_W(cm,  16, 32'h00000013);
+        `CPU_MEM_SET_W(cm,  17, 32'h00000013);
 
 
         // Reset and test

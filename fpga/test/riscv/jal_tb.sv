@@ -32,14 +32,14 @@ module jal_tb;
         $dumpfile(`VCD);
         $dumpvars(1, jal_tb);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h00c000ef);   // jal ra, +12
-        `CPU_MEM_SET_I(cm, 1, 32'h00000013);
-        `CPU_MEM_SET_I(cm, 2, 32'h00000013);
-        `CPU_MEM_SET_I(cm, 3, 32'h00000013);
-        `CPU_MEM_SET_I(cm, 4, 32'h00000013);
-        `CPU_MEM_SET_I(cm, 5, 32'h00000013);
-        `CPU_MEM_SET_I(cm, 6, 32'h00000013);
-        `CPU_MEM_SET_I(cm, 7, 32'hff9ff0ef);   // jal ra, 0x14
+        `CPU_MEM_SET_W(cm, 0, 32'h00c000ef);   // jal ra, +12
+        `CPU_MEM_SET_W(cm, 1, 32'h00000013);
+        `CPU_MEM_SET_W(cm, 2, 32'h00000013);
+        `CPU_MEM_SET_W(cm, 3, 32'h00000013);
+        `CPU_MEM_SET_W(cm, 4, 32'h00000013);
+        `CPU_MEM_SET_W(cm, 5, 32'h00000013);
+        `CPU_MEM_SET_W(cm, 6, 32'h00000013);
+        `CPU_MEM_SET_W(cm, 7, 32'hff9ff0ef);   // jal ra, 0x14
 
         // Reset and test
         #2  rst = 1;
@@ -61,7 +61,7 @@ module jal_tb;
                                     assert(`CPU_GET_R(dut, 1) === 32);
 
         // Modify first instr. to jump to itself
-        `CPU_MEM_SET_I(cm, 0, 32'h000000ef);
+        `CPU_MEM_SET_W(cm, 0, 32'h000000ef);
         #2  rst = 1;
         #2  rst = 0;
         `WAIT_CLKS(clk, `J_I_CYC)   assert(pc === 0);

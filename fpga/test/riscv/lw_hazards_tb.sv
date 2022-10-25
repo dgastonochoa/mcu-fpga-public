@@ -48,12 +48,12 @@ module lw_hazards_tb;
             `CPU_SET_R(dut, 7, 32'd1);
             `CPU_SET_R(dut, 10, 32'd3);
 
-            `CPU_MEM_SET_D(cm, `SEC_DATA_W, 32'hdeadc0de);
+            `CPU_MEM_SET_W(cm, `SEC_DATA_W, 32'hdeadc0de);
 
-            `CPU_MEM_SET_I(cm, 0, 32'h00012083); // lw  x1, 0(sp)
-            `CPU_MEM_SET_I(cm, 1, 32'h00a0f1b3); // and x3, x1, x10
-            `CPU_MEM_SET_I(cm, 2, 32'h0012e233); // or  x4, x5, x1
-            `CPU_MEM_SET_I(cm, 3, 32'h40708333); // sub x6, x1, x7
+            `CPU_MEM_SET_W(cm, 0, 32'h00012083); // lw  x1, 0(sp)
+            `CPU_MEM_SET_W(cm, 1, 32'h00a0f1b3); // and x3, x1, x10
+            `CPU_MEM_SET_W(cm, 2, 32'h0012e233); // or  x4, x5, x1
+            `CPU_MEM_SET_W(cm, 3, 32'h40708333); // sub x6, x1, x7
         #2  rst = 0;
 
         `WAIT_INIT_CYCLES(clk);
@@ -73,11 +73,11 @@ module lw_hazards_tb;
             `CPU_SET_R(dut, 4, 32'h00);
             `CPU_SET_R(dut, 10, 32'd3);
 
-            `CPU_MEM_SET_D(cm, `SEC_DATA_W, 32'hdeadc0de);
+            `CPU_MEM_SET_W(cm, `SEC_DATA_W, 32'hdeadc0de);
 
-            `CPU_MEM_SET_I(cm, 0, 32'h00012083); // lw  x1, 0(sp)
-            `CPU_MEM_SET_I(cm, 1, 32'h003500b3); // add x1, x10, x3
-            `CPU_MEM_SET_I(cm, 2, 32'h00a08233); // add x4, x1, x10
+            `CPU_MEM_SET_W(cm, 0, 32'h00012083); // lw  x1, 0(sp)
+            `CPU_MEM_SET_W(cm, 1, 32'h003500b3); // add x1, x10, x3
+            `CPU_MEM_SET_W(cm, 2, 32'h00a08233); // add x4, x1, x10
         #2  rst = 0;
 
         `WAIT_INIT_CYCLES(clk);

@@ -38,10 +38,10 @@ module or_tb;
         `CPU_SET_R(dut, 6, 32'hfe);
         `CPU_SET_R(dut, 7, 32'h00);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h00626033); // or x0, x4, x6
-        `CPU_MEM_SET_I(cm, 1, 32'h0002e233); // or x4, x5, x0
-        `CPU_MEM_SET_I(cm, 2, 32'h00626233); // or x4, x4, x6
-        `CPU_MEM_SET_I(cm, 3, 32'h004063b3); // or x7, x0, x4
+        `CPU_MEM_SET_W(cm, 0, 32'h00626033); // or x0, x4, x6
+        `CPU_MEM_SET_W(cm, 1, 32'h0002e233); // or x4, x5, x0
+        `CPU_MEM_SET_W(cm, 2, 32'h00626233); // or x4, x4, x6
+        `CPU_MEM_SET_W(cm, 3, 32'h004063b3); // or x7, x0, x4
 
         // Reset and test
         #2  rst = 1;

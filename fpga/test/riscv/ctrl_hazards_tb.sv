@@ -42,12 +42,12 @@ module ctrl_hazards_tb;
             `CPU_SET_R(dut, 4, 32'd25);
             `CPU_SET_R(dut, 5, 32'd7);
 
-            `CPU_MEM_SET_I(cm, 0, 32'h00208a63); //         beq x1, x2, .L1
-            `CPU_MEM_SET_I(cm, 1, 32'h401201b3); //         sub x3, x4, x1
-            `CPU_MEM_SET_I(cm, 2, 32'h0020e233); //         or  x4, x1, x2
-            `CPU_MEM_SET_I(cm, 3, 32'h00000013); //         nop
-            `CPU_MEM_SET_I(cm, 4, 32'h00000013); //         nop
-            `CPU_MEM_SET_I(cm, 5, 32'h001281b3); // .L1:    add x3, x5, x1
+            `CPU_MEM_SET_W(cm, 0, 32'h00208a63); //         beq x1, x2, .L1
+            `CPU_MEM_SET_W(cm, 1, 32'h401201b3); //         sub x3, x4, x1
+            `CPU_MEM_SET_W(cm, 2, 32'h0020e233); //         or  x4, x1, x2
+            `CPU_MEM_SET_W(cm, 3, 32'h00000013); //         nop
+            `CPU_MEM_SET_W(cm, 4, 32'h00000013); //         nop
+            `CPU_MEM_SET_W(cm, 5, 32'h001281b3); // .L1:    add x3, x5, x1
         #2  rst = 0;
 
         `WAIT_CLKS(clk, 5); assert(`CPU_GET_R(dut, 1) === 32'd1);
@@ -85,12 +85,12 @@ module ctrl_hazards_tb;
             `CPU_SET_R(dut, 4, 32'd25);
             `CPU_SET_R(dut, 5, 32'd7);
 
-            `CPU_MEM_SET_I(cm, 0, 32'h00208a63); //         beq x1, x2, .L1
-            `CPU_MEM_SET_I(cm, 1, 32'h401201b3); //         sub x3, x4, x1
-            `CPU_MEM_SET_I(cm, 2, 32'h0020e233); //         or  x4, x1, x2
-            `CPU_MEM_SET_I(cm, 3, 32'h00000013); //         nop
-            `CPU_MEM_SET_I(cm, 4, 32'h00000013); //         nop
-            `CPU_MEM_SET_I(cm, 5, 32'h003280b3); // .L1:    add x1, x5, x3
+            `CPU_MEM_SET_W(cm, 0, 32'h00208a63); //         beq x1, x2, .L1
+            `CPU_MEM_SET_W(cm, 1, 32'h401201b3); //         sub x3, x4, x1
+            `CPU_MEM_SET_W(cm, 2, 32'h0020e233); //         or  x4, x1, x2
+            `CPU_MEM_SET_W(cm, 3, 32'h00000013); //         nop
+            `CPU_MEM_SET_W(cm, 4, 32'h00000013); //         nop
+            `CPU_MEM_SET_W(cm, 5, 32'h003280b3); // .L1:    add x1, x5, x3
         #2  rst = 0;
 
         `WAIT_CLKS(clk, 5); assert(`CPU_GET_R(dut, 1) === 32'd1);
@@ -128,12 +128,12 @@ module ctrl_hazards_tb;
             `CPU_SET_R(dut, 4, 32'd25);
             `CPU_SET_R(dut, 5, 32'd7);
 
-            `CPU_MEM_SET_I(cm, 0, 32'h00308a63); //         beq x1, x3, .L1
-            `CPU_MEM_SET_I(cm, 1, 32'h401201b3); //         sub x3, x4, x1
-            `CPU_MEM_SET_I(cm, 2, 32'h0020e233); //         or  x4, x1, x2
-            `CPU_MEM_SET_I(cm, 3, 32'h00000013); //         nop
-            `CPU_MEM_SET_I(cm, 4, 32'h00000013); //         nop
-            `CPU_MEM_SET_I(cm, 5, 32'h003280b3); // .L1:    add x1, x5, x3
+            `CPU_MEM_SET_W(cm, 0, 32'h00308a63); //         beq x1, x3, .L1
+            `CPU_MEM_SET_W(cm, 1, 32'h401201b3); //         sub x3, x4, x1
+            `CPU_MEM_SET_W(cm, 2, 32'h0020e233); //         or  x4, x1, x2
+            `CPU_MEM_SET_W(cm, 3, 32'h00000013); //         nop
+            `CPU_MEM_SET_W(cm, 4, 32'h00000013); //         nop
+            `CPU_MEM_SET_W(cm, 5, 32'h003280b3); // .L1:    add x1, x5, x3
         #2  rst = 0;
 
         `WAIT_CLKS(clk, 5); assert(`CPU_GET_R(dut, 1) === 32'd1);

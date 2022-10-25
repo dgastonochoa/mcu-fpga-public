@@ -10,14 +10,14 @@
 `endif
 
 module mem_error_tb;
-    reg [31:0] addr, wd;
+    reg [31:0] addr, wd, addr2_word;
     mem_dt_e dt;
     errno_e err;
     reg we, clk = 0;
 
-    wire [31:0] rd;
+    wire [31:0] rd, rd2_word;
 
-    mem m(addr, wd, we, dt, rd, err, clk);
+    mem m(addr, addr2_word, wd, we, dt, rd, rd2_word, err, clk);
 
     always #10 clk = ~clk;
 

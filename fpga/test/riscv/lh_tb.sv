@@ -42,16 +42,16 @@ module lh_tb;
         `CPU_SET_R(dut, 6, 32'd0);
 
         // Set mem. init. vals
-        `CPU_MEM_SET_D(cm, `SEC_DATA_W + 0, 32'hdeadc0de);
-        `CPU_MEM_SET_D(cm, `SEC_DATA_W + 1, 32'hdeadbeef);
-        `CPU_MEM_SET_D(cm, `SEC_DATA_W + 2, 32'hc001c0de);
+        `CPU_MEM_SET_W(cm, `SEC_DATA_W + 0, 32'hdeadc0de);
+        `CPU_MEM_SET_W(cm, `SEC_DATA_W + 1, 32'hdeadbeef);
+        `CPU_MEM_SET_W(cm, `SEC_DATA_W + 2, 32'hc001c0de);
 
         // Load words with different addresses
         // Last instr. is to try to load word into x0
-        `CPU_MEM_SET_I(cm, 0, 32'hffc11303);  // lh x6, -4(sp)
-        `CPU_MEM_SET_I(cm, 1, 32'h00011303);  // lh x6, 0(sp)
-        `CPU_MEM_SET_I(cm, 2, 32'h00411303);  // lh x6, 4(sp)
-        `CPU_MEM_SET_I(cm, 3, 32'h00411003);  // lh x0, 4(sp)
+        `CPU_MEM_SET_W(cm, 0, 32'hffc11303);  // lh x6, -4(sp)
+        `CPU_MEM_SET_W(cm, 1, 32'h00011303);  // lh x6, 0(sp)
+        `CPU_MEM_SET_W(cm, 2, 32'h00411303);  // lh x6, 4(sp)
+        `CPU_MEM_SET_W(cm, 3, 32'h00411003);  // lh x0, 4(sp)
 
 
         // Reset and test

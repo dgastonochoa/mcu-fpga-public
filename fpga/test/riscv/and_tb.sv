@@ -37,9 +37,9 @@ module and_tb;
         `CPU_SET_R(dut, 5, 32'h01);
         `CPU_SET_R(dut, 6, 32'hff);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h00627033);  // and x0, x4, x6
-        `CPU_MEM_SET_I(cm, 1, 32'h0062f233);  // and x4, x5, x6
-        `CPU_MEM_SET_I(cm, 2, 32'h00637233);  // and x4, x6, x6
+        `CPU_MEM_SET_W(cm, 0, 32'h00627033);  // and x0, x4, x6
+        `CPU_MEM_SET_W(cm, 1, 32'h0062f233);  // and x4, x5, x6
+        `CPU_MEM_SET_W(cm, 2, 32'h00637233);  // and x4, x6, x6
 
         // Reset and test
         #2  rst = 1;

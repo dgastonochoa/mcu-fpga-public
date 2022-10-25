@@ -35,8 +35,8 @@ module auipc_tb;
         `CPU_SET_R(dut, 0, 32'd00);
         `CPU_SET_R(dut, 1, 32'd12);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h00014097);   // auipc   x1, 20
-        `CPU_MEM_SET_I(cm, 1, 32'h00014097);   // auipc   x1, 20
+        `CPU_MEM_SET_W(cm, 0, 32'h00014097);   // auipc   x1, 20
+        `CPU_MEM_SET_W(cm, 1, 32'h00014097);   // auipc   x1, 20
 
         // Reset and test
         #2  rst = 1;

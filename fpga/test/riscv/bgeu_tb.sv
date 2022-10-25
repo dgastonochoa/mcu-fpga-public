@@ -39,22 +39,22 @@ module bltu_tb;
         `CPU_SET_R(dut, 5, 32'hffffffff);
 
 
-        `CPU_MEM_SET_I(cm,  0, 32'h02407a63);  // bgeu    x0, x4, .L2
-        `CPU_MEM_SET_I(cm,  1, 32'h00007263);  // bgeu    x0, x0, .L4
-        `CPU_MEM_SET_I(cm,  2, 32'h00027863);  // bgeu    x4, x0, .L1
-        `CPU_MEM_SET_I(cm,  3, 32'h00000013);  // nop
-        `CPU_MEM_SET_I(cm,  4, 32'h00000013);  // nop
-        `CPU_MEM_SET_I(cm,  5, 32'h00000013);  // nop
-        `CPU_MEM_SET_I(cm,  6, 32'h00507e63);  // bgeu    x0, x5, .L2
-        `CPU_MEM_SET_I(cm,  7, 32'h0002f863);  // bgeu    x5, x0, .L5
-        `CPU_MEM_SET_I(cm,  8, 32'h00000013);  // nop
-        `CPU_MEM_SET_I(cm,  9, 32'h00000013);  // nop
-        `CPU_MEM_SET_I(cm,  10, 32'h00000013);  // nop
-        `CPU_MEM_SET_I(cm,  11, 32'h00407463);  // bgeu    x0, x4, .L2
-        `CPU_MEM_SET_I(cm,  12, 32'hfc52f8e3);  // bgeu    x5, x5, .L3
-        `CPU_MEM_SET_I(cm,  13, 32'h00000013);  // nop
-        `CPU_MEM_SET_I(cm,  14, 32'h00000013);  // nop
-        `CPU_MEM_SET_I(cm,  15, 32'h00000013);  // nop
+        `CPU_MEM_SET_W(cm,  0, 32'h02407a63);  // bgeu    x0, x4, .L2
+        `CPU_MEM_SET_W(cm,  1, 32'h00007263);  // bgeu    x0, x0, .L4
+        `CPU_MEM_SET_W(cm,  2, 32'h00027863);  // bgeu    x4, x0, .L1
+        `CPU_MEM_SET_W(cm,  3, 32'h00000013);  // nop
+        `CPU_MEM_SET_W(cm,  4, 32'h00000013);  // nop
+        `CPU_MEM_SET_W(cm,  5, 32'h00000013);  // nop
+        `CPU_MEM_SET_W(cm,  6, 32'h00507e63);  // bgeu    x0, x5, .L2
+        `CPU_MEM_SET_W(cm,  7, 32'h0002f863);  // bgeu    x5, x0, .L5
+        `CPU_MEM_SET_W(cm,  8, 32'h00000013);  // nop
+        `CPU_MEM_SET_W(cm,  9, 32'h00000013);  // nop
+        `CPU_MEM_SET_W(cm,  10, 32'h00000013);  // nop
+        `CPU_MEM_SET_W(cm,  11, 32'h00407463);  // bgeu    x0, x4, .L2
+        `CPU_MEM_SET_W(cm,  12, 32'hfc52f8e3);  // bgeu    x5, x5, .L3
+        `CPU_MEM_SET_W(cm,  13, 32'h00000013);  // nop
+        `CPU_MEM_SET_W(cm,  14, 32'h00000013);  // nop
+        `CPU_MEM_SET_W(cm,  15, 32'h00000013);  // nop
 
         // Reset and test
         #2  rst = 1;

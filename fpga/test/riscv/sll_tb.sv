@@ -37,9 +37,9 @@ module sll_tb;
         `CPU_SET_R(dut, 5, 32'h0f000000);
         `CPU_SET_R(dut, 6, 32'd4);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h00521033); // sll     x0, x4, x5
-        `CPU_MEM_SET_I(cm, 1, 32'h00629233); // sll     x4, x5, x6
-        `CPU_MEM_SET_I(cm, 2, 32'h00621233); // sll     x4, x4, x6
+        `CPU_MEM_SET_W(cm, 0, 32'h00521033); // sll     x0, x4, x5
+        `CPU_MEM_SET_W(cm, 1, 32'h00629233); // sll     x4, x5, x6
+        `CPU_MEM_SET_W(cm, 2, 32'h00621233); // sll     x4, x4, x6
 
         // Reset and test
         #2  rst = 1;

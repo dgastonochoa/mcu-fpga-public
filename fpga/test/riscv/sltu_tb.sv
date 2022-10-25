@@ -40,9 +40,9 @@ module sltu_tb;
         `CPU_SET_R(dut, 9, 32'd2);
         `CPU_SET_R(dut, 10, 32'd4);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h0062b233); // sltu   x4, x5, x6
-        `CPU_MEM_SET_I(cm, 1, 32'h0083b233); // sltu   x4, x7, x8
-        `CPU_MEM_SET_I(cm, 2, 32'h00a4b233); // sltu   x4, x9, x10
+        `CPU_MEM_SET_W(cm, 0, 32'h0062b233); // sltu   x4, x5, x6
+        `CPU_MEM_SET_W(cm, 1, 32'h0083b233); // sltu   x4, x7, x8
+        `CPU_MEM_SET_W(cm, 2, 32'h00a4b233); // sltu   x4, x9, x10
 
         // Reset and test
         #2  rst = 1;

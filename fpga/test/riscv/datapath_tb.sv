@@ -4,6 +4,8 @@
 `include "mem.svh"
 `include "errno.svh"
 
+`include "riscv/mem_map.svh"
+
 `include "riscv_test_utils.svh"
 
 `ifndef VCD
@@ -37,13 +39,13 @@ module datapath_tb;
         `CPU_SET_R(dut, 5, 32'hfffffffe);
         `CPU_SET_R(dut, 6, 32'd0);
 
-        `CPU_MEM_SET_D(cm, `SEC_DATA_W + 1, 32'hdeadc0de);
-        `CPU_MEM_SET_D(cm, `SEC_DATA_W + 4, 32'h00);
+        `CPU_MEM_SET_W(cm, `SEC_DATA_W + 1, 32'hdeadc0de);
+        `CPU_MEM_SET_W(cm, `SEC_DATA_W + 4, 32'h00);
 
-        `CPU_MEM_SET_I(cm, 0, 32'hffc12303);    // .L7: lw x6, -4(sp)
-        `CPU_MEM_SET_I(cm, 1, 32'h00612423);    //      sw x6, 8(sp)
-        `CPU_MEM_SET_I(cm, 2, 32'h0062e233);    //      or x4, x5, x6
-        `CPU_MEM_SET_I(cm, 3, 32'hfe420ae3);    //      beq x4, x4, .L7
+        `CPU_MEM_SET_W(cm, 0, 32'hffc12303);    // .L7: lw x6, -4(sp)
+        `CPU_MEM_SET_W(cm, 1, 32'h00612423);    //      sw x6, 8(sp)
+        `CPU_MEM_SET_W(cm, 2, 32'h0062e233);    //      or x4, x5, x6
+        `CPU_MEM_SET_W(cm, 3, 32'hfe420ae3);    //      beq x4, x4, .L7
 
         // Reset
         #2  rst = 1;
@@ -56,7 +58,7 @@ module datapath_tb;
 
         // Second instr. executed
         `WAIT_CLKS(clk, `S_I_CYC) assert(pc === 8);
-                                  assert(`CPU_MEM_GET_D(cm, `SEC_DATA_W + 4) === 32'hdeadc0de);
+                                  assert(`CPU_MEM_GET_W(cm, `SEC_DATA_W + 4) === 32'hdeadc0de);
 
         // Third instr. executed
         `WAIT_CLKS(clk, `R_I_CYC) assert(pc === 12);
@@ -72,7 +74,7 @@ module datapath_tb;
 
         // Second instr. executed again.
         `WAIT_CLKS(clk, `S_I_CYC) assert(pc === 8);
-                                  assert(`CPU_MEM_GET_D(cm, `SEC_DATA_W + 4) === 32'hdeadc0de);
+                                  assert(`CPU_MEM_GET_W(cm, `SEC_DATA_W + 4) === 32'hdeadc0de);
 
         // Third instr. executed again
         `WAIT_CLKS(clk, `R_I_CYC) assert(pc === 12);

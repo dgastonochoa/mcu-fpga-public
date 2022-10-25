@@ -36,8 +36,8 @@ module srai_tb;
         `CPU_SET_R(dut, 5, 32'h08);
         `CPU_SET_R(dut, 7, 32'hfffffff8);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h4022d213);   // srai     x4, x5, 2
-        `CPU_MEM_SET_I(cm, 1, 32'h4023d213);   // srai     x4, x7, 2
+        `CPU_MEM_SET_W(cm, 0, 32'h4022d213);   // srai     x4, x5, 2
+        `CPU_MEM_SET_W(cm, 1, 32'h4023d213);   // srai     x4, x7, 2
 
         // Reset and test
         #2  rst = 1;

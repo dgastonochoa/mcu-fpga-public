@@ -57,11 +57,13 @@
  */
 module mem_be #(parameter N = 64, INIT_VALS = 0)(
     input   wire        [31:0]  addr,
+    input   wire        [31:0]  addr2_word,
     input   wire        [31:0]  wd,
     input   wire        [3:0]   be,
     input   wire                we,
     input   wire                se,
     output  logic       [31:0]  rd,
+    output  wire        [31:0]  rd2_word,
     input   wire                clk
 );
     reg [31:0] _mem [N-1:0];
@@ -130,6 +132,8 @@ module mem_be #(parameter N = 64, INIT_VALS = 0)(
         default: rd = 32'hffffffff;
         endcase
     end
+
+    assign rd2_word = _mem[addr2_word[31:2]];
 endmodule
 
 /**
@@ -158,10 +162,12 @@ endmodule
  */
 module mem #(parameter N = 64, INIT_VALS = 0)(
     input   wire        [31:0]  addr,
+    input   wire        [31:0]  addr2_word,
     input   wire        [31:0]  wd,
     input   wire                we,
     input   mem_dt_e            dt,
     output  logic       [31:0]  rd,
+    output  wire        [31:0]  rd2_word,
     output  errno_e             err,
     input   wire                clk
 );
@@ -186,7 +192,8 @@ module mem #(parameter N = 64, INIT_VALS = 0)(
         endcase
     end
 
-    mem_be #(.N(N), .INIT_VALS(INIT_VALS)) _mem(addr, wd, be, we, se, rd, clk);
+    mem_be #(.N(N), .INIT_VALS(INIT_VALS)) _mem(
+        addr, addr2_word, wd, be, we, se, rd, rd2_word, clk);
 
 
     //

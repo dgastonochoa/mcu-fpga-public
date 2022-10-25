@@ -41,14 +41,14 @@ module sh_tb;
         `CPU_SET_R(dut, 7, 32'hdeadbeef);
         `CPU_SET_R(dut, 8, 32'hc001c0de);
 
-        `CPU_MEM_SET_D(cm, `SEC_DATA_W + 5, 32'h00);
-        `CPU_MEM_SET_D(cm, `SEC_DATA_W + 10, 32'h00);
-        `CPU_MEM_SET_D(cm, `SEC_DATA_W + 11, 32'h00);
+        `CPU_MEM_SET_W(cm, `SEC_DATA_W + 5, 32'h00);
+        `CPU_MEM_SET_W(cm, `SEC_DATA_W + 10, 32'h00);
+        `CPU_MEM_SET_W(cm, `SEC_DATA_W + 11, 32'h00);
 
-        `CPU_MEM_SET_I(cm, 0, 32'hfe611a23);  // sh x6, -12(sp)
-        `CPU_MEM_SET_I(cm, 1, 32'h00711423);  // sh x7, 8(sp)
-        `CPU_MEM_SET_I(cm, 2, 32'h00811623);  // sh x8, 12(sp)
-        `CPU_MEM_SET_I(cm, 3, 32'h00011623);  // sh x0, 12(sp)
+        `CPU_MEM_SET_W(cm, 0, 32'hfe611a23);  // sh x6, -12(sp)
+        `CPU_MEM_SET_W(cm, 1, 32'h00711423);  // sh x7, 8(sp)
+        `CPU_MEM_SET_W(cm, 2, 32'h00811623);  // sh x8, 12(sp)
+        `CPU_MEM_SET_W(cm, 3, 32'h00011623);  // sh x0, 12(sp)
 
         // Reset and test
         #2  rst = 1;
@@ -57,10 +57,10 @@ module sh_tb;
 `ifdef CONFIG_RISCV_PIPELINE
         `WAIT_CLKS(clk, 3);
 `endif
-        `WAIT_CLKS(clk, `S_I_CYC) assert(`CPU_MEM_GET_D(cm, `SEC_DATA_W + 5) === 32'h0000c0de);
-        `WAIT_CLKS(clk, `S_I_CYC) assert(`CPU_MEM_GET_D(cm, `SEC_DATA_W + 10) === 32'h0000beef);
-        `WAIT_CLKS(clk, `S_I_CYC) assert(`CPU_MEM_GET_D(cm, `SEC_DATA_W + 11) === 32'h0000c0de);
-        `WAIT_CLKS(clk, `S_I_CYC) assert(`CPU_MEM_GET_D(cm, `SEC_DATA_W + 11) === 32'h00000000);
+        `WAIT_CLKS(clk, `S_I_CYC) assert(`CPU_MEM_GET_W(cm, `SEC_DATA_W + 5) === 32'h0000c0de);
+        `WAIT_CLKS(clk, `S_I_CYC) assert(`CPU_MEM_GET_W(cm, `SEC_DATA_W + 10) === 32'h0000beef);
+        `WAIT_CLKS(clk, `S_I_CYC) assert(`CPU_MEM_GET_W(cm, `SEC_DATA_W + 11) === 32'h0000c0de);
+        `WAIT_CLKS(clk, `S_I_CYC) assert(`CPU_MEM_GET_W(cm, `SEC_DATA_W + 11) === 32'h00000000);
 
         #5;
         $finish;

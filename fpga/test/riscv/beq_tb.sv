@@ -37,16 +37,16 @@ module beq_tb;
         `CPU_SET_R(dut, 0, 32'd00);
         `CPU_SET_R(dut, 4, 32'd01);
 
-        `CPU_MEM_SET_I(cm,  0, 32'h00400a63);    // beq x0, x4, 20;  pc = 20
-        `CPU_MEM_SET_I(cm,  1, 32'h00000863);    // beq x0, x0, 16;  pc = 20
-        `CPU_MEM_SET_I(cm,  2, 32'h00000013);    // nop
-        `CPU_MEM_SET_I(cm,  3, 32'h00000013);    // nop
-        `CPU_MEM_SET_I(cm,  4, 32'h00000013);    // nop
-        `CPU_MEM_SET_I(cm,  5, 32'h00400463);    // beq x0, x4, 8;   pc = 28
-        `CPU_MEM_SET_I(cm,  6, 32'hfe0004e3);    // beq x0, x0, -24; pc = 0
-        `CPU_MEM_SET_I(cm,  7, 32'h00000013);    // nop
-        `CPU_MEM_SET_I(cm,  8, 32'h00000013);    // nop
-        `CPU_MEM_SET_I(cm,  9, 32'h00000013);    // nop
+        `CPU_MEM_SET_W(cm,  0, 32'h00400a63);    // beq x0, x4, 20;  pc = 20
+        `CPU_MEM_SET_W(cm,  1, 32'h00000863);    // beq x0, x0, 16;  pc = 20
+        `CPU_MEM_SET_W(cm,  2, 32'h00000013);    // nop
+        `CPU_MEM_SET_W(cm,  3, 32'h00000013);    // nop
+        `CPU_MEM_SET_W(cm,  4, 32'h00000013);    // nop
+        `CPU_MEM_SET_W(cm,  5, 32'h00400463);    // beq x0, x4, 8;   pc = 28
+        `CPU_MEM_SET_W(cm,  6, 32'hfe0004e3);    // beq x0, x0, -24; pc = 0
+        `CPU_MEM_SET_W(cm,  7, 32'h00000013);    // nop
+        `CPU_MEM_SET_W(cm,  8, 32'h00000013);    // nop
+        `CPU_MEM_SET_W(cm,  9, 32'h00000013);    // nop
 
 
         // Reset and test

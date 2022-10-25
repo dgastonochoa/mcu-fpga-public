@@ -40,9 +40,9 @@ module slti_tb;
         `CPU_SET_R(dut, 9, 32'd2);
         `CPU_SET_R(dut, 10, 32'd4);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h0022a213);   // slti    x4, x5, x6
-        `CPU_MEM_SET_I(cm, 1, 32'h0023a213);   // slti    x4, x7, x8
-        `CPU_MEM_SET_I(cm, 2, 32'h0044a213);   // slti    x4, x9, x10
+        `CPU_MEM_SET_W(cm, 0, 32'h0022a213);   // slti    x4, x5, x6
+        `CPU_MEM_SET_W(cm, 1, 32'h0023a213);   // slti    x4, x7, x8
+        `CPU_MEM_SET_W(cm, 2, 32'h0044a213);   // slti    x4, x9, x10
 
         // Reset and test
         #2  rst = 1;

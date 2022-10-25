@@ -38,8 +38,8 @@ module sra_tb;
         `CPU_SET_R(dut, 7, 32'hfffffff8);
         `CPU_SET_R(dut, 8, 32'd2);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h4062d233);   // sra x4, x5, x6
-        `CPU_MEM_SET_I(cm, 1, 32'h4083d233);   // sra x4, x7, x8
+        `CPU_MEM_SET_W(cm, 0, 32'h4062d233);   // sra x4, x5, x6
+        `CPU_MEM_SET_W(cm, 1, 32'h4083d233);   // sra x4, x7, x8
 
         // Reset and test
         #2  rst = 1;

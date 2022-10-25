@@ -36,9 +36,9 @@ module xori_tb;
         `CPU_SET_R(dut, 5, 32'b101010);
         `CPU_SET_R(dut, 6, 32'b010101);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h0152c013);   // xor    x0, x5, 0x15
-        `CPU_MEM_SET_I(cm, 1, 32'h0152c213);   // xor    x4, x5, 0x15
-        `CPU_MEM_SET_I(cm, 2, 32'h01524213);   // xor    x4, x4, 0x15
+        `CPU_MEM_SET_W(cm, 0, 32'h0152c013);   // xor    x0, x5, 0x15
+        `CPU_MEM_SET_W(cm, 1, 32'h0152c213);   // xor    x4, x5, 0x15
+        `CPU_MEM_SET_W(cm, 2, 32'h01524213);   // xor    x4, x4, 0x15
 
         // Reset and test
         #2  rst = 1;

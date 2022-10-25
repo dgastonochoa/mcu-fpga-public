@@ -74,8 +74,7 @@ module cpu(
     );
 endmodule
 
-module cpu_mem #(parameter D_SIZE = 256,
-                 parameter I_SIZE = 512,
+module cpu_mem #(parameter M_SIZE = 768,
                  parameter INIT_VALS = 0) (
     input  wire     [31:0]  pc,
     input  wire     [31:0]  addr,
@@ -89,8 +88,6 @@ module cpu_mem #(parameter D_SIZE = 256,
 
     input  wire             clk
 );
-    mem #(.N(D_SIZE + I_SIZE), .INIT_VALS(INIT_VALS)) m(
-        addr, wd, we, dt, rd, err, clk);
-
-    assign instr = rd;
+    mem #(.N(M_SIZE), .INIT_VALS(INIT_VALS)) m(
+        addr, pc, wd, we, dt, rd, instr, err, clk);
 endmodule

@@ -37,10 +37,10 @@ module xor_tb;
         `CPU_SET_R(dut, 5, 32'b101010);
         `CPU_SET_R(dut, 6, 32'b010101);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h0062c033); // xor     x0, x5, x6
-        `CPU_MEM_SET_I(cm, 1, 32'h0062c233); // xor     x4, x5, x6
-        `CPU_MEM_SET_I(cm, 2, 32'h00624233); // xor     x4, x4, x6
-        `CPU_MEM_SET_I(cm, 3, 32'h00424233); // xor     x4, x4, x4
+        `CPU_MEM_SET_W(cm, 0, 32'h0062c033); // xor     x0, x5, x6
+        `CPU_MEM_SET_W(cm, 1, 32'h0062c233); // xor     x4, x5, x6
+        `CPU_MEM_SET_W(cm, 2, 32'h00624233); // xor     x4, x4, x6
+        `CPU_MEM_SET_W(cm, 3, 32'h00424233); // xor     x4, x4, x4
 
         // Reset and test
         #2  rst = 1;

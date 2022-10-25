@@ -37,9 +37,9 @@ module ori_tb;
         `CPU_SET_R(dut, 5, 32'h01);
         `CPU_SET_R(dut, 6, 32'hfe);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h0fe26013);  // ori x0, x4, 0xfe
-        `CPU_MEM_SET_I(cm, 1, 32'h0002e213);  // ori x4, x5, 0x00
-        `CPU_MEM_SET_I(cm, 2, 32'h0fe26213);  // ori x4, x4, 0xfe
+        `CPU_MEM_SET_W(cm, 0, 32'h0fe26013);  // ori x0, x4, 0xfe
+        `CPU_MEM_SET_W(cm, 1, 32'h0002e213);  // ori x4, x5, 0x00
+        `CPU_MEM_SET_W(cm, 2, 32'h0fe26213);  // ori x4, x4, 0xfe
 
         // Reset and test
         #2  rst = 1;

@@ -35,9 +35,9 @@ module lui_tb;
         `CPU_SET_R(dut, 0, 32'd00);
         `CPU_SET_R(dut, 1, 32'd12);
 
-        `CPU_MEM_SET_I(cm, 0, 32'hfffff0b7);  // lui x1, 0xfffff
-        `CPU_MEM_SET_I(cm, 1, 32'h000010b7);  // lui x1, 1
-        `CPU_MEM_SET_I(cm, 2, 32'h000000b7);  // lui x1, 0
+        `CPU_MEM_SET_W(cm, 0, 32'hfffff0b7);  // lui x1, 0xfffff
+        `CPU_MEM_SET_W(cm, 1, 32'h000010b7);  // lui x1, 1
+        `CPU_MEM_SET_W(cm, 2, 32'h000000b7);  // lui x1, 0
 
         // Reset and test
         #2  rst = 1;

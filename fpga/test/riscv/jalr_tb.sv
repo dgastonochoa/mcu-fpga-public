@@ -39,8 +39,8 @@ module jalr_tb;
         `CPU_SET_R(dut, 3, 32'd8);
         `CPU_SET_R(dut, 4, 32'd4);
 
-        `CPU_MEM_SET_I(cm, 0, 32'h004180e7);   // jalr ra, x3, 4
-        `CPU_MEM_SET_I(cm, 3, 32'hffc200e7);   // jalr ra, x4, -4
+        `CPU_MEM_SET_W(cm, 0, 32'h004180e7);   // jalr ra, x3, 4
+        `CPU_MEM_SET_W(cm, 3, 32'hffc200e7);   // jalr ra, x4, -4
 
         // Reset and test
         #2  rst = 1;

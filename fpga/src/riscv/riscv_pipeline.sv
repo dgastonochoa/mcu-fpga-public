@@ -2,8 +2,6 @@
 `include "mem.svh"
 `include "synth.svh"
 
-`include "riscv/mem_map.svh"
-
 module cpu(
     input  wire     [31:0]  instr,
     input  wire     [31:0]  m_rd,
@@ -102,8 +100,7 @@ module cpu(
     mem_pipeline mdp(flush, stall, dt, mem_we, dt_m, m_we_m, clk, rst);
 endmodule
 
-module cpu_mem #(parameter D_SIZE = 256,
-                 parameter I_SIZE = 512,
+module cpu_mem #(parameter M_SIZE = 768,
                  parameter INIT_VALS = 0) (
     input  wire     [31:0]  pc,
     input  wire     [31:0]  d_addr,
@@ -117,19 +114,6 @@ module cpu_mem #(parameter D_SIZE = 256,
 
     input  wire             clk
 );
-    wire [31:0] real_d_addr;
-
-    assign real_d_addr = d_addr - (`SEC_DATA_W * 4);
-
-    mem #(.N(D_SIZE)) dm(
-        real_d_addr, d_wd, d_we, d_dt, d_rd, err, clk);
-
-
-    mem_dt_e dt_instr;
-    errno_e err_instr;
-
-    assign dt_instr = MEM_DT_WORD;
-
-    mem #(.N(I_SIZE), .INIT_VALS(INIT_VALS)) im(
-        pc, 32'b00, 1'b0, dt_instr, instr, err_instr, clk);
+    mem #(.N(M_SIZE), .INIT_VALS(INIT_VALS)) m(
+        d_addr, pc, d_wd, d_we, d_dt, d_rd, instr, err, clk);
 endmodule
