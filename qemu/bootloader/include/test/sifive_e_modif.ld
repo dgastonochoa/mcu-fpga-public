@@ -5,21 +5,40 @@ SECTIONS
 {
   /* text: test code section */
   . = 0x20400000;
-  .text : { *(.text) }
+  .text :
+  {
+    _text = .;
+    KEEP(*(.isr_vector))
+    *(.text)
+    *(.rodata)
+    _etext = .;
+  }
+
   /* gnu_build_id: readonly build identifier */
   .gnu_build_id : { *(.note.gnu.build-id) }
   /* rodata: readonly data segment */
-  .rodata : { *(.rodata) }
 
   /* data: Initialized data segment */
   . = 0x80000000;
-  .data : { *(.data) }
+  .data :
+  {
+    _data = .;
+    *(.data)
+    _edata = .;
+  }
   .sdata : { *(.sdata) }
   .debug : { *(.debug) }
-  _stack_bottom = .;
   . += 0x1000;
   stack_top = .;
 
   /* End of uninitalized data segement */
   _end = .;
+
+  . = ALIGN(4);
+  .fwimg :
+  {
+    _fwimg = .;
+    *(.fwimg)
+    _efwimg = .;
+  }
 }

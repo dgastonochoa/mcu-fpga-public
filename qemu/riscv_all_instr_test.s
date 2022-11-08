@@ -2,11 +2,12 @@
 # uncommenting sections depending on it's going to be executed in
 # qemu or the current version of the FPGA RISC-V proc.
 
+.ifndef BOARD_MY_RISCV
+    .ifndef BOARD_SIFIVE_E
+        .error "UNDEFINED BOARD"
+    .endif
+.endif
 
-#
-# SIFIVE_E initialization (Comment out when generating the
-# program for the FPGA test)
-#
 .align 4
 
 .section .text
@@ -14,21 +15,10 @@
 .globl _start
 
 _start:
-        la      sp, stack_top           # setup stack pointer
-
-
-        #
-        # STACK POINTER INITIALIZATION FOR TESTS (Uncomment when
-        # generating the program for the FPGA test)
-        #
-
-        # # Stack pointer for mixed instruction/data memory:
-        # addi    x2, x0, 2032               # setup stack pointer
-
-        # # Stack pointer for separated instruction/data memory:
-        # addi    x2, x0, 0                # setup stack pointer
-
-
+        la      sp, _stack_bottom  # setup stack pointer
+                                   # TODO should load _stack_top, but
+                                   # this program increases the sp
+                                   # instead of decrementing it
         #
         # addi, sw, jal
         #
@@ -598,19 +588,23 @@ tj:     sw      x3, (2*4)(x2)   # sp[2] = 24
         addi    a2, x0, 2       # value to turn on LED 1
         sw      a2, 0(a1)       # turn on LED
 
+.ifdef BOARD_MY_RISCV
 #
 # Finish program (uncomment when generating the FPGA
 # program)
 #
-# .OK:    jal     x3, .OK
-# .FAIL:  jal     x3, .FAIL
+.OK:    jal     x3, .OK
+.FAIL:  jal     x3, .FAIL
+.endif # BOARD_MY_RISCV
 
+.ifdef BOARD_SIFIVE_E
 #
 # Finish program (comment out when generating the FPGA
 # program)
 #
 .FAIL:  nop
 halt:   wfi                     # enter the infinite loop
+.endif # BOARD_SIFIVE_E
 
 
 #
