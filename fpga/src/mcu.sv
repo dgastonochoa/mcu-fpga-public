@@ -50,7 +50,7 @@ module mcu #(parameter DEFAULT_INSTR = 0, parameter SPI_SCK_WIDTH_CLKS = 4) (
     wire     [31:0]  m_data_rd;
     errno_e          m_err;
 
-    cpu_mem #(.M_SIZE(1024), .INIT_VALS(DEFAULT_INSTR)) cm(
+    cpu_mem #(.M_SIZE(1252), .INIT_VALS(DEFAULT_INSTR)) cm(
         pc,
         dec_m_addr,
         m_wd,

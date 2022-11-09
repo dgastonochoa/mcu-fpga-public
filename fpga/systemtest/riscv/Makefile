@@ -5,7 +5,7 @@ SRC = ../../src
 # Required include directories (will be required at synthesis time
 # as well)
 #
-INC = -I../../include -I.
+INC = -I../../include -I. -I./include/$(APP)
 
 VV := iverilog
 VVP := vvp
