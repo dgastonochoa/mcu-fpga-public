@@ -7,9 +7,9 @@
 .globl _start
 _start:
     la      sp, _stack_top
-    j       bootloader_main
+    j       main
 
-bootloader_main:
+main:
     call    bld_reset
 bld_loop:
     call    bld_next_state

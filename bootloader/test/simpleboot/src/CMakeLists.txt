@@ -1,0 +1,9 @@
+target_sources(${CMAKE_PROJECT_NAME}.elf
+    PRIVATE
+        bootloader_mocks.c
+        bootloader_test_stdlib.c
+        bootloader_test_utils.c
+        bootloader_test_utils.s
+        startup.s
+        main.c
+)
