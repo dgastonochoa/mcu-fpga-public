@@ -5,10 +5,17 @@ SECTIONS
 {
   /* text: test code section */
   . = 0x20400000;
+
+    .text.isr_vector :
+    {
+        _text.isr_vector = .;
+        *(.text.isr_vector) /* Note: verify that _start is at address 0 after build */
+        _etext.isr_vector = .;
+    }
+
   .text :
   {
     _text = .;
-    KEEP(*(.isr_vector))
     *(.text)
     *(.rodata)
     _etext = .;

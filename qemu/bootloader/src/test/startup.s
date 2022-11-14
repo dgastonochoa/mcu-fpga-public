@@ -2,9 +2,7 @@
 .include "test/cfg.inc"
 .equ UART_REG_TXFIFO,   0
 
-.section .text
-
-.section .isr_vector
+.section .text.isr_vector
 
 .globl _start
 .globl puts
