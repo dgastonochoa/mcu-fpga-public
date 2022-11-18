@@ -12,9 +12,9 @@
 
 .section .text
 
-.globl _start
+.globl main
 
-_start:
+main:
         la      sp, _stack_bottom  # setup stack pointer
                                    # TODO should load _stack_top, but
                                    # this program increases the sp

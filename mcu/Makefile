@@ -28,6 +28,10 @@ tm4c123g-fw_updater_defconfig: $(MAKEFILE_SOURCE_DIR)/config/tm4c123g-fw_updater
 simpleriscv-led_blink_defconfig: $(MAKEFILE_SOURCE_DIR)/config/simpleriscv-led_blink_defconfig
 	@cp $< $(MAKEFILE_SOURCE_DIR)/.config
 
+.PHONY: simpleriscv-led_blink_c_defconfig
+simpleriscv-led_blink_c_defconfig: $(MAKEFILE_SOURCE_DIR)/config/simpleriscv-led_blink_c_defconfig
+	@cp $< $(MAKEFILE_SOURCE_DIR)/.config
+
 .PHONY: simpleriscv-test_app_defconfig
 simpleriscv-test_app_defconfig: $(MAKEFILE_SOURCE_DIR)/config/simpleriscv-test_app_defconfig
 	@cp $< $(MAKEFILE_SOURCE_DIR)/.config

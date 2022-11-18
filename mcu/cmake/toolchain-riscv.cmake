@@ -21,7 +21,8 @@ set(CMAKE_OBJDUMP ${TOOLCHAIN_PREFIX}-objdump)
 
 # TODO These are actually gcc flags. The assembler should be
 # used and these flags replaced
-set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -march=rv32g -mabi=ilp32 -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=rv32g -mabi=ilp32 -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles -g -O0")
+set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -march=rv32g -mabi=ilp32 -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles -g -O0")
 
 
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")

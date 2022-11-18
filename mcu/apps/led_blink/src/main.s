@@ -2,9 +2,9 @@
 
 .section .text
 
-.globl _start
+.globl main
 
-_start:
+main:
         lui     a1, 0x80000
         addi    a1, a1, 0x40
 

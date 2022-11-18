@@ -1,6 +1,6 @@
 OUTPUT_ARCH("riscv")
 OUTPUT_FORMAT("elf32-littleriscv")
-/* TODO rename file */
+
 MEMORY
 {
     BOOTLOADER  (rx): ORIGIN = 0,       LENGTH = 2048
@@ -16,6 +16,7 @@ SECTIONS
     .text :
     {
         _text = .;
+        *(.text.init)
         *(.text)
         _etext = .;
     } > FW_IMG
