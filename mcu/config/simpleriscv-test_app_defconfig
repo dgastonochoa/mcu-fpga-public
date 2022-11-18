@@ -1,0 +1,3 @@
+CONFIG_ARCH=riscv
+CONFIG_SOC=simpleriscv
+CONFIG_APP_NAME=test_app

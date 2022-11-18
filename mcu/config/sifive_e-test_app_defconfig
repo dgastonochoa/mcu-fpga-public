@@ -1,0 +1,3 @@
+CONFIG_ARCH=riscv
+CONFIG_SOC=sifive_e
+CONFIG_APP_NAME=test_app
