@@ -31,32 +31,24 @@ module mem_map_gpio_tb;
         $dumpfile(`VCD);
         $dumpvars(1, mem_map_gpio_tb);
 
-        `CPU_SET_R(`MCU_GET_C(dut), 2, `SEC_DATA_W * 4);
         `CPU_SET_R(`MCU_GET_C(dut), 11, 32'h80000080);     // set a1 as the gpios periph. base
         `CPU_SET_R(`MCU_GET_C(dut), 6,  32'h00000000);     // set t1 as 0
 
-        `CPU_MEM_SET_W(`MCU_GET_M(dut), 0,  32'h0005a303); //   lw      t1, 0(a1)   # read gpios
-        `CPU_MEM_SET_W(`MCU_GET_M(dut), 1,  32'h00612023); //   sw      t1, 0(sp)   # store result
-        `CPU_MEM_SET_W(`MCU_GET_M(dut), 2,  32'h0005a303); //   lw      t1, 0(a1)   # read gpios
-        `CPU_MEM_SET_W(`MCU_GET_M(dut), 3,  32'h00612023); //   sw      t1, 0(sp)   # store result
-        `CPU_MEM_SET_W(`MCU_GET_M(dut), 4,  32'h0005a303); //   lw      t1, 0(a1)   # read gpios
-        `CPU_MEM_SET_W(`MCU_GET_M(dut), 5,  32'h00612023); //   sw      t1, 0(sp)   # store result
-
-        // Reset and test
-        gpios = 8'hff;
+                                                           // loop:
+        `CPU_MEM_SET_W(`MCU_GET_M(dut), 0,  32'h0005a303); //   lw      t1, 0(a1)       # read gpios
+        `CPU_MEM_SET_W(`MCU_GET_M(dut), 1,  32'hffdff06f); //   jal     x0, loop        # loop
 
         #2  rst = 1;
         #2  rst = 0;
 
-        // TODO Once GPIOs can be written, improve this test to not depend on the
-        // amount of cycles (by improving the test program above)
-        `WAIT_CLKS(clk, 2) gpios = 8'h55;
-                           assert(`CPU_MEM_GET_W(`MCU_GET_M(dut), `SEC_DATA_W) === 32'hff);
+        gpios = 8'hff;
+        `WAIT_CLKS(clk, 10) assert(`CPU_GET_R(`MCU_GET_C(dut), 6) === 32'hff);
 
-        `WAIT_CLKS(clk, 2) gpios = 8'haa;
-                           assert(`CPU_MEM_GET_W(`MCU_GET_M(dut), `SEC_DATA_W) === 32'h55);
+        gpios = 8'h55;
+        `WAIT_CLKS(clk, 10) assert(`CPU_GET_R(`MCU_GET_C(dut), 6) === 32'h55);
 
-        `WAIT_CLKS(clk, 2) assert(`CPU_MEM_GET_W(`MCU_GET_M(dut), `SEC_DATA_W) === 32'haa);
+        gpios = 8'haa;
+        `WAIT_CLKS(clk, 10) assert(`CPU_GET_R(`MCU_GET_C(dut), 6) === 32'haa);
 
         #5;
         $finish;
