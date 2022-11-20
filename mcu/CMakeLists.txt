@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.13.1)
 
-# TODO this won't be valid for the bootloader
 project(mcu)
 
 include(cmake/env.cmake)
