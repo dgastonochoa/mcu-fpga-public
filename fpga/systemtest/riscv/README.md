@@ -1,46 +1,48 @@
 # Summary
-This README file aims to explain briefly how `riscv_single_all_instr_top.sv` test works.
 
-`riscv_single_all_instr_top.sv` is an FPGA config. whose purpose is to test a RISC-V CPU.
-
-It executes a pre-loaded program (pre-loaded at synthesis time) which tests all the RISC-V
-ilp32 ABI instructions (the complete smallest RISC-V subset of instructions). This test is
-done by executing all these instructions in different scenarios and writing the results to
-memory. After that, the results are sent byte-a-byte through SPI, so they can be verified
-agains the expected ones in the host.
-
-This test will require `CONFIG_ENABLE_MEM_DEFAULT_VALS` to be defined so the initial
-program can be loaded at synthesis time.
-
-`riscv_single_all_instr_top_tb.sv` will perform a simulation of the FPGA program. See the
-`Makefile` file to check the required definitions, include directories, module dependencies
-etc.
-
-To execute the simulation execute `make all`. This will generate wavedumps as well. Some
-tests might take a few seconds to perform, but not too many.
-
-**Note:** Inspect the `Makefile` to see how to configure a Vivado project. `cnstr` contains
-the required constrains file for the project.
-
-# How to execute the test benches
-It's recommended to do this before executing the system tests on the physical FPGA.
- - Execute `CONFIG_RISCV_SINGLECYCLE=y make` for the single-cycle RISC-V tests
- - Execute `CONFIG_RISCV_MULTICYCLE=y make` for the multicycle-cycle RISC-V tests
- - Execute `CONFIG_RISCV_PIPELINE=y make` for the pipeline-cycle RISC-V tests
+Information about the fpga<->mcu test (**bootloader version**)
 
 
-# How to execute these tests in the physical FPGA
-Create a Vivado project and add all the files required to build the tests, which can be
-found in the `Makefile` in this directory. Remember to add the required include directories
-and the required definitions (e.g.:`CONFIG_RISCV_MULTICYCLE=y`). Some of the definitions might
-require to **not** be present when running the physical FPGA tests (e.g.: `IVERILOG`)
+# Execute the test bench
 
-**Note:** This test requires to read from an SPI port, therefore a device
-capable of this must act as a bridge between the FPGA and the host. You can
-user `find_spi_iface.sh` to try find this SPI interface by providing a keyword.
+To execute the simulation, do:
 
-Connect to the FPGA a device capable of reading SPI as following:
+    CONFIG_RISCV_$(CPU_MODEL)=y APP=$(APP_NAME) make                \
+        build/riscv_all_instr_physical_fpga_test_top_tb.xv &&       \
+        vvp ./build/riscv_all_instr_physical_fpga_test_top_tb.xv
+
+For example:
+
+    CONFIG_RISCV_SINGLECYCLE=y APP=all_instr_test make              \
+        build/riscv_all_instr_physical_fpga_test_top_tb.xv &&       \
+        vvp ./build/riscv_all_instr_physical_fpga_test_top_tb.xv
+
+
+# Configure the FPGA through Vivado
+
+ - Create a Vivado project and add all the required source files (those used
+   to run the test bench). These files can be found in the `Makefile` in this
+   directory. Do not add any test-related modules, such as the test bench module
+   itself.
+
+ - Add the required directories to the include path, namely:
+    - `gr/fpga/include`
+    - `gr/fpga/systemtests/riscv`
+    - `gr/fpga/systemtests/riscv/include/$(APP_NAME)`
+
+ - Add the require definitions, namely:
+    - The CPU model, e.g.: `-DCONFIG_RISCV_SINGLECYCLE=y`
+    - Enable the pre-loaded program feature: `-DCONFIG_ENABLE_MEM_DEFAULT_VALS=1`
+
+ - Add the constraints files, which are located in the `cnstr` directory.
+
+
+# Connect the FPGA to TI tm4c123g
+
 ![fpga-mcu-pin-conn](./doc/img/FPGA-MCU-PIN-CON-2.png)
+
+
+# SPI port configuration in the tm4c123g app
 
 Configure the SPI reader as:
 - PHA = 0
@@ -48,25 +50,26 @@ Configure the SPI reader as:
 - Num. bits = 8
 - Min. bit rate: 10 kHz
 
-**Note:** the min. bit rate is currently 10 kHz but depends on the bit rate of
-the master SPI in the FPGA, so double check it.
 
-In the host computer, open the SPI reader interface, possibly dumping its results
-to a file. E.g.:
+# Find the serial iface. in the host
 
-    minicom -D /dev/ttyACM0 -C riscv-fpga-test-res.txt
+See `find_spi_iface.sh`
 
-Flash the FPGA wasn't already, or reset it if it was. You should see a bunch of bytes
-in the terminal opened above.
 
-Copy all of them to a file. This won't be necessary if they were dumped already by
-doing something equivalent to the `minicom` example above. Make sure this file contains
-only bytes ontained, one in each line, and **nothing** else (no text, no empty lines etc.)
+# Run the test
 
-Execute:
+ - In the host computer: `minicom -D /dev/ttyACM0 -C file.txt`
+ - Config. the FPGA if it wasn't already, or reset it if it was.
 
-        verif_results.py riscv-fpga-test-res.txt
+ - Flash or reset the tm4c123g. This should trigger the send of the
+   test program and its execution. The program is first sent, then
+   read back and verified, then executed.
 
-If the above returns nothing, everything is file. Errors will be reported as assertion errors.
+ - Go to `file.txt` and remove **everything** except from the data
+   sent by the test program just executed.
 
-**Note:** The above file checks the obtained values agains `expected_results.py`
+  - Do: `verif_results.py file.txt`. If it returns nothing, the test
+    has passed.
+
+**Note:** The expected results are located at
+`expected_results/$(TEST)/expected?results.py`.
