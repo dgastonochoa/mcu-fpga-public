@@ -66,7 +66,7 @@ module mem_be #(parameter N = 64, INIT_VALS = 0)(
     output  wire        [31:0]  rd2_word,
     input   wire                clk
 );
-    reg [31:0] _mem [N-1:0];
+    reg [31:0] _mem [N];
 
 `ifdef CONFIG_ENABLE_MEM_DEFAULT_VALS
     initial begin
