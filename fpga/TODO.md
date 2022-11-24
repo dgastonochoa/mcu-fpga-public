@@ -1,13 +1,16 @@
 This file contains works to be done in the future.
 
- - The pipelined CPU time closure reports setup constraint violations
-   due to the memory having a second port to read the instruction. This
-   happens because the memory reads are async. Maybe a memory generated
-   wiyh the Vivado IP generator fixes this.
+ - The pipelined CPU needs to run at 25 MHz as a consequence of the delay
+   added by having mixed data/instr. memory. This can be fixed by making
+   the memory (for the pipelined CPU) sync-read and adding an extra stage
+   to the pipeline (since now the memory read will require 2 stages: one
+   to calc. the address and another one to read). This wil surely allow
+   to incr. the pipelined freq. to 50 MHz, maybe even 100.
 
  - Make the FPGA's mcu to have a slave spi, not master. This will
    remove the need for an extra pin to indiciate that data wants to
-   be sent from the host/tm4c123g.
+   be sent from the host/tm4c123g. --> Possibly it will need both master
+   and slave to first update then execute and send results.
 
  - Make simpleriscv GPIOs to be configurable at least as input/output.
 
