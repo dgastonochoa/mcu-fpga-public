@@ -7,16 +7,9 @@ Information about the fpga<->mcu test (**bootloader version**)
 
 To execute the simulation, do:
 
-    CONFIG_RISCV_$(CPU_MODEL)=y APP=$(APP_NAME) make                \
+    CONFIG_RISCV_$(CPU_MODEL)=y make                                \
         build/riscv_all_instr_physical_fpga_test_top_tb.xv &&       \
         vvp ./build/riscv_all_instr_physical_fpga_test_top_tb.xv
-
-For example:
-
-    CONFIG_RISCV_SINGLECYCLE=y APP=all_instr_test make              \
-        build/riscv_all_instr_physical_fpga_test_top_tb.xv &&       \
-        vvp ./build/riscv_all_instr_physical_fpga_test_top_tb.xv
-
 
 # Configure the FPGA through Vivado
 
