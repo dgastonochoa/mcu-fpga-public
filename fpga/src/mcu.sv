@@ -1,6 +1,11 @@
 `include "mem.svh"
 `include "errno.svh"
 
+/**
+ * Microcontroller made of a CPU, memory and some peripherals:
+ * GPIOs, LEDs and SPI.
+ *
+ */
 module mcu #(parameter DEFAULT_INSTR = 0, parameter SPI_SCK_WIDTH_CLKS = 4) (
     output  wire        mosi,
     input   wire        miso,
