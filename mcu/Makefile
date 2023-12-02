@@ -24,6 +24,10 @@ $(BUILD_ROOT)/.first-time-build-timestamp: ./.config | dirs
 tm4c123g-fw_updater_defconfig: $(MAKEFILE_SOURCE_DIR)/config/tm4c123g-fw_updater_defconfig
 	@cp $< $(MAKEFILE_SOURCE_DIR)/.config
 
+.PHONY: tm4c123g-fw_updater_defconfig
+tm4c123g-spi_reader_defconfig: $(MAKEFILE_SOURCE_DIR)/config/tm4c123g-spi_reader_defconfig
+	@cp $< $(MAKEFILE_SOURCE_DIR)/.config
+
 .PHONY: simpleriscv-led_blink_defconfig
 simpleriscv-led_blink_defconfig: $(MAKEFILE_SOURCE_DIR)/config/simpleriscv-led_blink_defconfig
 	@cp $< $(MAKEFILE_SOURCE_DIR)/.config
