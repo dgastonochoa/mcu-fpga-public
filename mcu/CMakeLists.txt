@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.13.1)
 
-project(mcu)
-
 include(cmake/env.cmake)
+
+project(mcu)
 
 set(SUBMODULES_ROOT ${CMAKE_SOURCE_DIR}/submodules)
 
