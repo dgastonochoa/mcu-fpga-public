@@ -1,0 +1,9 @@
+make
+libusb-1.0-0
+libusb-1.0-0-dev
+cmake=3.22.1-1ubuntu1.22.04.2
+gcc=4:11.2.0-1ubuntu1
+gcc-arm-none-eabi=15:10.3-2021.07-4
+binutils-arm-none-eabi
+gdb-multiarch
+pkg-config=0.29.2-1ubuntu3

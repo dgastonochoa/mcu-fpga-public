@@ -51,7 +51,20 @@ flash:
 .PHONY: clean
 clean:
 	@rm -rf $(BUILD_ROOT)
+	@cd submodules/SW-TM4C/TivaWare_C_Series-2.1.4.178 && make clean
+	@cd submodules/lm4tools/lm4flash && make clean
+	@cd submodules/lm4tools/lmicdiusb && make clean
+
 
 .PHONY: dirs
 dirs:
 	@mkdir -p $(BUILD_ROOT)
+
+.PHONY: debdeps
+debdeps:
+	sudo apt update && sudo apt install -y $(cat /packages.txt)
+
+.PHONY: docker
+docker:
+	docker build -f docker/Dockerfile -t gr_mcu .
+	docker run --privileged -it -v ~/.ssh:/home/dan-docker/.ssh -v .:/home/dan-docker/mcu gr_mcu

@@ -15,3 +15,6 @@ This file contains works to be done in the future.
  - Delete `verif_results.py` and similar scripts when they are no longer
    necessary.
 
+ - Add support for RISC-V projects to packages.txt and Dockerfile. Do the
+   same for IcarusVerilog.
+
