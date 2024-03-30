@@ -20,11 +20,15 @@ $(BUILD_ROOT)/.first-time-build-timestamp: ./.config | dirs
 #
 # config targets
 #
+.PHONY: tm4c123g-spi_slave_echo_defconfig
+tm4c123g-spi_slave_echo_defconfig: $(MAKEFILE_SOURCE_DIR)/config/tm4c123g-spi_slave_echo_defconfig
+	@cp $< $(MAKEFILE_SOURCE_DIR)/.config
+
 .PHONY: tm4c123g-fw_updater_defconfig
 tm4c123g-fw_updater_defconfig: $(MAKEFILE_SOURCE_DIR)/config/tm4c123g-fw_updater_defconfig
 	@cp $< $(MAKEFILE_SOURCE_DIR)/.config
 
-.PHONY: tm4c123g-fw_updater_defconfig
+.PHONY: tm4c123g-spi_reader_defconfig
 tm4c123g-spi_reader_defconfig: $(MAKEFILE_SOURCE_DIR)/config/tm4c123g-spi_reader_defconfig
 	@cp $< $(MAKEFILE_SOURCE_DIR)/.config
 
