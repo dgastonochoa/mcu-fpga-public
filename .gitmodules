@@ -6,7 +6,3 @@
 	path = mcu/submodules/lm4tools
 	url = https://github.com/utzig/lm4tools.git
 	ignore = dirty
-[submodule "mcu/openocd"]
-	path = mcu/submodules/openocd
-	url = https://github.com/openocd-org/openocd.git
-	ignore = dirty
