@@ -12,8 +12,12 @@
 
 .section .text
 
-.globl main
+.ifdef SOC_SIFIVE_E
+        .globl _start
+        _start:
+.endif
 
+.globl main
 main:
         la      sp, _stack_bottom  # setup stack pointer
                                    # TODO should load _stack_top, but
