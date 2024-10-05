@@ -4,7 +4,7 @@ MAKEFILE_SOURCE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 BUILD_ROOT = $(MAKEFILE_SOURCE_DIR)/build
 
 incremental-build: $(BUILD_ROOT)/.first-time-build-timestamp
-	@cd $(BUILD_ROOT) && make
+	@cd $(BUILD_ROOT) && make -s
 
 $(BUILD_ROOT)/.first-time-build-timestamp: ./.config | dirs
 	@echo
@@ -42,6 +42,10 @@ simpleriscv-led_blink_c_defconfig: $(MAKEFILE_SOURCE_DIR)/config/simpleriscv-led
 
 .PHONY: simpleriscv-test_app_defconfig
 simpleriscv-test_app_defconfig: $(MAKEFILE_SOURCE_DIR)/config/simpleriscv-test_app_defconfig
+	@cp $< $(MAKEFILE_SOURCE_DIR)/.config
+
+.PHONY: sifive_e-test_app_defconfig
+sifive_e-test_app_defconfig: $(MAKEFILE_SOURCE_DIR)/config/sifive_e-test_app_defconfig
 	@cp $< $(MAKEFILE_SOURCE_DIR)/.config
 
 
