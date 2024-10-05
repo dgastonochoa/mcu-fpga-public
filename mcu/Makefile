@@ -77,5 +77,5 @@ debdeps:
 
 .PHONY: docker
 docker:
-	docker build -f docker/Dockerfile -t gr_mcu .
-	docker run --privileged -it -v ~/.ssh:/home/dan-docker/.ssh -v .:/home/dan-docker/mcu gr_mcu
+	docker build -f docker/Dockerfile -t mcu_fpga .
+	docker run --privileged -it -v ~/.ssh:/home/dan-docker/.ssh -v .:/home/dan-docker/mcu mcu_fpga
