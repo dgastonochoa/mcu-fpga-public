@@ -4,7 +4,7 @@ MAKEFILE_SOURCE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 BUILD_ROOT = $(MAKEFILE_SOURCE_DIR)/build
 
 incremental-build: $(BUILD_ROOT)/.first-time-build-timestamp
-	@cd $(BUILD_ROOT) && make -s
+	@cd $(BUILD_ROOT) && make
 
 $(BUILD_ROOT)/.first-time-build-timestamp: ./.config | dirs
 	@echo
@@ -55,6 +55,9 @@ flash:
 .PHONY: clean
 clean:
 	@rm -rf $(BUILD_ROOT)
+
+.PHONY: clean_all
+clean_all: clean
 	@cd submodules/SW-TM4C/TivaWare_C_Series-2.1.4.178 && make clean
 	@cd submodules/lm4tools/lm4flash && make clean
 	@cd submodules/lm4tools/lmicdiusb && make clean
