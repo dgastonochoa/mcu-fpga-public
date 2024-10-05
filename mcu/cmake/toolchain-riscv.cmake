@@ -6,7 +6,7 @@ set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR riscv)
 
 # GCC toolchain prefix
-set(TOOLCHAIN_PREFIX "riscv64-unknown-elf")
+set(TOOLCHAIN_PREFIX "riscv32-unknown-elf")
 
 set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}-gcc)
 set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}-g++)
