@@ -66,16 +66,11 @@ clean_all: clean
 	@cd submodules/lm4tools/lm4flash && make clean
 	@cd submodules/lm4tools/lmicdiusb && make clean
 
-
 .PHONY: dirs
 dirs:
 	@mkdir -p $(BUILD_ROOT)
 
-.PHONY: debdeps
-debdeps:
+.PHONY: install_dependencies
+install_dependencies:
 	sudo apt update && sudo apt install -y $(cat /packages.txt)
-
-.PHONY: docker
-docker:
-	docker build -f docker/Dockerfile -t mcu_fpga .
-	docker run --privileged -it -v ~/.ssh:/home/dan-docker/.ssh -v .:/home/dan-docker/mcu mcu_fpga
+	@echo "====== RISC-V still required to be installed manually"
